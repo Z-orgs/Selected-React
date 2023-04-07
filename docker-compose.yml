@@ -1,5 +1,5 @@
 services:
-    nest:
+    node:
         env_file:
             - selected.env
         image: vuongsyhanh/selected

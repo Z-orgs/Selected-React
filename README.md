@@ -8,11 +8,11 @@ Selected is a music streaming website that allows users to stream and enjoy thei
 
 ## Features
 
-- User authentication and authorization
-- Search and filter for music tracks and artists
-- Ability to create and manage playlists
-- Social sharing capabilities
-- Easy navigation and intuitive user interface
+-   User authentication and authorization
+-   Search and filter for music tracks and artists
+-   Ability to create and manage playlists
+-   Social sharing capabilities
+-   Easy navigation and intuitive user interface
 
 ## Contributing
 
@@ -22,8 +22,8 @@ We welcome your pull requests, bug reports, and feature requests. If you find an
 
 Before you install and use the Selected project, you'll need the following:
 
-- [NodeJS](https://nodejs.org/en/)
-- [Yarn](https://yarnpkg.com/)
+-   [NodeJS](https://nodejs.org/en/)
+-   [Yarn](https://yarnpkg.com/)
 
 ## Installation
 
