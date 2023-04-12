@@ -1,14 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const useFetch = (url) => {
+const Fetch = (url, { }) => {
     const [data, setData] = useState([]);
     useEffect(() => {
 
         (async () => {
             try {
 
-                let res = await axios.get(url);
+                let res = await axios.post(url, {});
                 let data = res && res.data ? res.data : [];
 
                 setData(data);
@@ -19,11 +19,11 @@ const useFetch = (url) => {
             }
         })();
 
-    }, []);
+    });
 
     return {
         data
     };
 };
 
-export default useFetch;
+export default Fetch;

@@ -1,11 +1,9 @@
 import React from "react";
-import { createRoot } from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import Login from "./pages/login";
 import { createStore } from 'redux';
 import rootReducer from './store/reducers/rootReducer';
 
