@@ -1,14 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
-import Login from './login';
+import React from "react";
+import "./App.css";
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Login />
-      </header>
-    </div>
+    <h1 className="uppercase text-blue-500 text-[48px] text-center font-semibold">
+      Hello World!
+    </h1>
   );
 }
 
