@@ -11,15 +11,18 @@ const ListAdminPage = () => {
   useEffect(() => {
     getAllAdmins(admin?.data?.admin_token, dispatch);
   }, []);
-
+  localStorage.setItem("token", admin?.data?.admin_token);
   return (
     <div>
-      {list && list.map((ad) => <div key={ad._id}>
-        {ad.firstName} - {ad.lastName}
-        <button>
-          <NavLink to={`/admin/${ad._id}`}>View detail</NavLink>
-        </button>
-      </div>)}
+      {list &&
+        list.map((ad) => (
+          <div key={ad._id}>
+            {ad.firstName} - {ad.lastName}
+            <button>
+              <NavLink to={`/admin/${ad._id}`}>View detail</NavLink>
+            </button>
+          </div>
+        ))}
     </div>
   );
 };
