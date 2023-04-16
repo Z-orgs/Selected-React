@@ -4,7 +4,7 @@ import {
   getAdminsFailed,
   getAdminsStart,
   getAdminsSuccess,
-} from "./adminSlice";
+} from './adminSlice';
 import { useParams } from "react-router-dom";
 
 // const dispatch = useDispatch();
