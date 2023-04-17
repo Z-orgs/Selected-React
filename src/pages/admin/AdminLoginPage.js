@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import LayoutAuthentication from "../layout/LayoutAuthentication";
+import LayoutAuthentication from "../../layout/LayoutAuthentication";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../redux/apiRequest";
+import { loginUser } from "../../redux/apiRequest";
 
 const AdminLoginPage = () => {
   const [username, setUsername] = useState("");
@@ -23,14 +23,18 @@ const AdminLoginPage = () => {
   // return <LayoutAuthentication heading="Login"></LayoutAuthentication>;
   return (
     <div>
-      <a href="http://localhost:3000/auth"> Login with GG</a>
       <form onSubmit={handleLogin}>
+        <label>Username</label>
+        <br></br>
         <input
           type="text"
           name="username"
           onChange={(e) => setUsername(e.target.value)}
         />
         <br />
+        <label>Password</label>
+        <br></br>
+
         <input
           type="text"
           name="password"

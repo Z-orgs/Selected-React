@@ -11,7 +11,9 @@ const AdminByID = () => {
   const list = useSelector((state) => state.admin.admins?.allAdmins);
   //   const ad = list.map((item) => item._id === slug);
   const ad = useSelector((state) => state.auth.login?.currentUser);
+  const handleChangePassword = () => {
 
+  };
   useEffect(() => {
     axios
       .get(`http://localhost:3000/admin/admin/${slug}`, {
@@ -21,13 +23,16 @@ const AdminByID = () => {
       .then((response) => {
         setAdmin(response.data);
       });
-    console.log("hello");
+    console.log(admin);
   }, [slug]);
   return (
     <div>
       <h1>{admin.username}</h1>
       <p> {admin.firstName}</p>
       <p> {admin.lastName}</p>
+      <button>
+        <NavLink to={`/admin/${admin._id}/reset-password`}>Reset password</NavLink>
+      </button>
     </div>
   );
 };

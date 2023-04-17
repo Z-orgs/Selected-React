@@ -7,7 +7,6 @@ const ListAdminPage = () => {
   const admin = useSelector((state) => state.auth.login?.currentUser);
   const dispatch = useDispatch();
   const list = useSelector((state) => state.admin.admins?.allAdmins);
-  console.log(list);
   useEffect(() => {
     getAllAdmins(admin?.data?.admin_token, dispatch);
   }, []);

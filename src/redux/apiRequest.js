@@ -5,6 +5,11 @@ import {
   getAdminsStart,
   getAdminsSuccess,
 } from "./adminSlice";
+import {
+  getArtistStart,
+  getArtistSuccess,
+  getArtistFailed,
+} from "./artistSlice";
 
 // const dispatch = useDispatch();
 // const navigate = useNavigate();
@@ -36,18 +41,16 @@ export const getAllAdmins = async (accessToken, dispatch) => {
   }
 };
 
-export const getAdminByID = async (accessToken, dispatch) => {
-  dispatch(getAdminsStart());
+export const getAllArtist = async (accessToken, dispatch) => {
+  dispatch(getArtistStart());
   try {
-    const res = await axios.get(
-      `localhost:3000/admin/admin/6421da9cb507ca367d98d04c`,
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      }
-    );
+    const res = await axios.get("http://localhost:3000/admin/artist", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
     console.log(res.data);
-    // dispatch(getAdminsSuccess(res.data));
+    dispatch(getArtistSuccess(res.data));
   } catch (err) {
-    dispatch(getAdminsFailed());
+    dispatch(getArtistFailed());
   }
-};
+}
+
