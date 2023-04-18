@@ -30,6 +30,7 @@ const AdminByID = () => {
       <h1>{admin.username}</h1>
       <p> {admin.firstName}</p>
       <p> {admin.lastName}</p>
+      <p> {admin.password}</p>
       <button>
         <NavLink to={`/admin/${admin._id}/reset-password`}>Reset password</NavLink>
       </button>
