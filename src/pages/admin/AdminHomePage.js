@@ -11,6 +11,10 @@ const AdminHomePage = () => {
       <button>
         <NavLink to={'/list-artist'}>List artist</NavLink>
       </button>
+      <br></br>
+      <button>
+        <NavLink to={'/list-track'}>List track</NavLink>
+      </button>
     </div>
   );
 };

@@ -10,6 +10,11 @@ import {
   getArtistSuccess,
   getArtistFailed,
 } from "./artistSlice";
+import {
+  getTrackStart,
+  getTrackSuccess,
+  getTrackFailed,
+} from "./trackSlice";
 
 // const dispatch = useDispatch();
 // const navigate = useNavigate();
@@ -42,7 +47,7 @@ export const getAllAdmins = async (accessToken, dispatch) => {
 };
 
 export const getAllArtist = async (accessToken, dispatch) => {
-  dispatch(getArtistStart());
+  dispatch(getTrackStart());
   try {
     const res = await axios.get("http://localhost:3000/admin/artist", {
       headers: { Authorization: `Bearer ${accessToken}` },
@@ -51,6 +56,19 @@ export const getAllArtist = async (accessToken, dispatch) => {
     dispatch(getArtistSuccess(res.data));
   } catch (err) {
     dispatch(getArtistFailed());
+  }
+};
+
+export const getAllTracks = async (accessToken, dispatch) => {
+  dispatch(getTrackStart());
+  try {
+    const res = await axios.get("http://localhost:3000/admin/track", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    console.log(res.data);
+    dispatch(getTrackSuccess(res.data));
+  } catch (err) {
+    dispatch(getTrackFailed());
   }
 }
 
