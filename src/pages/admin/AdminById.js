@@ -20,7 +20,7 @@ const AdminByID = () => {
     console.log(admin);
   }, [slug]);
   const handleResetPassword = async () => {
-    const res = await axios.put(`http://localhost:3000/admin/`, {
+    const res = await axios.put(`http://localhost:3000/admin/${slug}`, {
       headers: { Authorization: `Bearer ${ad?.data?.admin_token}` },
     });
     console.log(res);

@@ -7,7 +7,7 @@ import AdminLoginPage from "./pages/admin/AdminLoginPage";
 import ListArtistPage from "./pages/artist/ListArtistPage";
 import AdminResetPassword from './pages/admin/AdminResetPassword';
 
-axios.get("http://localhost:3000/mxz");
+axios.get("http://localhost:3000/Kwzng");
 
 function App() {
   return (
