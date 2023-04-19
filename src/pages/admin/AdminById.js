@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { NavLink } from "react-router-dom";
-import { getAdminByID } from "../../redux/apiRequest";
 import axios from "axios";
 
 const AdminByID = () => {
@@ -11,13 +9,9 @@ const AdminByID = () => {
   const list = useSelector((state) => state.admin.admins?.allAdmins);
   //   const ad = list.map((item) => item._id === slug);
   const ad = useSelector((state) => state.auth.login?.currentUser);
-  const handleChangePassword = () => {
-
-  };
   useEffect(() => {
     axios
       .get(`http://localhost:3000/admin/admin/${slug}`, {
-        // headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         headers: { Authorization: `Bearer ${ad?.data?.admin_token}` },
       })
       .then((response) => {
@@ -25,14 +19,20 @@ const AdminByID = () => {
       });
     console.log(admin);
   }, [slug]);
+  const handleResetPassword = async () => {
+    const res = await axios.put(`http://localhost:3000/admin/`, {
+      headers: { Authorization: `Bearer ${ad?.data?.admin_token}` },
+    });
+    console.log(res);
+  };
   return (
     <div>
       <h1>{admin.username}</h1>
       <p> {admin.firstName}</p>
       <p> {admin.lastName}</p>
       <p> {admin.password}</p>
-      <button>
-        <NavLink to={`/admin/${admin._id}/reset-password`}>Reset password</NavLink>
+      <button onClick={() => handleResetPassword()} >
+        Reset password
       </button>
     </div>
   );
