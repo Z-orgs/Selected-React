@@ -6,8 +6,6 @@ import axios from "axios";
 const AdminByID = () => {
   const [admin, setAdmin] = useState({});
   const { slug } = useParams();
-  const list = useSelector((state) => state.admin.admins?.allAdmins);
-  //   const ad = list.map((item) => item._id === slug);
   const ad = useSelector((state) => state.auth.login?.currentUser);
   useEffect(() => {
     axios
@@ -20,9 +18,11 @@ const AdminByID = () => {
     console.log(admin);
   }, [slug]);
   const handleResetPassword = async () => {
-    const res = await axios.put(`http://localhost:3000/admin/${slug}`, {
-      headers: { Authorization: `Bearer ${ad?.data?.admin_token}` },
-    });
+    const res = await axios.put(`http://localhost:3000/admin/${slug}`,
+      { id: slug },
+      {
+        headers: { Authorization: `Bearer ${ad?.data?.admin_token}` },
+      });
     console.log(res);
   };
   return (
