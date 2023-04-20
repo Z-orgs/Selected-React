@@ -8,6 +8,7 @@ import ListArtistPage from "./pages/artist/ListArtistPage";
 import ListTrackPage from "./pages/tracks/ListTrackPage";
 import TrackDetail from "./pages/tracks/TrackDetail";
 import CreateAdmin from "./pages/admin/CreateAdmin";
+import AdminChangePassword from "./pages/admin/AdminChangePassword";
 
 axios.get("http://localhost:3000/Kwzng");
 
@@ -22,6 +23,7 @@ function App() {
       <Route path="/list-track" exact element={<ListTrackPage></ListTrackPage>}></Route>
       <Route path="/track/:slug" exact element={<TrackDetail></TrackDetail>}></Route>
       <Route path="/admin/create-admin" exact element={<CreateAdmin></CreateAdmin>}></Route>
+      <Route path="/admin/change-password" exact element={<AdminChangePassword></AdminChangePassword>}></Route>
     </Routes>
   );
 }

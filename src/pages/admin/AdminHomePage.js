@@ -5,15 +5,19 @@ const AdminHomePage = () => {
     <div>
       <h1>Admin home page</h1>
       <button>
-        <NavLink to={'/list-admin'}>List admin</NavLink>
+        <NavLink to={'/list-admin'}>Admin</NavLink>
       </button>
       <br></br>
       <button>
-        <NavLink to={'/list-artist'}>List artist</NavLink>
+        <NavLink to={'/list-artist'}>Artist</NavLink>
       </button>
       <br></br>
       <button>
-        <NavLink to={'/list-track'}>List track</NavLink>
+        <NavLink to={'/list-track'}>Track</NavLink>
+      </button>
+      <br></br>
+      <button>
+        <NavLink to={'/admin/change-password'}>Change password</NavLink>
       </button>
     </div>
   );
