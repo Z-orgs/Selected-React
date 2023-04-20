@@ -12,17 +12,25 @@ const ListAdminPage = () => {
   }, []);
   localStorage.setItem("token", admin?.data?.admin_token);
   return (
-    <div>
-      {list &&
-        list.map((ad) => (
-          <div key={ad._id}>
-            {ad.firstName} - {ad.lastName}
-            <button>
-              <NavLink to={`/admin/${ad._id}`}>View detail</NavLink>
-            </button>
-          </div>
-        ))}
-    </div>
+    <>
+      <div>
+        {list &&
+          list.map((ad) => (
+            <div key={ad._id}>
+              {ad.firstName} - {ad.lastName}
+              <button>
+                <NavLink to={`/admin/${ad._id}`}>View detail</NavLink>
+              </button>
+            </div>
+          ))}
+      </div>
+      <div>
+        <button>
+          <NavLink to={`/admin/create-admin`}>Create admin</NavLink>
+
+        </button>
+      </div>
+    </>
   );
 };
 
