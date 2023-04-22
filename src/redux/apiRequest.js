@@ -4,6 +4,7 @@ import { getAdminsFailed, getAdminsStart, getAdminsSuccess, } from "./adminSlice
 import { getArtistStart, getArtistSuccess, getArtistFailed, } from "./artistSlice";
 import { getTrackStart, getTrackSuccess, getTrackFailed, } from "./trackSlice";
 import { getPlaylistStart, getPlaylistSuccess, getPlaylistFailed } from "./playlistSlice";
+import { getAlbumsStart, getAlbumsSuccess, getAlbumsFailed } from "./albumSlice";
 
 // const dispatch = useDispatch();
 // const navigate = useNavigate();
@@ -70,6 +71,19 @@ export const getAllPlaylists = async (accessToken, dispatch) => {
     dispatch(getPlaylistSuccess(res.data));
   } catch (err) {
     dispatch(getPlaylistFailed());
+  }
+};
+
+export const getAllAlbums = async (accessToken, dispatch) => {
+  dispatch(getAlbumsStart());
+  try {
+    const res = await axios.get("http://localhost:3000/admin/album", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    console.log(res.data);
+    dispatch(getAlbumsSuccess(res.data));
+  } catch (err) {
+    dispatch(getAlbumsFailed());
   }
 }
 

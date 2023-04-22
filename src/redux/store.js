@@ -4,6 +4,7 @@ import adminReducer from "./adminSlice";
 import artistReducer from "./artistSlice";
 import trackReducer from "./trackSlice";
 import playlistReducer from "./playlistSlice";
+import albumSlice from "./albumSlice";
 
 export default configureStore({
     reducer: {
@@ -11,7 +12,8 @@ export default configureStore({
         admin: adminReducer,
         artist: artistReducer,
         track: trackReducer,
-        playlist: playlistReducer
+        playlist: playlistReducer,
+        album: albumSlice
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

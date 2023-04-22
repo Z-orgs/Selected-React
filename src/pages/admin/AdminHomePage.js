@@ -21,6 +21,10 @@ const AdminHomePage = () => {
       </button>
       <br></br>
       <button>
+        <NavLink to={'/album'}>Album</NavLink>
+      </button>
+      <br></br>
+      <button>
         <NavLink to={'/admin/change-password'}>Change password</NavLink>
       </button>
       <br></br>
