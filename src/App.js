@@ -14,6 +14,8 @@ import ListPLaylistPage from "./pages/playlist/ListPlayListPage";
 import PlaylistDetail from "./pages/playlist/PlaylistDetail";
 import ListAlbumPage from "./pages/album/ListAlbum";
 import AlbumDetail from "./pages/album/AlbumDetail";
+import ListUserPage from "./pages/user/ListUser";
+import ListLoggerPage from "./pages/logger/ListLogger";
 
 axios.get("http://localhost:3000/Kwzng");
 
@@ -34,6 +36,8 @@ function App() {
       <Route path="/playlist/:slug" exact element={<PlaylistDetail></PlaylistDetail>}></Route>
       <Route path="/album" exact element={<ListAlbumPage></ListAlbumPage>}></Route>
       <Route path="/album/:slug" exact element={<AlbumDetail></AlbumDetail>}></Route>
+      <Route path="/user" exact element={<ListUserPage></ListUserPage>}></Route>
+      <Route path="/logger" exact element={<ListLoggerPage></ListLoggerPage>}></Route>
     </Routes>
   );
 }

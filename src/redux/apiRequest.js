@@ -5,6 +5,8 @@ import { getArtistStart, getArtistSuccess, getArtistFailed, } from "./artistSlic
 import { getTrackStart, getTrackSuccess, getTrackFailed, } from "./trackSlice";
 import { getPlaylistStart, getPlaylistSuccess, getPlaylistFailed } from "./playlistSlice";
 import { getAlbumsStart, getAlbumsSuccess, getAlbumsFailed } from "./albumSlice";
+import { getUsersStart, getUsersSuccess, getUsersFailed } from "./userSlice";
+import { getLoggersStart, getLoggersSuccess, getLoggersFailed } from "./loggerSlice";
 
 // const dispatch = useDispatch();
 // const navigate = useNavigate();
@@ -84,6 +86,32 @@ export const getAllAlbums = async (accessToken, dispatch) => {
     dispatch(getAlbumsSuccess(res.data));
   } catch (err) {
     dispatch(getAlbumsFailed());
+  }
+};
+
+export const getAllUsers = async (accessToken, dispatch) => {
+  dispatch(getUsersStart());
+  try {
+    const res = await axios.get("http://localhost:3000/admin/user", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    console.log(res.data);
+    dispatch(getUsersSuccess(res.data));
+  } catch (err) {
+    dispatch(getUsersFailed());
+  }
+};
+
+export const getAllLoggers = async (accessToken, dispatch) => {
+  dispatch(getLoggersStart());
+  try {
+    const res = await axios.get("http://localhost:3000/admin/logger", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    console.log(res.data);
+    dispatch(getLoggersSuccess(res.data));
+  } catch (err) {
+    dispatch(getLoggersFailed());
   }
 }
 

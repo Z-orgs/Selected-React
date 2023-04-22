@@ -25,6 +25,14 @@ const AdminHomePage = () => {
       </button>
       <br></br>
       <button>
+        <NavLink to={'/logger'}>Logger</NavLink>
+      </button>
+      <br></br>
+      <button>
+        <NavLink to={'/user'}>User</NavLink>
+      </button>
+      <br></br>
+      <button>
         <NavLink to={'/admin/change-password'}>Change password</NavLink>
       </button>
       <br></br>
