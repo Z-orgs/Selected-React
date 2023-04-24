@@ -1,46 +1,56 @@
-# Getting Started with Create React App and Redux
+<p align="center">
+  <a href="https://github.com/Z-orgs/Selected-React" target="blank"><img src="https://i.imgur.com/JjjgDjL.png" width="300" alt="selected logo" /></a>
+</p>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+# Selected-React
 
-## Available Scripts
+Selected is a music streaming website that allows users to stream and enjoy their favorite music from around the world. This repository contains the frontend code for the [Selected](https://github.com/Z-orgs/Selected) project, developed using ReactJS.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- User authentication and authorization
+- Search and filter for music tracks and artists
+- Ability to create and manage playlists
+- Social sharing capabilities
+- Easy navigation and intuitive user interface
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Contributing
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+We welcome your pull requests, bug reports, and feature requests. If you find any issues or would like to suggest a feature, please feel free to open an issue in our [GitHub repository](https://github.com/Z-orgs/Selected-React).
 
-### `npm test`
+## Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Before you install and use the Selected project, you'll need the following:
 
-### `npm run build`
+- [NodeJS](https://nodejs.org/en/)
+- [Yarn](https://yarnpkg.com/)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Installation
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1.  Clone this repository
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```
+git clone https://github.com/Z-orgs/Selected-React.git
+```
 
-### `npm run eject`
+2.  Install all dependencies
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```
+yarn
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3.  Start the Selected server
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+yarn start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+4. Navigate to http://localhost:3006 in your web browser to use the Selected frontend.
 
-## Learn More
+## Contributing
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+We welcome contributions from the community. If you find any issues or would like to suggest a feature, please feel free to open an issue or pull request in our GitHub repository.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## License
+
+Selected is open-source software licensed under the [MIT License](https://opensource.org/licenses/MIT).
