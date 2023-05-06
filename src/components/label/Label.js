@@ -1,7 +1,15 @@
 import React from "react";
 
-const Label = () => {
-    return <div></div>;
+const Label = ({ htmlFor = "", children, className, ...props }) => {
+  return (
+    <label
+      htmlFor={htmlFor}
+      {...props}
+      className={`inline-block mb-2 text-[16px] font-medium ${className}`}
+    >
+      {children}
+    </label>
+  );
 };
 
 export default Label;

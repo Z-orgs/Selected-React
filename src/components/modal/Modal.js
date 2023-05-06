@@ -8,7 +8,7 @@ const Modal = ({ show, heading, onClose, children }) => {
     <div
       className={`${
         show ? "fixed" : "hidden"
-      } h-[100vh] left-0 right-0 top-0 bottom-0 bg-black opacity-50 flex justify-center items-center z-10`}
+      } h-[100vh] left-0 right-0 top-0 bottom-0 bg-[rgba(0,_0,_0,_0.5)] flex justify-center items-center z-10`}
       onClick={onClose}
     >
       <div className="absolute p-5 bg-white" onClick={handleClick}>

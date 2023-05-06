@@ -66,22 +66,22 @@ const ListArtistPage = () => {
   return (
     <>
       {listArtist && listArtist.length > 0 ? (
-        <table>
-          <thead>
+        <table className="w-full text-sm text-left text-gray-500">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
-              <th>Username</th>
-              <th>Nick name</th>
-              <th>Revenue</th>
-              <th>Action</th>
+              <th className="px-6 py-3">Username</th>
+              <th className="px-6 py-3">Nick name</th>
+              <th className="px-6 py-3">Revenue</th>
+              <th className="px-6 py-3">Action</th>
             </tr>
           </thead>
           <tbody>
             {listArtist.map((artist) => (
               <tr key={artist._id}>
-                <td>{artist.username}</td>
-                <td>{artist.nickName}</td>
-                <td>{artist.revenue || "0"}</td>
-                <td>
+                <td className="px-6 py-4">{artist.username}</td>
+                <td className="px-6 py-4">{artist.nickName}</td>
+                <td className="px-6 py-4">{artist.revenue || "0"}</td>
+                <td className="px-6 py-4">
                   <button onClick={() => handleResetPassword(artist._id)}>
                     Reset password
                   </button>
