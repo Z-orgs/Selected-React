@@ -1,25 +1,58 @@
 import axios from "axios";
 import { loginStart, loginSuccess, loginFail } from "./authSlice";
-import { getAdminsFailed, getAdminsStart, getAdminsSuccess, } from "./adminSlice";
-import { getArtistStart, getArtistSuccess, getArtistFailed, } from "./artistSlice";
-import { getTrackStart, getTrackSuccess, getTrackFailed, } from "./trackSlice";
-import { getPlaylistStart, getPlaylistSuccess, getPlaylistFailed } from "./playlistSlice";
-import { getAlbumsStart, getAlbumsSuccess, getAlbumsFailed } from "./albumSlice";
-import { getUsersStart, getUsersSuccess, getUsersFailed } from "./userSlice";
-import { getLoggersStart, getLoggersSuccess, getLoggersFailed } from "./loggerSlice";
+import {
+  getAdminsFailed,
+  getAdminsStart,
+  getAdminsSuccess,
+} from "./admin/adminSlice";
+import {
+  getArtistStart,
+  getArtistSuccess,
+  getArtistFailed,
+} from "./admin/artistSlice";
+import {
+  getTrackStart,
+  getTrackSuccess,
+  getTrackFailed,
+} from "./admin/trackSlice";
+import {
+  getPlaylistStart,
+  getPlaylistSuccess,
+  getPlaylistFailed,
+} from "./admin/playlistSlice";
+import {
+  getAlbumsStart,
+  getAlbumsSuccess,
+  getAlbumsFailed,
+} from "./admin/albumSlice";
+import {
+  getUsersStart,
+  getUsersSuccess,
+  getUsersFailed,
+} from "./admin/userSlice";
+import {
+  getLoggersStart,
+  getLoggersSuccess,
+  getLoggersFailed,
+} from "./admin/loggerSlice";
 
 // const dispatch = useDispatch();
 // const navigate = useNavigate();
 
-export const loginUser = async (user, dispatch, navigate) => {
+export const loginUser = async (role = "admin", user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
     const res = await axios.post(
-      "http://localhost:3000/auth/admin/login",
+      `${
+        role === "Admin"
+          ? "http://localhost:3000/auth/admin/login"
+          : "http://localhost:3000/auth/artist/login"
+      }`,
       user
     );
-    dispatch(loginSuccess(res));
-    navigate("/admin");
+    dispatch(loginSuccess({ res, role }));
+    console.log({ res, role });
+    navigate(`${role === "Admin" ? "/admin" : "/artist"}`);
   } catch (err) {
     dispatch(loginFail());
   }
@@ -113,5 +146,4 @@ export const getAllLoggers = async (accessToken, dispatch) => {
   } catch (err) {
     dispatch(getLoggersFailed());
   }
-}
-
+};
