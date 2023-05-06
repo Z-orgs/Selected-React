@@ -28,11 +28,6 @@ const ListAdminPage = () => {
   const dispatch = useDispatch();
   const list = useSelector((state) => state.admin.admins?.allAdmins);
   const [showModal, setShowModal] = useState(false);
-  // const [firstName, setFirstName] = useState("");
-  // const [lastName, setLasttName] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [username, setUsername] = useState("");
-  // const [showForm, setShowForm] = useState(false);
   const handleCreateAdmin = async () => {
     const ad = {
       username: watch("username"),
@@ -78,7 +73,6 @@ const ListAdminPage = () => {
     <div className="flex">
       <div className="flex-1">
         <Button
-          className="text-white bg-blue-500"
           onClick={() => {
             setShowModal(true);
             // setShowForm(!showForm);
@@ -141,7 +135,7 @@ const ListAdminPage = () => {
               name="password"
               placeholder="Enter your password..."
               control={control}
-              error={errors.username?.message}
+              error={errors.password?.message}
             ></Input>
           </FormGroup>
           <FormGroup>
@@ -150,7 +144,7 @@ const ListAdminPage = () => {
               name="firstName"
               placeholder="Enter your first name..."
               control={control}
-              error={errors.username?.message}
+              error={errors.firstName?.message}
             ></Input>
           </FormGroup>
           <FormGroup>
@@ -159,7 +153,7 @@ const ListAdminPage = () => {
               name="lastName"
               placeholder="Enter your last name..."
               control={control}
-              error={errors.username?.message}
+              error={errors.lastName?.message}
             ></Input>
           </FormGroup>
           <Button type="submit" className="text-white bg-blue-500">

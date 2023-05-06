@@ -9,7 +9,7 @@ const RoleItem = ({ img, role, onClick, isActive }) => {
       onClick={() => onClick(role, isActive)}
     >
       <img
-        className={`w-full rounded-md ${
+        className={`w-full select-none rounded-md ${
           isActive
             ? "scale-150 opacity-100 border-2 border-white"
             : "opacity-80"
@@ -45,8 +45,7 @@ const LoginPage = () => {
             role ? "" : "translate-x-[50%]"
           } transition-all`}
           style={{
-            backgroundImage:
-              "url('https://khoinguonsangtao.vn/wp-content/uploads/2022/09/hinh-nen-galaxy-1.jpg')",
+            backgroundImage: "url('/bg-login.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "75% 20%",
           }}

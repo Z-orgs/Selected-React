@@ -9,6 +9,7 @@ const authSlice = createSlice({
       error: false,
       isAuthenticated: false,
       role: null,
+      info: null,
     },
   },
   reducers: {
@@ -21,6 +22,7 @@ const authSlice = createSlice({
       state.login.error = false;
       state.login.isAuthenticated = true;
       state.login.role = action.payload.role;
+      state.login.info = action.payload.user;
     },
     loginFail: (state) => {
       state.login.isFetching = false;
@@ -30,6 +32,7 @@ const authSlice = createSlice({
       state.login.currentUser = null;
       state.login.role = null;
       state.login.isAuthenticated = false;
+      state.login.info = null;
     },
   },
 });

@@ -2,14 +2,9 @@ import { Route, Routes } from "react-router-dom";
 import axios from "axios";
 import AdminHomePage from "./pages/admin/admin/AdminHomePage";
 import ListAdminPage from "./pages/admin/admin/ListAdminPage";
-// import AdminByID from './pages/admin/admin/AdminById';
-// import AdminLoginPage from "./pages/admin/admin/AdminLoginPage";
 import ListArtistPage from "./pages/admin/artist/ListArtistPage";
 import ListTrackPage from "./pages/admin/tracks/ListTrackPage";
 import TrackDetail from "./pages/admin/tracks/TrackDetail";
-// import CreateAdmin from './pages/admin/admin/CreateAdmin';
-import AdminChangePassword from "./pages/admin/admin/AdminChangePassword";
-import CreateArtist from "./pages/admin/artist/CreateArtist";
 import ListPLaylistPage from "./pages/admin/playlist/ListPlayListPage";
 import PlaylistDetail from "./pages/admin/playlist/PlaylistDetail";
 import ListAlbumPage from "./pages/admin/album/ListAlbum";
@@ -19,12 +14,12 @@ import ListLoggerPage from "./pages/admin/logger/ListLogger";
 import LoginPage from "./pages/LoginPage";
 import AdminDashBoardPage from "./pages/admin/AdminDashBoardPage";
 import LayoutDashboard from "./layout/LayoutDashboard";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import ArtistTrackPage from "./pages/artist/ArtistTrackPage";
 
 axios.get("http://localhost:3000/Kwzng");
 
 function App() {
-  const dispatch = useDispatch();
   const role = useSelector((state) => state.auth.login.role);
   const isLogin = useSelector((state) => state.auth.login.isAuthenticated);
   return (
@@ -73,16 +68,6 @@ function App() {
                 element={<TrackDetail></TrackDetail>}
               ></Route>
               <Route
-                path="/admin/change-password"
-                exact
-                element={<AdminChangePassword></AdminChangePassword>}
-              ></Route>
-              <Route
-                path="/admin/create-artist"
-                exact
-                element={<CreateArtist></CreateArtist>}
-              ></Route>
-              <Route
                 path="/playlists"
                 exact
                 element={<ListPLaylistPage></ListPLaylistPage>}
@@ -111,6 +96,25 @@ function App() {
                 path="/logger"
                 exact
                 element={<ListLoggerPage></ListLoggerPage>}
+              ></Route>
+            </>
+          )}
+          {role === "Artist" && (
+            <>
+              <Route
+                path="/"
+                exact
+                element={<AdminDashBoardPage></AdminDashBoardPage>}
+              ></Route>
+              <Route
+                path="/tracks"
+                exact
+                element={<ArtistTrackPage></ArtistTrackPage>}
+              ></Route>
+              <Route
+                path="/albums"
+                exact
+                element={<AdminDashBoardPage></AdminDashBoardPage>}
               ></Route>
             </>
           )}

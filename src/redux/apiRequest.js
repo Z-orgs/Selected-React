@@ -50,9 +50,9 @@ export const loginUser = async (role = "admin", user, dispatch, navigate) => {
       }`,
       user
     );
-    dispatch(loginSuccess({ res, role }));
+    dispatch(loginSuccess({ res, role, user }));
     console.log({ res, role });
-    navigate(`${role === "Admin" ? "/admin" : "/artist"}`);
+    navigate("/");
   } catch (err) {
     dispatch(loginFail());
   }

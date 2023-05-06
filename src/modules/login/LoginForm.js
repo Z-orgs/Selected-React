@@ -13,10 +13,8 @@ import { IconEyeToggle } from "../../components/icons";
 
 const schema = yup.object({
   username: yup.string().required("Please enter your username"),
-  password: yup
-    .string()
-    .required("Please enter your password")
-    .min(8, "Your password must be at least 8 characters"),
+  password: yup.string().required("Please enter your password"),
+  //.min(8, "Your password must be at least 8 characters"),
 });
 
 const LoginForm = ({ role }) => {
