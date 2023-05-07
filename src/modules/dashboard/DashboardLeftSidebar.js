@@ -24,8 +24,7 @@ const adminSidebarLink = [
   },
   {
     icon: <IconUser></IconUser>,
-    title: "Users",
-    url: "/user",
+    title: "Accounts",
     subs: [
       {
         color: "text-pink-300",

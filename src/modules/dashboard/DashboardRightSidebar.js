@@ -71,35 +71,42 @@ const DashboardRightSidebar = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-8 w-[64px]">
+      <div className="flex flex-col gap-4 w-[52px]">
         <div className="font-semibold">
           <span
             onClick={() => setShowModal(true)}
-            className="block p-4 bg-black rounded-full cursor-pointer"
+            className="block p-4 bg-white rounded-full cursor-pointer shadow-[rgba(60,_64,_67,_0.3)_0px_1px_2px_0px,_rgba(60,_64,_67,_0.15)_0px_2px_6px_2px]"
           >
             <svg
-              className="fill-white"
+              className=""
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
             >
               <path d="M22,18V22H18V19H15V16H12L9.74,13.74C9.19,13.91 8.61,14 8,14A6,6 0 0,1 2,8A6,6 0 0,1 8,2A6,6 0 0,1 14,8C14,8.61 13.91,9.19 13.74,9.74L22,18M7,5A2,2 0 0,0 5,7A2,2 0 0,0 7,9A2,2 0 0,0 9,7A2,2 0 0,0 7,5Z" />
             </svg>
           </span>
-          Change Password
         </div>
         <div className="font-semibold">
           <span
             onClick={handleLogout}
-            className="block p-4 bg-black rounded-full cursor-pointer"
+            className="block p-4 bg-white rounded-full cursor-pointer shadow-[rgba(60,_64,_67,_0.3)_0px_1px_2px_0px,_rgba(60,_64,_67,_0.15)_0px_2px_6px_2px]"
           >
-            <IconLogout className="fill-white"></IconLogout>
+            <IconLogout className=""></IconLogout>
           </span>
-          Sign out
         </div>
+        <span className="block p-4 bg-black rounded-full cursor-pointer">
+          <svg
+            className="fill-white"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+          >
+            <path d="M20 14H14V20H10V14H4V10H10V4H14V10H20V14Z" />
+          </svg>
+        </span>
       </div>
       <Modal
         show={showModal}
-        heading="Create admin"
+        heading="Change password"
         onClose={() => setShowModal(false)}
       >
         <form
@@ -134,7 +141,7 @@ const DashboardRightSidebar = () => {
               error={errors.confirmNewPassword?.message}
             ></Input>
           </FormGroup>
-          <Button>Submit</Button>
+          <Button type="submit">Submit</Button>
         </form>
       </Modal>
     </div>

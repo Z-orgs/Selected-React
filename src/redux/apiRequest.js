@@ -50,7 +50,7 @@ export const loginUser = async (role = "admin", user, dispatch, navigate) => {
       }`,
       user
     );
-    dispatch(loginSuccess({ res, role, user }));
+    dispatch(loginSuccess({ res, role }));
     console.log({ res, role });
     navigate("/");
   } catch (err) {
