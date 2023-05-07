@@ -1,7 +1,6 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
-// import IconTrack from "../../components/icons/IconTrack";
 import {
   IconTrack,
   IconPlaylist,
@@ -10,12 +9,14 @@ import {
   IconArrowToggle,
   IconDashboard,
 } from "../../components/icons";
+import { useSelector } from "react-redux";
 
 const itemClass =
   "flex items-center justify-between w-full px-4 py-2 text-lg font-semibold cursor-pointer rounded-md";
 const subItemClass =
   "flex items-center gap-3 px-2 py-[4px] mx-10 text-base font-semibold rounded-sm";
-const sidebarLink = [
+let sidebarLink = null;
+const adminSidebarLink = [
   {
     icon: <IconDashboard></IconDashboard>,
     title: "Dashboard",
@@ -23,8 +24,7 @@ const sidebarLink = [
   },
   {
     icon: <IconUser></IconUser>,
-    title: "Users",
-    url: "/user",
+    title: "Accounts",
     subs: [
       {
         color: "text-pink-300",
@@ -62,14 +62,35 @@ const sidebarLink = [
     url: "/albums",
   },
 ];
+const artistSidebarLink = [
+  {
+    icon: <IconDashboard></IconDashboard>,
+    title: "Dashboard",
+    url: "/",
+  },
+  {
+    icon: <IconTrack></IconTrack>,
+    title: "Tracks",
+    url: "/tracks",
+  },
+  {
+    icon: <IconAlbum></IconAlbum>,
+    title: "Albums",
+    url: "/albums",
+  },
+];
 const DashboardLeftSidebar = () => {
+  const user = useSelector((state) => state.auth.login);
+  user.role === "Admin"
+    ? (sidebarLink = [...adminSidebarLink])
+    : (sidebarLink = [...artistSidebarLink]);
   return (
     <div className="w-[15%] px-8 py-12">
       <Link
         to="/"
         className="inline-block w-full text-4xl font-semibold text-center uppercase font-secondary"
       >
-        Admin Manager
+        {`${user.role} Manager`}
       </Link>
       <div className="my-10">
         {sidebarLink.map((link) =>
