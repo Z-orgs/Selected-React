@@ -43,10 +43,9 @@ export const loginUser = async (role = "admin", user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
     const res = await axios.post(
-      `${
-        role === "Admin"
-          ? "http://localhost:3000/auth/admin/login"
-          : "http://localhost:3000/auth/artist/login"
+      `${role === "Admin"
+        ? "http://localhost:3000/auth/admin/login"
+        : "http://localhost:3000/auth/artist/login"
       }`,
       user
     );
@@ -85,7 +84,7 @@ export const getAllArtist = async (accessToken, dispatch) => {
 };
 
 export const getAllTracks = async (accessToken, dispatch) => {
-  dispatch(getPlaylistStart());
+  dispatch(getTrackStart());
   try {
     const res = await axios.get("http://localhost:3000/admin/track", {
       headers: { Authorization: `Bearer ${accessToken}` },
@@ -97,7 +96,7 @@ export const getAllTracks = async (accessToken, dispatch) => {
   }
 };
 export const getAllPlaylists = async (accessToken, dispatch) => {
-  dispatch(getTrackStart());
+  dispatch(getPlaylistStart());
   try {
     const res = await axios.get("http://localhost:3000/admin/playlist", {
       headers: { Authorization: `Bearer ${accessToken}` },
