@@ -1,5 +1,5 @@
 import axios from "axios";
-import { loginStart, loginSuccess, loginFail } from "./authSlice";
+import { loginStart, loginSuccess, loginFail, loginWithGG } from "./authSlice";
 import {
   getAdminsFailed,
   getAdminsStart,
@@ -43,9 +43,12 @@ export const loginUser = async (role = "admin", user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
     const res = await axios.post(
-      `${role === "Admin"
-        ? "http://localhost:3000/auth/admin/login"
-        : "http://localhost:3000/auth/artist/login"
+      `${
+        role === "Admin"
+          ? "http://localhost:3000/auth/admin/login"
+          : role === "Artist"
+          ? "http://localhost:3000/auth/artist/login"
+          : ""
       }`,
       user
     );
@@ -55,6 +58,19 @@ export const loginUser = async (role = "admin", user, dispatch, navigate) => {
   } catch (err) {
     dispatch(loginFail());
   }
+};
+
+export const loginUserWithGoogle = async (credential, dispatch, navigate) => {
+  try {
+    const { data } = await axios.post("http://localhost:3000/auth/login", {
+      token: credential,
+    });
+    dispatch(loginWithGG(data));
+    navigate("/");
+  } catch (err) {
+    console.log(err);
+  }
+  // return data;
 };
 
 export const getAllAdmins = async (accessToken, dispatch) => {

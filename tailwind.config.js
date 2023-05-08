@@ -8,9 +8,10 @@ module.exports = {
         secondary: ["Merriweather Sans", "sans-serif"],
       },
       colors: {
-        primary: "",
-        secondary: "",
-        "dashboard-color": "#fbf7f4",
+        primary: "#7A0BC0",
+        secondary: "#FA58B6",
+        "bg-color": "270082",
+        "dashboard-color": " ",
       },
       // backgroundImage: {
       //   "theme-1": "url(/artist.jpg)",

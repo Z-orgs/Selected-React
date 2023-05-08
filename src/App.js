@@ -16,6 +16,7 @@ import AdminDashBoardPage from "./pages/admin/AdminDashBoardPage";
 import LayoutDashboard from "./layout/LayoutDashboard";
 import { useSelector } from "react-redux";
 import ArtistTrackPage from "./pages/artist/ArtistTrackPage";
+import LayoutSeleted from "./layout/LayoutSeleted";
 
 axios.get("http://localhost:3000/Kwzng");
 
@@ -118,6 +119,18 @@ function App() {
               ></Route>
             </>
           )}
+        </Route>
+        {/* <Route exact path="/" element={<LayoutSeleted></LayoutSeleted>}></Route> */}
+        <Route
+          element={
+            isLogin && role === "User" && <LayoutSeleted></LayoutSeleted>
+          }
+        >
+          <Route
+            path="/"
+            exact
+            element={<AdminDashBoardPage></AdminDashBoardPage>}
+          ></Route>
         </Route>
       </Routes>
       {/* <div className="mx-auto my-8">
