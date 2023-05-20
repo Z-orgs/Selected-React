@@ -17,6 +17,11 @@ import LayoutDashboard from "./layout/LayoutDashboard";
 import { useSelector } from "react-redux";
 import ArtistTrackPage from "./pages/artist/ArtistTrackPage";
 import LayoutSeleted from "./layout/LayoutSeleted";
+import HomePage from "./pages/user/HomePage";
+import AlbumDetailPage from "./pages/user/AlbumDetailPage";
+import PlaylistPage from "./pages/user/PlaylistPage";
+import ArtistDetailPage from "./pages/user/ArtistDetailPage";
+import SongsFavoritePage from "./pages/user/SongsFavoritePage";
 
 axios.get("http://localhost:3000/Kwzng");
 
@@ -126,10 +131,26 @@ function App() {
             isLogin && role === "User" && <LayoutSeleted></LayoutSeleted>
           }
         >
+          <Route path="/" exact element={<HomePage></HomePage>}></Route>
           <Route
-            path="/"
+            path="/albums/:id"
+            extract
+            element={<AlbumDetailPage></AlbumDetailPage>}
+          ></Route>
+          <Route
+            path="/artists/:id"
+            extract
+            element={<ArtistDetailPage></ArtistDetailPage>}
+          ></Route>
+          <Route
+            path="/playlists"
             exact
-            element={<AdminDashBoardPage></AdminDashBoardPage>}
+            element={<PlaylistPage></PlaylistPage>}
+          ></Route>
+          <Route
+            path="/songs-favorite"
+            exact
+            element={<SongsFavoritePage></SongsFavoritePage>}
           ></Route>
         </Route>
       </Routes>

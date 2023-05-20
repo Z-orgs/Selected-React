@@ -29,7 +29,6 @@ const TrackDetail = () => {
         <div>
             <audio
                 controls
-                autoPlay="true"
                 src={track.link}
             ></audio>
             <button onClick={() => handleApproveTrack()}>

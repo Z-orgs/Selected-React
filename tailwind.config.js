@@ -3,14 +3,20 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      spacing: {
+        "player-height": "90px",
+        "topbar-height": "80px",
+      },
       fontFamily: {
         primary: ["Quicksand", "sans-serif"],
-        secondary: ["Merriweather Sans", "sans-serif"],
+        secondary: ["Inter", "sans-serif"],
       },
       colors: {
         primary: "#7A0BC0",
         secondary: "#FA58B6",
-        "bg-color": "270082",
+        "bg-color": "#37075d",
+        "bg-2": "#34224f",
+        "alpha-bg": "hsla(0,0%,100%,0.1)",
         "dashboard-color": " ",
       },
       // backgroundImage: {
@@ -24,6 +30,7 @@ module.exports = {
     },
     backgroundImage: {
       "primary-gradient": `linear-gradient(93.71deg, #7A0BC0 13.27%, #FA58B6 101.64%)`,
+      "secondary-gradient": `linear-gradient(-225deg, rgb(82, 113, 196) 0%, rgb(177, 159, 255) 48%, rgb(236, 161, 254) 100%)`,
     },
     keyframes: {
       "text-animation": {

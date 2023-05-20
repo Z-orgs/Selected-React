@@ -35,6 +35,11 @@ import {
   getLoggersSuccess,
   getLoggersFailed,
 } from "./admin/loggerSlice";
+import {
+  getHomePageFailed,
+  getHomePageStart,
+  getHomePageSuccess,
+} from "./user/homePageSlice";
 
 // const dispatch = useDispatch();
 // const navigate = useNavigate();
@@ -62,10 +67,10 @@ export const loginUser = async (role = "admin", user, dispatch, navigate) => {
 
 export const loginUserWithGoogle = async (credential, dispatch, navigate) => {
   try {
-    const { data } = await axios.post("http://localhost:3000/auth/login", {
+    const res = await axios.post("http://localhost:3000/auth/login", {
       token: credential,
     });
-    dispatch(loginWithGG(data));
+    dispatch(loginWithGG(res));
     navigate("/");
   } catch (err) {
     console.log(err);
@@ -160,5 +165,57 @@ export const getAllLoggers = async (accessToken, dispatch) => {
     dispatch(getLoggersSuccess(res.data));
   } catch (err) {
     dispatch(getLoggersFailed());
+  }
+};
+
+export const getHomePage = async (accessToken, dispatch) => {
+  try {
+    dispatch(getHomePageStart());
+
+    const res = await axios.get("http://localhost:3000/home", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    console.log(res);
+    dispatch(getHomePageSuccess(res.data));
+  } catch (err) {
+    dispatch(getHomePageFailed());
+  }
+};
+
+export const createPlaylistUser = async (namePlaylist, token) => {
+  await axios
+    .post(
+      "http://localhost:3000/playlist",
+      {
+        title: namePlaylist,
+        tracks: JSON.stringify([]),
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
+
+export const followArtistToggle = async (idArtist, token, followed = false) => {
+  if (!followed) {
+    await axios
+      .put(`http://localhost:3000/user/follow/${idArtist}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
+  } else {
+    await axios
+      .put(`http://localhost:3000/user/unfollow/${idArtist}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
   }
 };
