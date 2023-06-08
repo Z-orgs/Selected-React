@@ -8,6 +8,9 @@ import albumReducer from "./admin/albumSlice";
 import userReducer from "./admin/userSlice";
 import loggerReducer from "./admin/loggerSlice";
 import homePageReducer from "./user/homePageSlice";
+import songsLikedReducer from "./user/songsLikedSlice";
+import playerReducer from "./user/playerSlice";
+
 import {
   persistStore,
   persistReducer,
@@ -30,6 +33,8 @@ const rootReducer = combineReducers({
   user: userReducer,
   logger: loggerReducer,
   homePage: homePageReducer,
+  songsLiked: songsLikedReducer,
+  player: playerReducer,
 });
 
 const persistConfig = {

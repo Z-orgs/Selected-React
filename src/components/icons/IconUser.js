@@ -1,6 +1,6 @@
 import React from "react";
 
-const IconUser = ({ className }) => {
+const IconUser = ({ className = "fill-white w-[24px] h-[24px]" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

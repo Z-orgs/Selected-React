@@ -8,7 +8,7 @@ import {
   IconUser,
   IconArrowToggle,
   IconDashboard,
-} from "../../components/icons";
+} from "components/icons";
 import { useSelector } from "react-redux";
 
 const itemClass =
@@ -85,7 +85,7 @@ const DashboardLeftSidebar = () => {
     ? (sidebarLink = [...adminSidebarLink])
     : (sidebarLink = [...artistSidebarLink]);
   return (
-    <div className="w-[15%] px-8 py-12">
+    <div className="w-[15%] px-8 py-12 bg-bg-color">
       <Link
         to="/"
         className="inline-block w-full text-4xl font-semibold text-center uppercase font-secondary"
@@ -101,7 +101,9 @@ const DashboardLeftSidebar = () => {
               //   isActive,
               // }) => (isActive ? "bg-slate-400" : "")}`}
               className={({ isActive }) =>
-                isActive ? `${itemClass} bg-gray-300` : `${itemClass}`
+                isActive
+                  ? `${itemClass} bg-[rgba(255,255,255,0.2)]`
+                  : `${itemClass}`
               }
               key={link.title}
             >

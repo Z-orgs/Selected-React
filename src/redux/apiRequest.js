@@ -1,4 +1,3 @@
-import axios from "axios";
 import { loginStart, loginSuccess, loginFail, loginWithGG } from "./authSlice";
 import {
   getAdminsFailed,
@@ -40,6 +39,16 @@ import {
   getHomePageStart,
   getHomePageSuccess,
 } from "./user/homePageSlice";
+import {
+  getSongsLikedFailed,
+  getSongsLikedStart,
+  getSongsLikedSuccess,
+} from "./user/songsLikedSlice";
+// import axios from "axios";
+
+// const api = process.env.REACT_APP_API;
+
+const { default: axios } = require("api/axios");
 
 // const dispatch = useDispatch();
 // const navigate = useNavigate();
@@ -50,9 +59,9 @@ export const loginUser = async (role = "admin", user, dispatch, navigate) => {
     const res = await axios.post(
       `${
         role === "Admin"
-          ? "http://localhost:3000/auth/admin/login"
+          ? `/auth/admin/login`
           : role === "Artist"
-          ? "http://localhost:3000/auth/artist/login"
+          ? `/auth/artist/login`
           : ""
       }`,
       user
@@ -67,7 +76,7 @@ export const loginUser = async (role = "admin", user, dispatch, navigate) => {
 
 export const loginUserWithGoogle = async (credential, dispatch, navigate) => {
   try {
-    const res = await axios.post("http://localhost:3000/auth/login", {
+    const res = await axios.post(`/auth/login`, {
       token: credential,
     });
     dispatch(loginWithGG(res));
@@ -81,7 +90,7 @@ export const loginUserWithGoogle = async (credential, dispatch, navigate) => {
 export const getAllAdmins = async (accessToken, dispatch) => {
   dispatch(getAdminsStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/admin", {
+    const res = await axios.get(`/admin/admin`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -94,7 +103,7 @@ export const getAllAdmins = async (accessToken, dispatch) => {
 export const getAllArtist = async (accessToken, dispatch) => {
   dispatch(getArtistStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/artist", {
+    const res = await axios.get(`/admin/artist`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -107,7 +116,7 @@ export const getAllArtist = async (accessToken, dispatch) => {
 export const getAllTracks = async (accessToken, dispatch) => {
   dispatch(getTrackStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/track", {
+    const res = await axios.get(`/admin/track`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -119,7 +128,7 @@ export const getAllTracks = async (accessToken, dispatch) => {
 export const getAllPlaylists = async (accessToken, dispatch) => {
   dispatch(getPlaylistStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/playlist", {
+    const res = await axios.get(`/admin/playlist`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -132,7 +141,7 @@ export const getAllPlaylists = async (accessToken, dispatch) => {
 export const getAllAlbums = async (accessToken, dispatch) => {
   dispatch(getAlbumsStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/album", {
+    const res = await axios.get(`/admin/album`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -145,7 +154,7 @@ export const getAllAlbums = async (accessToken, dispatch) => {
 export const getAllUsers = async (accessToken, dispatch) => {
   dispatch(getUsersStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/user", {
+    const res = await axios.get(`/admin/user`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -158,7 +167,7 @@ export const getAllUsers = async (accessToken, dispatch) => {
 export const getAllLoggers = async (accessToken, dispatch) => {
   dispatch(getLoggersStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/logger", {
+    const res = await axios.get(`/admin/logger`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -172,7 +181,7 @@ export const getHomePage = async (accessToken, dispatch) => {
   try {
     dispatch(getHomePageStart());
 
-    const res = await axios.get("http://localhost:3000/home", {
+    const res = await axios.get(`/home`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res);
@@ -185,7 +194,7 @@ export const getHomePage = async (accessToken, dispatch) => {
 export const createPlaylistUser = async (namePlaylist, token) => {
   await axios
     .post(
-      "http://localhost:3000/playlist",
+      `/playlist`,
       {
         title: namePlaylist,
         tracks: JSON.stringify([]),
@@ -203,19 +212,38 @@ export const createPlaylistUser = async (namePlaylist, token) => {
 };
 
 export const followArtistToggle = async (idArtist, token, followed = false) => {
+  console.log("aa");
   if (!followed) {
     await axios
-      .put(`http://localhost:3000/user/follow/${idArtist}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .put(
+        `/user/follow/${idArtist}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => console.log(response))
       .catch((err) => console.log(err));
   } else {
     await axios
-      .put(`http://localhost:3000/user/unfollow/${idArtist}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .put(
+        `/user/unfollow/${idArtist}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => console.log(response))
       .catch((err) => console.log(err));
   }
 };
+
+export async function getSongsLiked(token, dispatch) {
+  dispatch(getSongsLikedStart());
+  await axios
+    .get(`/user/likes`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((response) => dispatch(getSongsLikedSuccess(response.data)))
+    .catch(dispatch(getSongsLikedFailed()));
+}

@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { IconLogout } from "../../components/icons";
+import { IconLogout } from "components/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/authSlice";
+import { logout } from "redux/authSlice";
 import { useNavigate } from "react-router-dom";
-import Modal from "../../components/modal/Modal";
-import axios from "axios";
+import Modal from "components/modal/Modal";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Label } from "../../components/label";
-import FormGroup from "../../components/common/FormGroup";
-import { Input } from "../../components/input";
-import { Button } from "../../components/button";
+import { Label } from "components/label";
+import FormGroup from "components/common/FormGroup";
+import { Input } from "components/input";
+import { Button } from "components/button";
+const { default: axios } = require("api/axios");
 
 const schema = yup.object({
   password: yup.string().required("Please enter your username"),
@@ -41,7 +41,7 @@ const DashboardRightSidebar = () => {
     };
     try {
       await axios
-        .put(`http://localhost:3000/admin`, pass, {
+        .put(`/admin`, pass, {
           headers: {
             Authorization: `Bearer ${ad?.data?.admin_token}`,
           },
@@ -59,10 +59,10 @@ const DashboardRightSidebar = () => {
     navigate("/");
   };
   return (
-    <div className="flex flex-col items-center justify-between flex-1 flex-shrink-0 px-4 py-12 ml-4 border-l border-gray-300">
+    <div className="flex flex-col items-center justify-between flex-1 flex-shrink-0 px-4 py-12 text-black border-l border-gray-400">
       <div>
         <div className="relative rounded-full w-[80px] m-auto">
-          <img src="/avt.jpg" alt="" className="object-cover rounded-full" />
+          <img src={"/avt.jpg"} alt="" className="object-cover rounded-full" />
           <span className="absolute w-[20px] h-[20px] bg-green-500 block rounded-full border-2 border-white top-0 right-0"></span>
         </div>
         <div className="text-center">

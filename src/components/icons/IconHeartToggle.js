@@ -4,7 +4,7 @@ const IconHeartToggle = ({ liked = false, onClick = () => {} }) => {
   if (liked === true)
     return (
       <svg
-        className="w-[24px] h-[24px] fill-red-600 cursor-pointer"
+        className="w-[18px] h-[18px] fill-red-600 cursor-pointer"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         onClick={onClick}
@@ -15,7 +15,7 @@ const IconHeartToggle = ({ liked = false, onClick = () => {} }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      className="w-[24px] h-[24px] cursor-pointer"
+      className="w-[18px] h-[18px] cursor-pointer"
       viewBox="0 0 24 24"
       onClick={onClick}
       fill="white"

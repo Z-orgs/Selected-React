@@ -1,29 +1,32 @@
 import { Route, Routes } from "react-router-dom";
-import axios from "axios";
-import AdminHomePage from "./pages/admin/admin/AdminHomePage";
-import ListAdminPage from "./pages/admin/admin/ListAdminPage";
-import ListArtistPage from "./pages/admin/artist/ListArtistPage";
-import ListTrackPage from "./pages/admin/tracks/ListTrackPage";
-import TrackDetail from "./pages/admin/tracks/TrackDetail";
-import ListPLaylistPage from "./pages/admin/playlist/ListPlayListPage";
-import PlaylistDetail from "./pages/admin/playlist/PlaylistDetail";
-import ListAlbumPage from "./pages/admin/album/ListAlbum";
-import AlbumDetail from "./pages/admin/album/AlbumDetail";
-import ListUserPage from "./pages/admin/user/ListUser";
-import ListLoggerPage from "./pages/admin/logger/ListLogger";
-import LoginPage from "./pages/LoginPage";
-import AdminDashBoardPage from "./pages/admin/AdminDashBoardPage";
-import LayoutDashboard from "./layout/LayoutDashboard";
+import AdminHomePage from "pages/admin/admin/AdminHomePage";
+import ListAdminPage from "pages/admin/admin/ListAdminPage";
+import ListArtistPage from "pages/admin/artist/ListArtistPage";
+import ListTrackPage from "pages/admin/tracks/ListTrackPage";
+import TrackDetail from "pages/admin/tracks/TrackDetail";
+import ListPLaylistPage from "pages/admin/playlist/ListPlayListPage";
+import PlaylistDetail from "pages/admin/playlist/PlaylistDetail";
+import ListAlbumPage from "pages/admin/album/ListAlbum";
+import AlbumDetail from "pages/admin/album/AlbumDetail";
+import ListUserPage from "pages/admin/user/ListUser";
+import ListLoggerPage from "pages/admin/logger/ListLogger";
+import LoginPage from "pages/LoginPage";
+import AdminDashBoardPage from "pages/admin/AdminDashBoardPage";
+import LayoutDashboard from "layout/LayoutDashboard";
 import { useSelector } from "react-redux";
-import ArtistTrackPage from "./pages/artist/ArtistTrackPage";
-import LayoutSeleted from "./layout/LayoutSeleted";
-import HomePage from "./pages/user/HomePage";
-import AlbumDetailPage from "./pages/user/AlbumDetailPage";
-import PlaylistPage from "./pages/user/PlaylistPage";
-import ArtistDetailPage from "./pages/user/ArtistDetailPage";
-import SongsFavoritePage from "./pages/user/SongsFavoritePage";
+import ArtistTrackPage from "pages/artist/ArtistTrackPage";
+import LayoutSeleted from "layout/LayoutSeleted";
+import HomePage from "pages/user/HomePage";
+import AlbumDetailPage from "pages/user/AlbumDetailPage";
+import PlaylistPage from "pages/user/PlaylistPage";
+import ArtistDetailPage from "pages/user/ArtistDetailPage";
+import SongsFavoritePage from "pages/user/SongsFavoritePage";
+import SearchResultPage from "pages/user/SearchResultPage";
+import PlaylistDetailPage from "pages/user/PlaylistDetailPage";
+import ArtistHomePage from "pages/artist/artist/ArtistHomePage";
+import axios from "axios";
 
-axios.get("http://localhost:3000/Kwzng");
+axios.get("http://localhost:3000/");
 
 function App() {
   const role = useSelector((state) => state.auth.login.role);
@@ -89,7 +92,7 @@ function App() {
                 element={<ListAlbumPage></ListAlbumPage>}
               ></Route>
               <Route
-                path="/album/:slug"
+                path="/albums/:slug"
                 exact
                 element={<AlbumDetail></AlbumDetail>}
               ></Route>
@@ -110,7 +113,7 @@ function App() {
               <Route
                 path="/"
                 exact
-                element={<AdminDashBoardPage></AdminDashBoardPage>}
+                element={<ArtistHomePage></ArtistHomePage>}
               ></Route>
               <Route
                 path="/tracks"
@@ -148,9 +151,19 @@ function App() {
             element={<PlaylistPage></PlaylistPage>}
           ></Route>
           <Route
+            path="/playlists/:id"
+            extract
+            element={<PlaylistDetailPage></PlaylistDetailPage>}
+          ></Route>
+          <Route
             path="/songs-favorite"
             exact
             element={<SongsFavoritePage></SongsFavoritePage>}
+          ></Route>
+          <Route
+            path="/search/:keyword"
+            extract
+            element={<SearchResultPage></SearchResultPage>}
           ></Route>
         </Route>
       </Routes>

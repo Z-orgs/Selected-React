@@ -1,13 +1,14 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { v4 } from "uuid";
-import Modal from "../../components/modal/Modal";
-import { Label } from "../../components/label";
-import { Button } from "../../components/button";
-import { createPlaylistUser } from "../../redux/apiRequest";
+import Modal from "components/modal/Modal";
+import { Label } from "components/label";
+import { Button } from "components/button";
+import { createPlaylistUser } from "redux/apiRequest";
+
+const { default: axios } = require("api/axios");
 
 const panelItemClass = "px-10 block py-2 hover:bg-alpha-bg cursor-pointer";
 const TrackPanel = ({ song, show, nodeRef }) => {
@@ -17,16 +18,16 @@ const TrackPanel = ({ song, show, nodeRef }) => {
 
   const [playlists, setPlaylists] = useState({});
   const getPlaylistsUser = async () => {
-    const res = await axios.get("http://localhost:3000/playlist", {
+    const res = await axios.get("/playlist", {
       headers: { Authorization: `Bearer ${token}` },
     });
     setPlaylists(res.data);
-    console.log(res);
+    // console.log(res);
   };
-  const addTrackToPlaylist = async (trackId, playlistId, token) => {
+  const addTrackToPlaylist = async (trackId, playlistId) => {
     await axios
       .put(
-        `http://localhost:3000/playlist/add/${playlistId}`,
+        `/playlist/add/${playlistId}`,
         {
           trackId,
         },
@@ -43,14 +44,14 @@ const TrackPanel = ({ song, show, nodeRef }) => {
   useEffect(() => {
     getPlaylistsUser(token);
   }, []);
-  console.log(show);
+  // console.log(show);
   return (
     <div>
       <ul
         ref={nodeRef}
         className={`${
           show ? "flex" : "hidden"
-        } absolute bottom-0 right-0 flex-col list-none rounded-md bg-primary z-[99999999999]`}
+        } absolute bottom-0 right-0 flex-col list-none rounded-md bg-primary z-[99999999999] min-w-[220px]`}
       >
         <li className="relative group">
           <Link className={`${panelItemClass}`} to="#">
@@ -113,9 +114,8 @@ const TrackPanel = ({ song, show, nodeRef }) => {
               </span>
               New playlist
             </div>
-            <ul className="overflow-auto list-none max-h-52">
-              {playlists &&
-                playlists.length > 0 &&
+            <ul className="overflow-auto list-none min-h-[120px] min-w-[180px]">
+              {playlists && playlists.length > 0 ? (
                 playlists.map((playlist) => (
                   <li
                     key={v4()}
@@ -151,7 +151,10 @@ const TrackPanel = ({ song, show, nodeRef }) => {
                     </span>
                     {playlist.title}
                   </li>
-                ))}
+                ))
+              ) : (
+                <div className="m-auto">Empty</div>
+              )}
             </ul>
           </div>
         </li>

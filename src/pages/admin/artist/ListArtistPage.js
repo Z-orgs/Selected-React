@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllArtist } from "../../../redux/apiRequest";
-import axios from "axios";
-import Modal from "../../../components/modal/Modal";
-import { Button } from "../../../components/button";
-import FormGroup from "../../../components/common/FormGroup";
-import { Label } from "../../../components/label";
-import { Input } from "../../../components/input";
+import { getAllArtist } from "redux/apiRequest";
+import Modal from "components/modal/Modal";
+import { Button } from "components/button";
+import FormGroup from "components/common/FormGroup";
+import { Label } from "components/label";
+import { Input } from "components/input";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import HeadingOverView from "components/common/HeadingOverView";
+const { default: axios } = require("api/axios");
 
 const schema = yup.object({
   username: yup.string().required("Please enter your username"),
@@ -31,6 +32,7 @@ const ListArtistPage = () => {
   const dispatch = useDispatch();
   const listArtist = useSelector((state) => state.artist.artists?.allArtist);
   const [showModal, setShowModal] = useState(false);
+  const [count, setCount] = useState(0);
 
   const handleCreateAdmin = async (e) => {
     const artist = {
@@ -45,7 +47,7 @@ const ListArtistPage = () => {
     };
     try {
       await axios
-        .post(`http://localhost:3000/artist`, artist, {
+        .post(`/artist`, artist, {
           headers: {
             Authorization: `Bearer ${admin?.data?.admin_token}`,
           },
@@ -53,6 +55,7 @@ const ListArtistPage = () => {
         .then((res) => {
           console.log(res);
           setShowModal(false);
+          setCount(count + 1);
         });
       console.log(artist);
     } catch (e) {
@@ -61,12 +64,12 @@ const ListArtistPage = () => {
   };
   useEffect(() => {
     getAllArtist(admin?.data?.admin_token, dispatch);
-  }, [listArtist]);
+  }, [count]);
   localStorage.setItem("token", admin?.data?.admin_token);
   const handleResetPassword = async (id) => {
     try {
       await axios.put(
-        `http://localhost:3000/artist/reset/${id}`,
+        `/artist/reset/${id}`,
         { id },
         {
           headers: {
@@ -80,6 +83,11 @@ const ListArtistPage = () => {
   };
   return (
     <>
+      <HeadingOverView
+        imgUrl="/wallpaper-2.jpg"
+        total={listArtist.length}
+        type="artists"
+      ></HeadingOverView>
       <Button
         className="text-white bg-blue-500"
         onClick={() => setShowModal(true)}
@@ -197,7 +205,9 @@ const ListArtistPage = () => {
               error={errors.phone?.message}
             ></Input>
           </FormGroup>
-          <Button className="text-white bg-blue-500">Submit</Button>
+          <Button type="submit" className="text-white bg-blue-500">
+            Submit
+          </Button>
         </form>
       </Modal>
     </>

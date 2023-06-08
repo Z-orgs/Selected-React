@@ -1,20 +1,33 @@
-import React, { useState } from "react";
-import AlbumGrid from "../../modules/album/AlbumGrid";
-import GridView from "../../components/common/GridView";
-import AlbumItem from "../../modules/album/AlbumItem";
-import Modal from "../../components/modal/Modal";
+import React, { useEffect, useState } from "react";
+import AlbumGrid from "modules/album/AlbumGrid";
+import GridView from "components/common/GridView";
+import AlbumItem from "modules/album/AlbumItem";
+import Modal from "components/modal/Modal";
 import { useSelector } from "react-redux";
-import axios from "axios";
-import { Label } from "../../components/label";
-import { Input } from "../../components/input";
-import { Button } from "../../components/button";
-import { createPlaylistUser } from "../../redux/apiRequest";
+import { Label } from "components/label";
+import { Input } from "components/input";
+import { Button } from "components/button";
+import { createPlaylistUser } from "redux/apiRequest";
+
+const { default: axios } = require("api/axios");
 
 const PlaylistPage = () => {
   const token = useSelector((state) => state.auth.login.currentUser.jwt);
   const [showModal, setShowModal] = useState(false);
   const [namePlaylist, setNamePlaylist] = useState("");
+  const [playlists, setPlaylists] = useState([]);
   // const title = "hehe";
+  const getAllPlaylists = async () => {
+    await axios
+      .get("/playlist", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => setPlaylists(response.data))
+      .catch((err) => console.log(err));
+  };
+  useEffect(() => {
+    getAllPlaylists();
+  }, []);
 
   return (
     <div className="py-2">
@@ -55,6 +68,13 @@ const PlaylistPage = () => {
           </span>
           Add a new playlist
         </div>
+        {playlists.map((playlist) => (
+          <AlbumItem
+            isPlaylist={true}
+            id={playlist._id}
+            title={playlist.title}
+          ></AlbumItem>
+        ))}
         <AlbumItem></AlbumItem>
         <AlbumItem></AlbumItem>
         <AlbumItem></AlbumItem>

@@ -1,6 +1,6 @@
 import React from "react";
 
-const ButtonFollowArtist = ({ onClick, followed }) => {
+const ButtonFollowArtist = ({ onClick, followed, countFollower }) => {
   return (
     <button
       className={`flex items-center gap-2 px-4 py-1 text-sm rounded-full ${
@@ -37,7 +37,7 @@ const ButtonFollowArtist = ({ onClick, followed }) => {
           </svg>
         </span>
       )}
-      {followed ? "Unfollow" : "Follow"}
+      {followed ? "Followed" : "Follow"}
     </button>
   );
 };

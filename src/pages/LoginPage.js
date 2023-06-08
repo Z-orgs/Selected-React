@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import LoginForm from "../modules/login/LoginForm";
+import LoginForm from "modules/login/LoginForm";
 
 const RoleItem = ({ img, role, onClick, isActive }) => {
   return (

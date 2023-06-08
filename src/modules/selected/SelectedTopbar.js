@@ -1,10 +1,12 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import useSearch from "../../hooks/useSearch";
+import useSearch from "hooks/useSearch";
 import { debounce } from "lodash";
-import useOnChange from "../../hooks/useOnChange";
+import useOnChange from "hooks/useOnChange";
+import { v4 } from "uuid";
+
+const { default: axios } = require("api/axios");
 
 const SelectedTopbar = ({ sticky }) => {
   const navigate = useNavigate();
@@ -15,9 +17,10 @@ const SelectedTopbar = ({ sticky }) => {
     window.location.hostname
   );
   const handleOnchange = debounce((e) => {
-    setUrl(`http://localhost:3000/search?keyword=${e.target.value}`);
+    if (e.target.value !== "") setUrl(`/search?keyword=${e.target.value}`);
+    else setUrl("");
   }, 300);
-  console.log(data);
+  console.log(typeof data);
   const canGoBack = () => {
     return window.history.length > 1;
   };
@@ -34,9 +37,12 @@ const SelectedTopbar = ({ sticky }) => {
     // window.location.href.includes(window.lo)
     navigate(1);
   };
+
   return (
     <div
-      className={`absolute left-0 right-0 z-50 flex items-center justify-between py-4 px-16 max-h-topbar-height backdrop-blur-2xl bg-[#37075de3] mr-[17px]`}
+      className={`absolute left-0 right-0 z-50 flex items-center justify-between py-4 px-16 max-h-topbar-height transition-all ${
+        sticky ? "bg-[#37075de3] backdrop-blur-2xl" : ""
+      } mr-1`}
     >
       {/* <div className="absolute left-0 right-0 h-full -z-10 bg-bg-color bg-opacity-60 backdrop-blur-2xl"></div> */}
       <div className="flex gap-2">
@@ -74,9 +80,9 @@ const SelectedTopbar = ({ sticky }) => {
             </svg>
           </span>
         </div>
-        <div className="relative flex items-center">
+        <div className="relative flex items-center w-[440px]">
           <input
-            className="outline-none bg-[#4c4b4b8a] w-[340px] rounded-full h-full px-4 py-2 text-white pl-10 focus:bg-[rgba(0,0,0,0.4)]"
+            className={`outline-none bg-[hsla(0,0%,100%,0.1)] w-full rounded-full h-full px-4 py-2 text-white pl-10 focus:bg-[#200437]`}
             type="text"
             name=""
             id=""
@@ -99,6 +105,41 @@ const SelectedTopbar = ({ sticky }) => {
               />
             </svg>
           </span>
+
+          {typeof data !== "string" && Object.keys(data).length > 0 && (
+            <div className="absolute left-0 right-0 h-40 bg-[#200437] top-full text-white rounded-b-xl  px-4">
+              <div className="w-6 h-6 bg-[#200437] absolute bottom-full left-0 -z-10"></div>
+              <div className="w-6 h-6 bg-[#200437] absolute bottom-full right-0 -z-10"></div>
+              {data?.tracks?.length > 0 && (
+                <div className="border-t border-[rgba(255,255,255,0.2)]">
+                  {data.tracks.map((track) => (
+                    <div key={v4()}>{track.title}</div>
+                  ))}
+                </div>
+              )}
+              {data?.artists?.length > 0 && (
+                <div className="border-t border-[rgba(255,255,255,0.2)]">
+                  {data.artists.map((artist) => (
+                    <div key={v4()}>{artist.nickName}</div>
+                  ))}
+                </div>
+              )}
+              {data?.albums?.length > 0 && (
+                <div className="border-t border-[rgba(255,255,255,0.2)]">
+                  {data.albums.map((album) => (
+                    <div key={v4()}>{album.title}</div>
+                  ))}
+                </div>
+              )}
+              {data?.playlists?.length > 0 && (
+                <div className="border-t border-[rgba(255,255,255,0.2)]">
+                  {data.playlists.map((playlist) => (
+                    <div key={v4()}>{playlist.title}</div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
       <div className="cursor-pointer">

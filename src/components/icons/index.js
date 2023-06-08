@@ -7,3 +7,7 @@ export const { default: IconArrowToggle } = require("./IconArrowToggle");
 export const { default: IconLogout } = require("./IconLogout");
 export const { default: IconDashboard } = require("./IconDashboard");
 export const { default: IconPlayToggle } = require("./IconPlayToggle");
+export const { default: IconApproveToggle } = require("./IconApproveToggle");
+export const { default: IconPrevSong } = require("./IconPrevSong");
+export const { default: IconNextSong } = require("./IconNextSong");
+export const { default: IconSpeaker } = require("./IconSpeaker");

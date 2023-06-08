@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { ButtonFollowArtist } from "../../components/button";
+import { ButtonFollowArtist } from "components/button";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { followArtistToggle } from "../../redux/apiRequest";
+import { followArtistToggle } from "redux/apiRequest";
 import { useSelector } from "react-redux";
+
+const { default: axios } = require("api/axios");
 
 const ArtistCard = ({ idArtist }) => {
   const token = useSelector((state) => state.auth.login.currentUser.jwt);
   const [artist, setArtist] = useState({});
   const [data, setData] = useState({});
+  const [countFollower, setCountFollower] = useState(0);
   const getInfoArtist = async (id) => {
     try {
-      const res = await axios.get(`http://localhost:3000/artist/artist/${id}`, {
+      const res = await axios.get(`/artist/artist/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log(res);
       setData(res.data);
       setArtist(res.data.artist);
+      setCountFollower(res.data.artist.followers);
     } catch (err) {
       console.log(err);
     }
@@ -24,7 +27,7 @@ const ArtistCard = ({ idArtist }) => {
   useEffect(() => {
     getInfoArtist(idArtist);
   }, []);
-  console.log(artist);
+  // console.log(artist);
   return (
     <div className=" w-[250px] items-center flex flex-col justify-center text-white gap-y-1">
       <div className="relative overflow-hidden transition-all rounded-full cursor-pointer group">
@@ -54,10 +57,31 @@ const ArtistCard = ({ idArtist }) => {
           {artist.nickName || `${artist.userName}`}
           {/* Mob */}
         </Link>
-        <p className="text-sm font-semibold text-gray-300">100 followers</p>
+        <p className="text-sm font-semibold text-gray-300">
+          {artist.followers
+            ? `${artist.followers} followers`
+            : "Become first follower"}
+        </p>
         <ButtonFollowArtist
-          onClick={() => followArtistToggle(artist._id, token, data.followed)}
+          onClick={() => {
+            followArtistToggle(artist._id, token, data.followed)
+              .then((res) => {
+                if (res.success) {
+                  if (data.followed) {
+                    setCountFollower(countFollower - 1); // Giảm giá trị countFollower nếu unfollow
+                  } else {
+                    setCountFollower(countFollower + 1); // Tăng giá trị countFollower nếu follow
+                  }
+                  setData((prevState) => ({
+                    ...prevState,
+                    followed: !prevState.followed,
+                  })); // Toggle trạng thái follow/unfollow
+                }
+              })
+              .catch((err) => console.log(err));
+          }}
           followed={data.followed}
+          countFollower={countFollower}
         ></ButtonFollowArtist>
       </div>
     </div>

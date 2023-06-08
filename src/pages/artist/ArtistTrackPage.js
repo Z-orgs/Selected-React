@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
 import Modal from "../../components/modal/Modal";
 import { Button } from "../../components/button";
+
+const { default: axios } = require("api/axios");
 
 const ArtistTrackPage = () => {
   const artist = useSelector((state) => state.auth.login?.currentUser);
@@ -42,7 +43,7 @@ const ArtistTrackPage = () => {
     trackData.append("isPublic", formData.isPublic);
 
     try {
-      await axios.post("http://localhost:3000/track", trackData, {
+      await axios.post("/track", trackData, {
         headers: {
           Authorization: `Bearer ${artist?.data?.artist_token}`,
         },

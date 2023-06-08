@@ -9,6 +9,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { v4 } from "uuid";
 import { logout } from "../../redux/authSlice";
 import { useDispatch } from "react-redux";
+import { clearPlaylist } from "../../redux/user/playerSlice";
 
 const itemClass =
   "flex py-2 px-6 items-center w-full gap-2 text-lg font-semibold text-white";
@@ -36,7 +37,7 @@ const sidebarLinks = [
   },
   {
     title: "Subrice",
-    icon: <IconUser className="fill-white w-[24px] h-[24px]"></IconUser>,
+    icon: <IconUser></IconUser>,
     url: "/artists/64579beab680077a8e371679",
   },
   {
@@ -80,6 +81,7 @@ const SelectedLeftSidebar = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(clearPlaylist());
     navigate("/");
   };
   return (

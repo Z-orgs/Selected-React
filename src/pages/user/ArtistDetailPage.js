@@ -1,42 +1,48 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import ButtonFollowArtist from "../../components/button/ButtonFollowArtist";
-import ArtistCard from "../../modules/artist/ArtistCard";
-import GridView from "../../components/common/GridView";
-import Heading from "../../components/common/Heading";
+import ButtonFollowArtist from "components/button/ButtonFollowArtist";
+import ArtistCard from "modules/artist/ArtistCard";
+import GridView from "components/common/GridView";
+import Heading from "components/common/Heading";
 import { v4 } from "uuid";
-import TrackItem from "../../modules/track/TrackItem";
+import TrackItem from "modules/track/TrackItem";
+import { followArtistToggle } from "redux/apiRequest";
+
+const { default: axios } = require("api/axios");
 
 const ArtistDetailPage = () => {
   const { id } = useParams();
   const [artists, setArtists] = useState([]);
   const [artist, setArtist] = useState({});
   const [tracks, setTracks] = useState([]);
+  const [data, setData] = useState({});
+  const [countFollower, setCountFollower] = useState(0);
   const token = useSelector((state) => state.auth.login.currentUser.jwt);
   const getArtist = async () => {
     await axios
-      .get(`http://localhost:3000/artist/artist/${id}`, {
+      .get(`/artist/artist/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setTracks(res.data.tracks);
         setArtist(res.data.artist);
+        setData(res.data);
+        setCountFollower(res.data.artist.followers);
       })
       .catch((err) => console.log(err));
   };
 
   const getAllArtist = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/search", {
+      const res = await axios.get("/search", {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
       });
       setArtists(res.data.artists);
-      console.log(res);
+      // console.log(res);
     } catch (err) {
       console.log(err);
     }
@@ -47,7 +53,7 @@ const ArtistDetailPage = () => {
     getAllArtist();
   }, []);
   return (
-    <div>
+    <div className="-mt-16">
       <div className="relative -pt-16 mb-8 pt-[135px] flex items-end">
         {/* background cover */}
         <div className="absolute top-0 bottom-0 overflow-hidden -left-28 -right-28">
@@ -81,9 +87,15 @@ const ArtistDetailPage = () => {
               </h3>
               <div className="flex items-center gap-4">
                 <p className="text-sm font-semibold">
-                  {artist.followers} followers
+                  {countFollower} followers
                 </p>
-                <ButtonFollowArtist></ButtonFollowArtist>
+                <ButtonFollowArtist
+                  onClick={() => {
+                    followArtistToggle(artist._id, token, data.followed);
+                    setCountFollower(countFollower + 1);
+                  }}
+                  followed={data.followed}
+                ></ButtonFollowArtist>
               </div>
             </div>
           </div>
@@ -98,13 +110,12 @@ const ArtistDetailPage = () => {
       <div>
         <Heading>You may also like</Heading>
         <GridView>
-          {artists.map((artist) => (
-            <ArtistCard key={v4()} idArtist={artist._id}></ArtistCard>
-          ))}
-          <ArtistCard></ArtistCard>
-          <ArtistCard></ArtistCard>
-          <ArtistCard></ArtistCard>
-          <ArtistCard></ArtistCard>
+          {artists
+            .filter((artist) => artist._id !== id)
+            .slice(0, 5)
+            .map((artist) => (
+              <ArtistCard key={v4()} idArtist={artist._id}></ArtistCard>
+            ))}
         </GridView>
       </div>
     </div>

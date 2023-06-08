@@ -9,6 +9,7 @@ import { store, persistor } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// require("dotenv").config();
 
 const container = document.getElementById("root");
 const root = createRoot(container);

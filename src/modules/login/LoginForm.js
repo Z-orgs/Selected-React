@@ -4,12 +4,12 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { loginUser, loginUserWithGoogle } from "../../redux/apiRequest";
-import FormGroup from "../../components/common/FormGroup";
-import { Label } from "../../components/label";
-import { Input } from "../../components/input";
-import { Button } from "../../components/button";
-import { IconEyeToggle } from "../../components/icons";
+import { loginUser, loginUserWithGoogle } from "redux/apiRequest";
+import FormGroup from "components/common/FormGroup";
+import { Label } from "components/label";
+import { Input } from "components/input";
+import { Button } from "components/button";
+import { IconEyeToggle } from "components/icons";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
 const schema = yup.object({

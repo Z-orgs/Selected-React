@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getHomePage } from "../../redux/apiRequest";
-import io from "socket.io-client";
-import axios from "axios";
-import Player from "../../components/Player";
-import ReactAudioPlayer from "react-audio-player";
-import AlbumItem from "../../modules/album/AlbumItem";
-import AlbumGrid from "../../modules/album/AlbumGrid";
-import TrackItem from "../../modules/track/TrackItem";
-import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
-import "react-h5-audio-player/lib/styles.css";
+import { getHomePage } from "redux/apiRequest";
+import AlbumItem from "modules/album/AlbumItem";
+import AlbumGrid from "modules/album/AlbumGrid";
+import TrackItem from "modules/track/TrackItem";
 import { v4 } from "uuid";
-import Slider from "../../modules/slider";
+import Slider from "modules/slider";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -20,6 +14,7 @@ const HomePage = () => {
 
   const data = useSelector((state) => state.homePage.homePage.data);
   console.log(data);
+  const trackActive = useSelector((state) => state.player.trackActive);
 
   useEffect(() => {
     getHomePage(token, dispatch);
@@ -65,13 +60,14 @@ const HomePage = () => {
               thumb={album.coverArtUrl}
             ></AlbumItem>
           ))}
+          {/* <AlbumItem></AlbumItem>
           <AlbumItem></AlbumItem>
           <AlbumItem></AlbumItem>
-          <AlbumItem></AlbumItem>
-          <AlbumItem></AlbumItem>
+          <AlbumItem></AlbumItem> */}
         </AlbumGrid>
         {/* <MusicPlayer></MusicPlayer> */}
       </div>
+
       {data?.NoFollowing && (
         <div>
           <h2 className="text-2xl font-semibold text-white">Random Albums</h2>
@@ -85,21 +81,37 @@ const HomePage = () => {
                 thumb={album.coverArtUrl}
               ></AlbumItem>
             ))}
+            {/* <AlbumItem></AlbumItem>
             <AlbumItem></AlbumItem>
             <AlbumItem></AlbumItem>
-            <AlbumItem></AlbumItem>
-            <AlbumItem></AlbumItem>
+            <AlbumItem></AlbumItem> */}
           </AlbumGrid>
           {/* <MusicPlayer></MusicPlayer> */}
         </div>
       )}
-      <div>
-        <h2 className="text-2xl font-semibold text-white">Random Albums</h2>
 
+      <div className="flex gap-10">
         <div>
-          {data?.NoFollowing?.randomTracksNF.map((track) => (
-            <TrackItem key={v4()} song={track}></TrackItem>
-          ))}
+          <h2 className="text-2xl font-semibold text-white">Random Tracks</h2>
+
+          <div>
+            {data?.NoFollowing?.randomTracksNF.map((track) => (
+              <TrackItem key={v4()} song={track}></TrackItem>
+            ))}
+          </div>
+        </div>
+        <div>
+          <h2 className="text-2xl font-semibold text-white">Random Albums</h2>
+
+          <div>
+            {data?.NoFollowing?.randomTracksNF.map((track) => (
+              <TrackItem
+                key={v4()}
+                song={track}
+                activeSong={track._id === trackActive?._id}
+              ></TrackItem>
+            ))}
+          </div>
         </div>
       </div>
     </div>

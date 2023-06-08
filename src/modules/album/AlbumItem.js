@@ -1,20 +1,21 @@
 import React from "react";
 import "./Album.css";
 import { Link } from "react-router-dom";
+import generateImg from "utils/generateImg";
 
-const AlbumItem = ({ thumb, title, id, keyProp }) => {
+const AlbumItem = ({ thumb, title, id, isPlaylist = false, size = "290" }) => {
   return (
-    <div className="w-[290px]" key={keyProp}>
+    <div className={`w-[${size}px] h-[${size}px] mb-4`}>
       <Link
-        to={`/albums/${id}`}
-        className="relative mb-2 overflow-hidden rounded-md cursor-pointer select-none group max-h-[290px] block bg-[#eee]"
+        to={`/${!isPlaylist ? "albums" : "playlists"}/${id}`}
+        className={`relative mb-1 cursor-pointer select-none group overflow-hidden block h-[250px] bg-[#eee] rounded-md`}
       >
         <img
-          className="w-full duration-500 ease-in group-hover:scale-110"
+          className={`duration-300 ease-out group-hover:scale-110 object-cover h-full w-full`}
           src={
             thumb
-              ? `http://localhost:3000/file/${thumb}`
-              : "https://photo-resize-zmp3.zmdcdn.me/w320_r1x1_webp/cover/b/d/f/4/bdf46d5caf0e60100052b74d06f4e3ea.jpg"
+              ? generateImg(thumb)
+              : "https://e7.pngegg.com/pngimages/228/498/png-clipart-playlist-spotify-music-music-radio-music-download-radio-thumbnail.png"
           }
           alt=""
         />
@@ -42,9 +43,12 @@ const AlbumItem = ({ thumb, title, id, keyProp }) => {
           </span>
         </div>
       </Link>
-      <h3 className="text-base font-semibold text-white cursor-pointer">
+      <Link
+        to={`/${!isPlaylist ? "albums" : "playlists"}/${id}`}
+        className="overflow-hidden text-base font-semibold cursor-pointer whitespace-nowrap text-ellipsis"
+      >
         {title || "Âm nhạc nạp vitamin tích cực cho bạn mỗi ngày"}
-      </h3>
+      </Link>
     </div>
   );
 };

@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllAdmins } from "../../../redux/apiRequest";
-import axios from "axios";
-import Modal from "../../../components/modal/Modal";
-import { Button } from "../../../components/button";
-import { Label } from "../../../components/label";
-import FormGroup from "../../../components/common/FormGroup";
-import { Input } from "../../../components/input";
+import { getAllAdmins } from "redux/apiRequest";
+import Modal from "components/modal/Modal";
+import { Button } from "components/button";
+import { Label } from "components/label";
+import FormGroup from "components/common/FormGroup";
+import { Input } from "components/input";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import HeadingOverView from "components/common/HeadingOverView";
+const { default: axios } = require("api/axios");
 
 const schema = yup.object({
   username: yup.string().required("Please enter your username"),
@@ -28,6 +29,7 @@ const ListAdminPage = () => {
   const dispatch = useDispatch();
   const list = useSelector((state) => state.admin.admins?.allAdmins);
   const [showModal, setShowModal] = useState(false);
+  const [count, setCount] = useState(0);
   const handleCreateAdmin = async () => {
     const ad = {
       username: watch("username"),
@@ -38,7 +40,7 @@ const ListAdminPage = () => {
     try {
       // setTypeModal("form");
       await axios
-        .post(`http://localhost:3000/admin/`, ad, {
+        .post(`/admin/`, ad, {
           headers: {
             Authorization: `Bearer ${admin?.data?.admin_token}`,
           },
@@ -46,6 +48,7 @@ const ListAdminPage = () => {
         .then((res) => {
           console.log(res);
           setShowModal(false);
+          setCount(count + 1);
         });
       console.log(admin);
     } catch (e) {
@@ -54,7 +57,7 @@ const ListAdminPage = () => {
   };
   const handleResetPassword = async (id) => {
     const res = await axios.put(
-      `http://localhost:3000/admin/${id}`,
+      `/admin/${id}`,
       { id: id },
       {
         headers: {
@@ -67,10 +70,15 @@ const ListAdminPage = () => {
   console.log(watch("username"));
   useEffect(() => {
     getAllAdmins(admin?.data?.admin_token, dispatch);
-  }, [list]);
+  }, [count]);
   localStorage.setItem("token", admin?.data?.admin_token);
   return (
-    <div className="flex">
+    <div className="">
+      <HeadingOverView
+        imgUrl="/wallpaper-2.jpg"
+        total={list.length}
+        type="admins"
+      ></HeadingOverView>
       <div className="flex-1">
         <Button
           onClick={() => {
