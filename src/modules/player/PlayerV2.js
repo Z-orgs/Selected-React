@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 const PlayerV2 = ({
   songs,
   index = 0,
+  setPlaying,
   children,
   isPlaying = false,
   handlePlayPause,
@@ -21,28 +22,15 @@ const PlayerV2 = ({
   const audioRef = useRef();
   const [audioIndex, setAudioIndex] = useState(index);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
   const [currentVolume, setCurrentVolume] = useState(100);
-  const [isPlay, setPlay] = useState(false);
   const [track, setTrack] = useState({});
   const ad = useSelector((state) => state.auth.login?.currentUser);
-  console.log(isPlaying);
-  // const handleApproveTrack = async () => {
-  //   const res = await axios.put(
-  //     `/track/approved/${songs[index]._id}`,
-  //     { id: songs[index]._id },
-  //     {
-  //       headers: { Authorization: `Bearer ${ad?.data?.admin_token}` },
-  //     }
-  //   );
-  //   console.log(res);
-  // };
+
   React.useEffect(() => {
     if (isPlaying) audioRef.current.play();
     else audioRef.current.pause();
   }, [isPlaying]);
   const handleLoadedData = () => {
-    setDuration(audioRef.current.duration);
     if (isPlaying) audioRef.current.play();
   };
   const handlePausePlayClick = () => {
@@ -51,17 +39,16 @@ const PlayerV2 = ({
     } else {
       audioRef.current.play();
     }
-    // setPlay((prevIsPlaying) => !prevIsPlaying);
-    handlePlayPause();
+    handlePlayPause && handlePlayPause();
   };
 
   const handleTimeSliderChange = (value) => {
     audioRef.current.currentTime = value;
     setCurrentTime(value);
-    // if (!isPlaying) {
-    //   isPlaying = true;
-    //   audioRef.current.play();
-    // }
+    if (!isPlaying) {
+      setPlaying(true);
+      audioRef.current.play();
+    }
   };
   const handleVolumeSliderChange = (value) => {
     const volume = value / 100;
@@ -137,14 +124,14 @@ const PlayerV2 = ({
           <Slider
             className="my-slider"
             min={0}
-            max={duration}
+            max={track.duration}
             value={currentTime}
             onChange={handleTimeSliderChange}
             handleStyle={{
               transform: "translateX(0)",
             }}
           />
-          <p>{formatDuration(duration)}</p>
+          <p>{formatDuration(track.duration)}</p>
         </div>
         <audio
           ref={audioRef}
@@ -170,15 +157,7 @@ const PlayerV2 = ({
           />
         </div>
       </div>
-      {/* <button
-        onClick={handleApproveTrack}
-        className={`px-4 py-2 text-white rounded-md min-w-[120px] my-2 font-semibold block text-lg ${
-          songs[index].status ? "bg-blue-400 text-gray-100" : "bg-blue-500"
-        }`}
-        disabled={songs[index].status}
-      >
-        {songs[index].status ? "Approved" : "Approve"}
-      </button> */}
+      {children}
     </div>
   );
 };

@@ -4,15 +4,32 @@ import { getAllTracks } from "redux/apiRequest";
 import HeadingOverView from "components/common/HeadingOverView";
 import IconApproveToggle from "components/icons/IconApproveToggle";
 import PlayerV2 from "modules/player/PlayerV2";
+import { IconPlayToggle } from "components/icons";
+import axios from "api/axios";
 
 const ListTrackPage = () => {
   const admin = useSelector((state) => state.auth.login?.currentUser);
   const dispatch = useDispatch();
   const listTracks = useSelector((state) => state.track.tracks?.allTracks);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [index, setIndex] = useState(0);
-  // const [active, setActive] = useState(false);
+  const ad = useSelector((state) => state.auth.login?.currentUser);
+
   const handlePickTrack = (i) => {
     setIndex(i);
+  };
+  const hanldePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
+  const handleApproveTrack = async () => {
+    const res = await axios.put(
+      `/track/approved/${listTracks[index]._id}`,
+      { id: listTracks[index]._id },
+      {
+        headers: { Authorization: `Bearer ${ad?.data?.admin_token}` },
+      }
+    );
+    console.log(res);
   };
   console.log(index);
   useEffect(() => {
@@ -44,6 +61,12 @@ const ListTrackPage = () => {
                 key={item._id}
                 onClick={() => handlePickTrack(i)}
               >
+                <span onClick={hanldePlayPause}>
+                  <IconPlayToggle
+                    currentColor="black"
+                    playing={index === i && isPlaying}
+                  ></IconPlayToggle>
+                </span>
                 <h3>
                   {item.title} - {item.artist}
                 </h3>
@@ -57,7 +80,25 @@ const ListTrackPage = () => {
             ))}
         </div>
         <div className="items-center flex-1">
-          <PlayerV2 songs={listTracks} index={index}></PlayerV2>
+          <PlayerV2
+            songs={listTracks}
+            index={index}
+            handlePlayPause={hanldePlayPause}
+            isPlaying={isPlaying}
+            setPlaying={setIsPlaying}
+          >
+            <button
+              onClick={handleApproveTrack}
+              className={`px-4 py-2 text-white rounded-md min-w-[120px] my-2 font-semibold block text-lg ${
+                listTracks[index].status
+                  ? "bg-blue-400 text-gray-100"
+                  : "bg-blue-500"
+              }`}
+              disabled={listTracks[index].status}
+            >
+              {listTracks[index].status ? "Approved" : "Approve"}
+            </button>
+          </PlayerV2>
         </div>
       </div>
     </>

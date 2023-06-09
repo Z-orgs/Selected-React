@@ -1,12 +1,10 @@
 import React from "react";
-import { useSelector } from "react-redux";
 
 const IconPlayToggle = ({
   playing = false,
   currentColor = "white",
   hover = true,
 }) => {
-  // const [play, setPlay] = React.useState(playing);
   if (playing)
     return (
       <svg
@@ -34,7 +32,6 @@ const IconPlayToggle = ({
       height={24}
       viewBox="0 0 24 24"
       className="group"
-      // onClick={() => setPlay(!play)}
     >
       <path
         className={`hover ? 'group-hover:fill-gray-300' : ''`}

@@ -1,13 +1,17 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import Modal from "../../components/modal/Modal";
-import { Button } from "../../components/button";
-
-const { default: axios } = require("api/axios");
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import Modal from "components/modal/Modal";
+import { getAllTrackArtists } from "redux/apiRequest";
+import { NavLink } from "react-router-dom";
 
 const ArtistTrackPage = () => {
   const artist = useSelector((state) => state.auth.login?.currentUser);
   const [showModal, setShowModal] = useState(false);
+  const dispatch = useDispatch();
+  const listTracks = useSelector(
+    (state) => state.trackArtist.trackArtists?.allTrackArtists
+  );
   const [formData, setFormData] = useState({
     file: null,
     title: "",
@@ -18,9 +22,13 @@ const ArtistTrackPage = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    // Xử lý giá trị boolean của isPublic
+    const inputValue = name === "isPublic" ? value === "true" : value;
+
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value,
+      [name]: inputValue,
     }));
   };
 
@@ -53,10 +61,23 @@ const ArtistTrackPage = () => {
       alert(e);
     }
   };
-
+  useEffect(() => {
+    getAllTrackArtists(artist?.data?.artist_token, dispatch);
+  }, []);
   return (
     <>
-      <Button onClick={() => setShowModal(true)}>Upload Track</Button>
+      <div>
+        {listTracks &&
+          listTracks.map((item) => (
+            <div key={item._id}>
+              {item.title} &nbsp;
+              <button>
+                <NavLink to={`/tracks/${item._id}`}>Detail</NavLink>
+              </button>
+            </div>
+          ))}
+      </div>
+      <button onClick={() => setShowModal(true)}>Upload Track</button>
       <Modal
         show={showModal}
         heading="Upload Track"
@@ -116,7 +137,7 @@ const ArtistTrackPage = () => {
           </label>
 
           <br />
-          <Button type="submit">Submit</Button>
+          <button type="submit">Submit</button>
         </form>
       </Modal>
     </>

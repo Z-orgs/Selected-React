@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllAlbums } from "../../../redux/apiRequest";
-import { NavLink } from "react-router-dom";
+import { getAllAlbums } from "redux/apiRequest";
 import AlbumGrid from "modules/album/AlbumGrid";
 import AlbumItem from "modules/album/AlbumItem";
 
@@ -19,7 +18,7 @@ const ListAlbumPage = () => {
         {listAlbum &&
           listAlbum.map((item) => (
             <AlbumItem
-              thumb={`${item.coverArtUrl}`}
+              thumb={`${process.env.REACT_APP_API}/file/${item.coverArtUrl}`}
               size="250"
               title={item.title}
               key={item._id}

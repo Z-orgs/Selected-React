@@ -44,6 +44,16 @@ import {
   getSongsLikedStart,
   getSongsLikedSuccess,
 } from "./user/songsLikedSlice";
+import {
+  getTrackArtistFailed,
+  getTrackArtistStart,
+  getTrackArtistSuccess,
+} from "./trackArtistSlice";
+import {
+  getAritstAlbumFailed,
+  getArtistAlbumStart,
+  getArtistAlbumSuccess,
+} from "./albumArtistSlice";
 // import axios from "axios";
 
 // const api = process.env.REACT_APP_API;
@@ -174,6 +184,32 @@ export const getAllLoggers = async (accessToken, dispatch) => {
     dispatch(getLoggersSuccess(res.data));
   } catch (err) {
     dispatch(getLoggersFailed());
+  }
+};
+
+export const getAllTrackArtists = async (accessToken, dispatch) => {
+  dispatch(getTrackArtistStart());
+  try {
+    const res = await axios.get("/artist/track", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    console.log(res.data);
+    dispatch(getTrackArtistSuccess(res.data));
+  } catch (err) {
+    dispatch(getTrackArtistFailed());
+  }
+};
+
+export const getAllAlbumArtists = async (accessToken, dispatch) => {
+  dispatch(getArtistAlbumStart());
+  try {
+    const res = await axios.get("/artist/album", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    console.log(res.data);
+    dispatch(getArtistAlbumSuccess(res.data));
+  } catch (err) {
+    dispatch(getAritstAlbumFailed());
   }
 };
 

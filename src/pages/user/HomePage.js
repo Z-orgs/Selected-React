@@ -57,7 +57,7 @@ const HomePage = () => {
               key={v4()}
               id={album._id}
               title={album.title}
-              thumb={album.coverArtUrl}
+              thumb={`${process.env.REACT_APP_API}/file/${album.coverArtUrl}`}
             ></AlbumItem>
           ))}
           {/* <AlbumItem></AlbumItem>
@@ -78,7 +78,7 @@ const HomePage = () => {
                 id={album._id}
                 keyProp={album._id}
                 title={album.title}
-                thumb={album.coverArtUrl}
+                thumb={`${process.env.REACT_APP_API}/file/${album.coverArtUrl}`}
               ></AlbumItem>
             ))}
             {/* <AlbumItem></AlbumItem>

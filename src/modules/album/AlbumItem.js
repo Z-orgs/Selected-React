@@ -14,7 +14,7 @@ const AlbumItem = ({ thumb, title, id, isPlaylist = false, size = "290" }) => {
           className={`duration-300 ease-out group-hover:scale-110 object-cover h-full w-full`}
           src={
             thumb
-              ? generateImg(thumb)
+              ? thumb
               : "https://e7.pngegg.com/pngimages/228/498/png-clipart-playlist-spotify-music-music-radio-music-download-radio-thumbnail.png"
           }
           alt=""
@@ -45,7 +45,7 @@ const AlbumItem = ({ thumb, title, id, isPlaylist = false, size = "290" }) => {
       </Link>
       <Link
         to={`/${!isPlaylist ? "albums" : "playlists"}/${id}`}
-        className="overflow-hidden text-base font-semibold cursor-pointer whitespace-nowrap text-ellipsis"
+        className="block overflow-hidden text-base font-semibold cursor-pointer whitespace-nowrap text-ellipsis"
       >
         {title || "Âm nhạc nạp vitamin tích cực cho bạn mỗi ngày"}
       </Link>

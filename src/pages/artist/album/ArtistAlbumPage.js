@@ -124,7 +124,7 @@ const ArtistAlbumPage = () => {
             <div key={item._id}>
               {item.title} &nbsp; {item.tracks} &nbsp;
               <button>
-                <NavLink to={`/artist/album/${item._id}`}>Detail</NavLink>
+                <NavLink to={`/albums/${item._id}`}>Detail</NavLink>
               </button>
             </div>
           ))}

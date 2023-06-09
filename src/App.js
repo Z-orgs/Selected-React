@@ -25,6 +25,9 @@ import SearchResultPage from "pages/user/SearchResultPage";
 import PlaylistDetailPage from "pages/user/PlaylistDetailPage";
 import ArtistHomePage from "pages/artist/artist/ArtistHomePage";
 import axios from "axios";
+import ArtistTrackDetail from "pages/artist/track/ArtistTrackDetail";
+import ArtistAlbumPage from "pages/artist/album/ArtistAlbumPage";
+import ArtistAlbumDetail from "pages/artist/album/ArtistAlbumDetail";
 
 axios.get("http://localhost:3000/");
 
@@ -121,9 +124,19 @@ function App() {
                 element={<ArtistTrackPage></ArtistTrackPage>}
               ></Route>
               <Route
+                path="/tracks/:slug"
+                exact
+                element={<ArtistTrackDetail></ArtistTrackDetail>}
+              ></Route>
+              <Route
                 path="/albums"
                 exact
-                element={<AdminDashBoardPage></AdminDashBoardPage>}
+                element={<ArtistAlbumPage></ArtistAlbumPage>}
+              ></Route>
+              <Route
+                path="/albums/:id"
+                exact
+                element={<ArtistAlbumDetail></ArtistAlbumDetail>}
               ></Route>
             </>
           )}

@@ -79,6 +79,7 @@ const ArtistAlbumDetail = () => {
         console.log(error);
       });
   }, [id, artist]);
+  console.log(album);
 
   const handleUpdateAlbum = async (e) => {
     e.preventDefault();

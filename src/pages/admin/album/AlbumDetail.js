@@ -30,16 +30,15 @@ const AlbumDetail = () => {
         setAlbum(response.data);
       });
   }, []);
-  console.log(album);
   return (
-    <div>
+    <div className="flex flex-col h-[90vh] gap-4">
       <HeadingOverView
         total={album?.tracks?.length}
         imgUrl="/bg-3.jpg"
         type={`tracks`}
       ></HeadingOverView>
-      <div className="flex gap-6">
-        <div className="h-[42vh] w-[60%] bg-white rounded-md relative">
+      <div className="flex flex-1 gap-6">
+        <div className="min-h-[42vh] w-[60%] bg-white rounded-md relative">
           <div
             className="absolute top-0 bottom-0 left-0 right-0 blur-sm brightness-75"
             style={{
@@ -84,6 +83,7 @@ const AlbumDetail = () => {
         <div className="flex-1">
           {Object.keys(album).length > 0 && (
             <PlayerV2
+              setPlaying={setIsPlaying}
               handlePlayPause={hanldePlayPause}
               isPlaying={isPlaying}
               songs={album.tracks}
