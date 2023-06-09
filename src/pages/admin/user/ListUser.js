@@ -15,10 +15,10 @@ const ListUserPage = () => {
     <>
       <HeadingOverView
         imgUrl="wallpaper-1.jpg"
-        total={listUser.length}
+        total={listUser && listUser?.length}
         type="users"
       ></HeadingOverView>
-      {listUser && listUser.length > 0 ? (
+      {listUser && listUser?.length > 0 ? (
         <table className="w-full text-sm text-gray-500">
           <thead className="text-base text-gray-700 uppercase bg-gray-50">
             <tr>
