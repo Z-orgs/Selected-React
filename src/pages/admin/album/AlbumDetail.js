@@ -88,6 +88,7 @@ const AlbumDetail = () => {
               isPlaying={isPlaying}
               songs={album.tracks}
               index={index}
+              setAudioIndex={setIndex}
             ></PlayerV2>
           )}
         </div>

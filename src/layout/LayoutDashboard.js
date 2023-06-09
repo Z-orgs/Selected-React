@@ -2,6 +2,7 @@ import React from "react";
 import DashboardRightSidebar from "modules/dashboard/DashboardRightSidebar";
 import DashboardLeftSidebar from "modules/dashboard/DashboardLeftSidebar";
 import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const LayoutDashboard = () => {
   return (

@@ -31,20 +31,6 @@ const PlaylistDetail = () => {
   }, [slug]);
   console.log(playlist);
   return (
-    // <>
-    //   <div>
-    //     {playlist.tracks &&
-    //       playlist.tracks.map((item) => {
-    //         return (
-    //           <div key={item._id}>
-    //             {item.title}
-    //             <br></br>
-    //             <audio controls src={item.link}></audio>
-    //           </div>
-    //         );
-    //       })}
-    //   </div>
-    // </>
     <div className="flex flex-col h-[90vh] gap-4">
       <HeadingOverView
         total={playlist?.tracks?.length}
@@ -69,7 +55,6 @@ const PlaylistDetail = () => {
               />
               <div className="p-2 text-center">
                 <h3 className="text-xl font-bold">{playlist.title}</h3>
-                {/* <p className="">Release: {calculateTime(album.release)}</p> */}
                 <p className="">Owner: {playlist.owner}</p>
               </div>
             </div>
@@ -102,6 +87,7 @@ const PlaylistDetail = () => {
               isPlaying={isPlaying}
               songs={playlist.tracks}
               index={index}
+              setAudioIndex={setIndex}
             ></PlayerV2>
           )}
         </div>

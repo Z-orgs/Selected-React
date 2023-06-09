@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
 import Modal from "./../../../components/modal/Modal";
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-const { default: axios } = require("api/axios");
 
 const ArtistHomePage = () => {
   const ar = useSelector((state) => state.auth.login?.currentUser);
@@ -64,21 +64,25 @@ const ArtistHomePage = () => {
     formData.append("firstName", artistData.firstName);
     formData.append("lastName", artistData.lastName);
     if (artistData.image) {
-      formData.append("image", formData.image);
+      formData.append("image", artistData.image);
     }
 
     formData.append("socialLinks", JSON.stringify(artistData.socialLinks));
 
     console.log(artistData);
     try {
-      const response = await axios.put("/artist", formData, {
-        headers: {
-          Authorization: `Bearer ${ar?.data?.artist_token}`,
-          "Content-Type": artistData.image
-            ? "multipart/form-data"
-            : "application/x-www-form-urlencoded",
-        },
-      });
+      const response = await axios.put(
+        "http://localhost:3000/artist",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${ar?.data?.artist_token}`,
+            "Content-Type": artistData.image
+              ? "multipart/form-data"
+              : "application/x-www-form-urlencoded",
+          },
+        }
+      );
       console.log(response);
       // Update the artist data in the Redux store or perform any other necessary actions
       // ...
@@ -113,6 +117,7 @@ const ArtistHomePage = () => {
       };
     });
   };
+  console.log(artistData);
 
   return (
     <>
@@ -135,6 +140,7 @@ const ArtistHomePage = () => {
             <input
               type="file"
               name="image"
+              accept="image/*"
               onChange={(e) => handleInputChange("image", e.target.files[0])}
             />
             <br />

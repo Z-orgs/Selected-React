@@ -16,11 +16,12 @@ const PlayerV2 = ({
   index = 0,
   setPlaying,
   children,
+  setAudioIndex,
   isPlaying = false,
   handlePlayPause,
 }) => {
   const audioRef = useRef();
-  const [audioIndex, setAudioIndex] = useState(index);
+  // const [audioIndex, setAudioIndex] = useState(index);
   const [currentTime, setCurrentTime] = useState(0);
   const [currentVolume, setCurrentVolume] = useState(100);
   const [track, setTrack] = useState({});
@@ -58,13 +59,15 @@ const PlayerV2 = ({
 
   React.useEffect(() => {
     // setAudioIndex(index);
-    axios
-      .get(`/admin/track/${songs[index]._id}`, {
-        headers: { Authorization: `Bearer ${ad?.data?.admin_token}` },
-      })
-      .then((response) => {
-        setTrack(response.data);
-      });
+    songs &&
+      songs.length > 0 &&
+      axios
+        .get(`/admin/track/${songs[index]._id}`, {
+          headers: { Authorization: `Bearer ${ad?.data?.admin_token}` },
+        })
+        .then((response) => {
+          setTrack(response.data);
+        });
   }, [index]);
   return (
     <div
@@ -95,7 +98,7 @@ const PlayerV2 = ({
           <div
             className="Prev-Button"
             onClick={() => {
-              setAudioIndex((audioIndex - 1) % songs.length);
+              setAudioIndex((index - 1) % songs.length);
             }}
           >
             <IconPrevSong></IconPrevSong>
@@ -113,7 +116,7 @@ const PlayerV2 = ({
           <div
             className="Next-Button"
             onClick={() => {
-              setAudioIndex((audioIndex + 1) % songs.length);
+              setAudioIndex((index + 1) % songs.length);
             }}
           >
             <IconNextSong></IconNextSong>

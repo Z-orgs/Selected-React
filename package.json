@@ -45,7 +45,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "up": "docker-compose up -d",
-    "down": "docker-compose down"
+    "down": "docker-compose down",
+    "docker": "docker build -t selected-react . && docker tag selected-react nguyendangkhai20/selected-react&& docker push nguyendangkhai20/selected-react"
   },
   "eslintConfig": {
     "extends": [
