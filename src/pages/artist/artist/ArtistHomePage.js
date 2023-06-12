@@ -1,264 +1,28 @@
-import { NavLink } from "react-router-dom";
-import Modal from "./../../../components/modal/Modal";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 
 const ArtistHomePage = () => {
-  const ar = useSelector((state) => state.auth.login?.currentUser);
-  const [artistData, setArtistData] = useState({
-    nickName: "",
-    firstName: "",
-    lastName: "",
-
-    address: "",
-    genre: "",
-    socialLinks: [{ name: "", url: "" }],
-    dob: "",
-    email: "",
-    phone: "",
-    image: null,
-  });
-  const [showModal, setShowModal] = useState(false);
-  useEffect(() => {
-    if (ar) {
-      // Extract artist data from Redux store and update artistData state
-      const {
-        address,
-        genre,
-        socialLinks,
-        dob,
-        email,
-        phone,
-        nickName,
-        firstName,
-        lastName,
-        image,
-      } = ar.data;
-      setArtistData((prevData) => ({
-        ...prevData,
-        address,
-        genre,
-        socialLinks,
-        dob,
-        email,
-        phone,
-        nickName,
-        firstName,
-        lastName,
-        image,
-      }));
-    }
-  }, [ar]);
-
-  const handleUpdateArtist = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("address", artistData.address);
-    formData.append("genre", artistData.genre);
-    formData.append("dob", artistData.dob);
-    formData.append("email", artistData.email);
-    formData.append("phone", artistData.phone);
-    formData.append("nickName", artistData.nickName);
-    formData.append("firstName", artistData.firstName);
-    formData.append("lastName", artistData.lastName);
-    if (artistData.image) {
-      formData.append("image", artistData.image);
-    }
-
-    formData.append("socialLinks", JSON.stringify(artistData.socialLinks));
-
-    console.log(artistData);
-    try {
-      const response = await axios.put(
-        "http://localhost:3000/artist",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${ar?.data?.artist_token}`,
-            "Content-Type": artistData.image
-              ? "multipart/form-data"
-              : "application/x-www-form-urlencoded",
-          },
-        }
-      );
-      console.log(response);
-      // Update the artist data in the Redux store or perform any other necessary actions
-      // ...
-
-      setShowModal(false);
-    } catch (e) {
-      alert(e);
-    }
-  };
-
-  const handleInputChange = (field, value) => {
-    setArtistData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
-
-  const handleAddSocialLink = () => {
-    setArtistData((prevData) => ({
-      ...prevData,
-      socialLinks: [...prevData.socialLinks, { name: "", url: "" }],
-    }));
-  };
-
-  const handleSocialLinkChange = (index, field, value) => {
-    setArtistData((prevData) => {
-      const updatedSocialLinks = [...prevData.socialLinks];
-      updatedSocialLinks[index][field] = value;
-      return {
-        ...prevData,
-        socialLinks: updatedSocialLinks,
-      };
-    });
-  };
-  console.log(artistData);
-
   return (
-    <>
-      <div>Artist Home Page</div>
-      <div>
-        <button>
-          <NavLink to={"/artist/change-password"}>Change password</NavLink>
-        </button>
-        <br />
-        <button onClick={() => setShowModal(true)}>Update</button>
-
-        <Modal
-          show={showModal}
-          heading="Update"
-          onClose={() => setShowModal(false)}
-        >
-          <form onSubmit={handleUpdateArtist}>
-            <label>Image</label>
-            <br />
-            <input
-              type="file"
-              name="image"
-              accept="image/*"
-              onChange={(e) => handleInputChange("image", e.target.files[0])}
+    <div className="flex flex-col gap-4 p-6">
+      <div className="flex">
+        <div className="w-2/4 h-[400px] bg-blue-500 rounded-md flex-col items-center justify-center flex">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={180}
+            height={(180 * 4) / 5}
+            viewBox="0 0 640 512"
+          >
+            <path
+              fill="white"
+              d="M0 24C0 10.7 10.7 0 24 0h592c13.3 0 24 10.7 24 24s-10.7 24-24 24H24C10.7 48 0 37.3 0 24zm0 464c0-13.3 10.7-24 24-24h592c13.3 0 24 10.7 24 24s-10.7 24-24 24H24c-13.3 0-24-10.7-24-24zm83.2-328a64 64 0 1 1 128 0a64 64 0 1 1-128 0zM32 320c0-35.3 28.7-64 64-64h96c12.2 0 23.7 3.4 33.4 9.4c-37.2 15.1-65.6 47.2-75.8 86.6H64c-17.7 0-32-14.3-32-32zm461.6 32c-10.3-40.1-39.6-72.6-77.7-87.4c9.4-5.5 20.4-8.6 32.1-8.6h96c35.3 0 64 28.7 64 64c0 17.7-14.3 32-32 32h-82.4zm-102.4-61.6c32.1 7.4 58.1 30.9 68.9 61.6c3.5 10 5.5 20.8 5.5 32c0 17.7-14.3 32-32 32h-224c-17.7 0-32-14.3-32-32c0-11.2 1.9-22 5.5-32c10.5-29.7 35.3-52.8 66.1-60.9c7.8-2.1 16-3.1 24.5-3.1h96c7.4 0 14.7.8 21.6 2.4zm44-130.4a64 64 0 1 1 128 0a64 64 0 1 1-128 0zM321.6 96a80 80 0 1 1 0 160a80 80 0 1 1 0-160z"
             />
-            <br />
-            <label>Nickname</label>
-            <br />
-            <input
-              type="text"
-              name="nickName"
-              value={artistData.nickName}
-              onChange={(e) => handleInputChange("nickName", e.target.value)}
-            />
-            <br />
-            <label>First Name</label>
-            <br />
-            <input
-              type="text"
-              name="firstName"
-              value={artistData.firstName}
-              onChange={(e) => handleInputChange("firstName", e.target.value)}
-            />
-            <br />
-            <label>Last Name</label>
-            <br />
-            <input
-              type="text"
-              name="lastName"
-              value={artistData.lastName}
-              onChange={(e) => handleInputChange("lastName", e.target.value)}
-            />
-            <br />
-            <label>Address</label>
-            <br />
-            <input
-              type="text"
-              name="address"
-              value={artistData.address}
-              onChange={(e) => handleInputChange("address", e.target.value)}
-            />
-            <br />
-            <label>Genre</label>
-            <br />
-            <input
-              type="text"
-              name="genre"
-              value={artistData.genre}
-              onChange={(e) => handleInputChange("genre", e.target.value)}
-            />
-            {artistData.socialLinks.map((link, index) => (
-              <div key={`socialLink-${index}`}>
-                <br />
-                <label>Social Link Name</label>
-                <br />
-                <input
-                  type="text"
-                  name={`socialName-${index}`}
-                  value={link.name}
-                  onChange={(e) =>
-                    handleSocialLinkChange(index, "name", e.target.value)
-                  }
-                />
-                <br />
-                <label>Social Link URL</label>
-                <br />
-                <input
-                  type="text"
-                  name={`socialURL-${index}`}
-                  value={link.url}
-                  onChange={(e) =>
-                    handleSocialLinkChange(index, "url", e.target.value)
-                  }
-                />
-              </div>
-            ))}
-            <br />
-            <button type="button" onClick={handleAddSocialLink}>
-              Add Social Link
-            </button>
-            <br />
-            <label>Dob</label>
-            <br />
-            <input
-              type="date"
-              name="dob"
-              value={artistData.dob}
-              onChange={(e) => handleInputChange("dob", e.target.value)}
-            />
-            <br />
-            <label>Email</label>
-            <br />
-            <input
-              type="text"
-              name="email"
-              value={artistData.email}
-              onChange={(e) => handleInputChange("email", e.target.value)}
-            />
-            <br />
-            <label>Phone number</label>
-            <br />
-            <input
-              type="text"
-              name="phone"
-              value={artistData.phone}
-              onChange={(e) => handleInputChange("phone", e.target.value)}
-            />
-            <br />
-            <button type="submit">Submit</button>
-          </form>
-        </Modal>
-        <br />
-        <button>
-          <NavLink to={"/artist/track"}>Track</NavLink>
-        </button>
-        <br />
-        <button>
-          <NavLink to={"/artist/album"}>Album</NavLink>
-        </button>
+          </svg>
+          <div className="flex flex-col items-center text-4xl font-bold text-white font-secondary">
+            500
+            <p className="text-2xl font-normal">followers</p>
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

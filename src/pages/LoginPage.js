@@ -79,7 +79,7 @@ const LoginPage = () => {
         <div
           className={`${
             role ? "translate-x-[98%] transition-all" : "opacity-0"
-          } relative flex flex-col items-center bg-[#270082] justify-center max-w-[480px] w-full rounded-tr-xl rounded-br-xl overflow-hidden shadow-shadow-r`}
+          } relative flex flex-col items-center bg-bg-color-2 justify-center max-w-[480px] w-full rounded-tr-xl rounded-br-xl overflow-hidden shadow-shadow-r`}
         >
           <img className="absolute top-0 right-0 " src="/UpWave.svg" alt="" />
           <h3 className="absolute inline-block text-4xl font-semibold text-white top-2">

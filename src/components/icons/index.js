@@ -11,3 +11,7 @@ export const { default: IconApproveToggle } = require("./IconApproveToggle");
 export const { default: IconPrevSong } = require("./IconPrevSong");
 export const { default: IconNextSong } = require("./IconNextSong");
 export const { default: IconSpeaker } = require("./IconSpeaker");
+export const { default: IconBin } = require("./IconBin");
+export const { default: IconEdit } = require("./IconEdit");
+export const { default: IconUpload } = require("./IconUpload");
+export const { default: IconMore } = require("./IconMore");

@@ -1,7 +1,7 @@
 import React from "react";
 import CountUp from "react-countup";
 
-const HeadingOverView = ({ imgUrl, total, type }) => {
+const HeadingOverView = ({ imgUrl = "/bg-3.jpg", total, type }) => {
   return (
     <div
       className="h-[15vh] w-full mb-4 relative rounded-lg overflow-hidden"

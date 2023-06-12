@@ -8,13 +8,13 @@ const ListUserPage = () => {
   const dispatch = useDispatch();
   const listUser = useSelector((state) => state.user.users?.allUsers);
   useEffect(() => {
-    getAllUsers(admin?.data?.admin_token, dispatch);
+    getAllUsers(admin?.admin_token, dispatch);
   }, []);
-  localStorage.setItem("token", admin?.data?.admin_token);
+  localStorage.setItem("token", admin?.admin_token);
   return (
     <>
       <HeadingOverView
-        imgUrl="wallpaper-1.jpg"
+        // imgUrl="wallpaper-1.jpg"
         total={listUser && listUser?.length}
         type="users"
       ></HeadingOverView>

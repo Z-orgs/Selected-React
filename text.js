@@ -2,7 +2,6 @@ import { getAllAlbumArtists, getAllTrackArtists } from "redux/apiRequest";
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "components/modal/Modal";
-import { NavLink } from "react-router-dom";
 import AlbumGrid from "modules/album/AlbumGrid";
 import AlbumItem from "modules/album/AlbumItem";
 import LayoutForm from "layout/LayoutForm";
@@ -20,12 +19,11 @@ import { Button } from "components/button";
 import DatePicker from "react-date-picker";
 import "react-date-picker/dist/DatePicker.css";
 import "react-calendar/dist/Calendar.css";
-import { toast } from "react-toastify";
 
 const { default: axios } = require("api/axios");
 const schema = yup.object({
-  // username: yup.string().required("Please enter your username"),
-  // password: yup.string().required("Please enter your password"),
+  username: yup.string().required("Please enter your username"),
+  password: yup.string().required("Please enter your password"),
   //.min(8, "Your password must be at least 8 characters"),
 });
 const formatText = (str) =>
@@ -36,11 +34,8 @@ const formatText = (str) =>
     .replace(/[\u0300-\u036f]/g, "");
 
 const ArtistAlbumPage = () => {
-  const [count, setCount] = useState(0);
   const [value, onChange] = useState(new Date());
-  const token = useSelector((state) => state.auth.login.token);
   const {
-    register,
     control,
     handleSubmit,
     formState: { errors },
@@ -56,65 +51,23 @@ const ArtistAlbumPage = () => {
   const listTrack = useSelector(
     (state) => state.trackArtist.trackArtists?.allTrackArtists
   );
-  const [formData, setFormData] = useState({
-    image: null,
-    title: "",
-    genre: "",
-    release: "",
-    isPublic: true,
-    tracks: [],
-  });
-
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState(listTrack);
   const [selectedTracks, setSelectedTracks] = useState([]);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    // Xử lý giá trị boolean của isPublic
-    const inputValue = name === "isPublic" ? value === "true" : value;
-
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: inputValue,
-    }));
-  };
-
-  const handleFileChange = (e) => {
-    const image = e.target.files[0];
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      image: image,
-    }));
-  };
-
   useEffect(() => {
-    getAllAlbumArtists(token, dispatch);
-    // getAllTrackArtists(token, dispatch);
-  }, [count]);
+    getAllAlbumArtists(artist?.data?.artist_token, dispatch);
+    getAllTrackArtists(artist?.data?.artist_token, dispatch);
+  }, []);
 
   const handleCreateAlbum = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
 
     const albumData = new FormData();
-    // albumData.append("image", formData.image);
-    // albumData.append("title", formData.title);
-    // albumData.append("genre", formData.genre);
-    // albumData.append("release", formData.release);
-    // albumData.append("isPublic", formData.isPublic);
-    // albumData.append(
-    //   "tracks",
-    //   JSON.stringify(selectedTracks.map((track) => track._id))
-    // );
     albumData.append("image", watch("image"));
     albumData.append("title", watch("title"));
     albumData.append("genre", watch("genre"));
-    albumData.append("release", value);
-    albumData.append(
-      "isPublic",
-      JSON.stringify(watch("isPublic") === "public")
-    );
+    albumData.append("release", watch("release"));
+    albumData.append("isPublic", watch("isPublic"));
     albumData.append(
       "tracks",
       JSON.stringify(selectedTracks.map((track) => track._id))
@@ -123,32 +76,18 @@ const ArtistAlbumPage = () => {
     try {
       await axios.post("/album", albumData, {
         headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${artist?.data?.artist_token}`,
         },
       });
-      toast.success("Album created successfully!");
-      setCount(count + 1);
-      setShowModal(false);
+      alert("Album created successfully!");
+      console.log(albumData);
     } catch (error) {
       console.log(error);
-      toast.error("Failed to create album. Please try again.");
+      alert("Failed to create album. Please try again.");
     }
   };
 
   const handleTrackSearch = (e) => {
-    // const term = e.target.value;
-    // setSearchTerm(term);
-
-    // if (term.trim() === "") {
-    //   setSearchResults(listTrack);
-    // } else {
-    //   const filteredTracks = listTrack.filter((track) => {
-    //     return track.title.toLowerCase().includes(term.toLowerCase());
-    //   });
-
-    //   setSearchResults(filteredTracks);
-    // }
     setSearchResults(
       listTrack.filter((track) =>
         formatText(track.title).includes(formatText(e.target.value))
@@ -197,15 +136,6 @@ const ArtistAlbumPage = () => {
   return (
     <>
       <div>
-        {/* {listAlbum &&
-          listAlbum.map((item) => (
-            <div key={item._id}>
-              {item.title} &nbsp; {item.tracks} &nbsp;
-              <button>
-                <NavLink to={`/albums/${item._id}`}>Detail</NavLink>
-              </button>
-            </div>
-          ))} */}
         <div className="max-h-[96vh] overflow-auto  rounded-lg pl-6 py-4 text-black ">
           <AlbumGrid>
             <div
@@ -312,53 +242,6 @@ const ArtistAlbumPage = () => {
                 <FileInput control={control} name="image"></FileInput>
               </FormGroup>
 
-              {/* <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-              /> */}
-              {/* <br />
-              <label>Genre</label>
-              <br />
-              <input
-                type="text"
-                name="genre"
-                value={formData.genre}
-                onChange={handleInputChange}
-              />
-              <br /> */}
-
-              {/* <label>Release</label>
-              <br />
-              <input
-                type="date"
-                name="release"
-                value={formData.release}
-                onChange={handleInputChange}
-              />
-              <br /> */}
-
-              {/* <label>
-                <input
-                  type="radio"
-                  name="isPublic"
-                  value={true}
-                  checked={formData.isPublic === true}
-                  onChange={handleInputChange}
-                />
-                True
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="isPublic"
-                  value={false}
-                  checked={formData.isPublic === false}
-                  onChange={handleInputChange}
-                />
-                False
-              </label> */}
               <div className="flex justify-between gap-3">
                 <FormGroup className="w-[50%]">
                   <Label htmlFor="">Release</Label>
@@ -392,35 +275,6 @@ const ArtistAlbumPage = () => {
                 </div>
               </div>
               <div className="flex justify-between gap-3">
-                {/* <Label htmlFor="track">Search Tracks:</Label>
-                <br />
-                <input
-                  type="text"
-                  id="track"
-                  name="track"
-                  value={searchTerm}
-                  onChange={handleTrackSearch}
-                  className="input-text"
-                />
-                <br />
-                <div>
-                  <label>Selected Tracks:</label>
-                  {renderSelectedTracks()}
-                </div>
-                <br />
-                <ul>
-                  {searchResults.map((track) => (
-                    <li key={track._id}>
-                      {track.title} &nbsp;
-                      <button
-                        type="button"
-                        onClick={() => handleAddTrack(track)}
-                      >
-                        Add
-                      </button>
-                    </li>
-                  ))}
-                </ul> */}
                 <FormGroup className="w-[60%]">
                   <Label>Your Tracks</Label>
                   <div className="flex flex-col p-2 border-2 rounded-xl hover:border-secondary border-primary h-[200px]">
@@ -456,7 +310,6 @@ const ArtistAlbumPage = () => {
                   </div>
                 </FormGroup>
               </div>
-              {/* <button type="submit">Submit</button> */}
               <Button type="submit">Create</Button>
             </form>
           </LayoutForm>

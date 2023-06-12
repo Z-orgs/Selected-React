@@ -19,13 +19,16 @@ const PlayerV2 = ({
   setAudioIndex,
   isPlaying = false,
   handlePlayPause,
+  role = "Admin",
+  isFetching = false,
+  otherFunction,
 }) => {
   const audioRef = useRef();
   // const [audioIndex, setAudioIndex] = useState(index);
   const [currentTime, setCurrentTime] = useState(0);
   const [currentVolume, setCurrentVolume] = useState(100);
   const [track, setTrack] = useState({});
-  const ad = useSelector((state) => state.auth.login?.currentUser);
+  const ad = useSelector((state) => state.auth.login);
 
   React.useEffect(() => {
     if (isPlaying) audioRef.current.play();
@@ -59,15 +62,32 @@ const PlayerV2 = ({
 
   React.useEffect(() => {
     // setAudioIndex(index);
-    songs &&
+    role === "Admin" &&
+      songs &&
       songs.length > 0 &&
       axios
         .get(`/admin/track/${songs[index]._id}`, {
-          headers: { Authorization: `Bearer ${ad?.data?.admin_token}` },
+          headers: { Authorization: `Bearer ${ad?.currentUser?.admin_token}` },
         })
         .then((response) => {
           setTrack(response.data);
         });
+    // role === "Artist" && isFetching ? '' : setTrack(songs);
+    if (role === "Artist") {
+      if (isFetching)
+        axios
+          .get(`/artist/track/${songs[index]._id}`, {
+            headers: { Authorization: `Bearer ${ad?.token}` },
+          })
+          .then((response) => {
+            setTrack(response.data);
+            otherFunction(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      else setTrack(songs);
+    }
   }, [index]);
   return (
     <div
@@ -86,9 +106,11 @@ const PlayerV2 = ({
         />
         <div>
           <h2 className="p-1 text-white rounded-md">
-            {songs[index]?.title || "No songs are playing"}
+            {(songs && songs[index]?.title) || "No songs are playing"}
           </h2>
-          <p className="Singer">{songs[index]?.artist?.nickName || ""}</p>
+          <p className="Singer">
+            {(songs && songs[index]?.artist?.nickName) || ""}
+          </p>
         </div>
       </div>
 
@@ -127,18 +149,22 @@ const PlayerV2 = ({
           <Slider
             className="my-slider"
             min={0}
-            max={track.duration}
+            max={track ? track.duration : ""}
             value={currentTime}
             onChange={handleTimeSliderChange}
             handleStyle={{
               transform: "translateX(0)",
             }}
           />
-          <p>{formatDuration(track.duration)}</p>
+          <p>
+            {formatDuration(
+              track.duration ? track?.duration : songs[index]?.duration
+            )}
+          </p>
         </div>
         <audio
           ref={audioRef}
-          src={track.link || ""}
+          src={track?.link || songs[index]?.link}
           onLoadedData={handleLoadedData}
           onTimeUpdate={() => setCurrentTime(audioRef.current.currentTime)}
           onEnded={() => handlePlayPause()}

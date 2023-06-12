@@ -23,7 +23,7 @@ const PlaylistDetail = () => {
   useEffect(() => {
     axios
       .get(`/admin/playlist/${slug}`, {
-        headers: { Authorization: `Bearer ${ad?.data?.admin_token}` },
+        headers: { Authorization: `Bearer ${ad?.admin_token}` },
       })
       .then((response) => {
         setPlaylist(response.data);
@@ -47,10 +47,10 @@ const PlaylistDetail = () => {
             }}
           ></div>
           <div className="absolute top-0 bottom-0 left-0 right-0 z-10 flex gap-4 p-4">
-            <div className="w-[36%] text-white">
+            <div className="w-[300px] text-white">
               <img
                 src={`${playlist.picture}`}
-                className="object-cover w-full rounded-lg"
+                className="object-cover w-full rounded-lg h-[300px]"
                 alt=""
               />
               <div className="p-2 text-center">
@@ -59,7 +59,7 @@ const PlaylistDetail = () => {
               </div>
             </div>
             <div className="flex-1 overflow-auto bg-[rgba(0,0,0,0.5)] text-white  rounded-md">
-              {playlist.tracks &&
+              {playlist.tracks > 0 ? (
                 playlist.tracks.map((item, i) => (
                   <div
                     onClick={() => handlePickTrack(i)}
@@ -75,7 +75,10 @@ const PlaylistDetail = () => {
                     </span>
                     {item.title}
                   </div>
-                ))}
+                ))
+              ) : (
+                <p className="text-center">No song exists</p>
+              )}
             </div>
           </div>
         </div>

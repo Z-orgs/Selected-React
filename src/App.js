@@ -14,7 +14,7 @@ import LoginPage from "pages/LoginPage";
 import AdminDashBoardPage from "pages/admin/AdminDashBoardPage";
 import LayoutDashboard from "layout/LayoutDashboard";
 import { useSelector } from "react-redux";
-import ArtistTrackPage from "pages/artist/ArtistTrackPage";
+import ArtistTrackPage from "pages/artist/track/ArtistTrackPage";
 import LayoutSeleted from "layout/LayoutSeleted";
 import HomePage from "pages/user/HomePage";
 import AlbumDetailPage from "pages/user/AlbumDetailPage";

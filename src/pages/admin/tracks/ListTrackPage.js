@@ -29,19 +29,19 @@ const ListTrackPage = () => {
   };
   const handleApproveTrack = async () => {
     const res = await axios.put(
-      `/track/approved/${listTracks[index]._id}`,
-      { id: listTracks[index]._id },
+      `/track/approved/${result[index]._id}`,
+      { id: result[index]._id },
       {
-        headers: { Authorization: `Bearer ${ad?.data?.admin_token}` },
+        headers: { Authorization: `Bearer ${ad?.admin_token}` },
       }
     );
     console.log(res);
   };
   console.log(index);
   useEffect(() => {
-    getAllTracks(admin?.data?.admin_token, dispatch);
+    getAllTracks(admin?.admin_token, dispatch);
   }, []);
-  localStorage.setItem("token", admin?.data?.admin_token);
+  localStorage.setItem("token", admin?.admin_token);
   const handleSearchTrack = (e) => {
     setResult(
       listTracks.filter((track) =>
@@ -53,12 +53,12 @@ const ListTrackPage = () => {
   return (
     <>
       <HeadingOverView
-        imgUrl="/bg-3.jpg"
+        // imgUrl="/bg-3.jpg"
         total={listTracks && listTracks.length}
         type="tracks"
       ></HeadingOverView>
       <div className="flex gap-4">
-        <div className="w-[60%] bg-bg-color overflow-auto h-[80vh] flex flex-col">
+        <div className="w-[60%] bg-bg-color overflow-auto h-[80vh] flex flex-col rounded-md">
           <div className="w-full p-4">
             <input
               className="w-full h-[40px] outline-none rounded-md text-base px-2"
@@ -111,17 +111,19 @@ const ListTrackPage = () => {
             setAudioIndex={setIndex}
             setPlaying={setIsPlaying}
           >
-            <button
-              onClick={handleApproveTrack}
-              className={`px-4 py-2 text-white rounded-md min-w-[120px] my-2 font-semibold block text-lg ${
-                result[index].status
-                  ? "bg-blue-400 text-gray-100"
-                  : "bg-blue-500"
-              }`}
-              disabled={result[index].status}
-            >
-              {result[index].status ? "Approved" : "Approve"}
-            </button>
+            {result && result.length > 0 && (
+              <button
+                onClick={handleApproveTrack}
+                className={`px-4 py-2 text-white rounded-md min-w-[120px] my-2 font-semibold block text-lg ${
+                  result[index].status
+                    ? "bg-blue-400 text-gray-100"
+                    : "bg-blue-500"
+                }`}
+                disabled={result[index].status}
+              >
+                {result[index].status ? "Approved" : "Approve"}
+              </button>
+            )}
           </PlayerV2>
         </div>
       </div>

@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import calculateTime from "utils/calculateTime";
 import { useDispatch, useSelector } from "react-redux";
 import IconHeartToggle from "components/icons/IconHeartToggle";
-import { IconPlayToggle } from "components/icons";
+import { IconMore, IconPlayToggle } from "components/icons";
 import { Link } from "react-router-dom";
 import TrackPanel from "./TrackPanel";
 import { playPause, setPlaylist } from "redux/user/playerSlice";
+import formatDuration from "utils/formatDuration";
 
 const { default: axios } = require("api/axios");
 
@@ -32,17 +33,34 @@ const TrackItem = ({
   const [liked, setLiked] = useState(isLiked);
   const [showPanel, setShowPanel] = useState(false);
   const ref = useRef(null);
+  const moreBtnRef = useRef(null);
   useEffect(() => {
     function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        if (!event.target.matches("svg")) setShowPanel(false);
+      if (
+        ref.current &&
+        !ref.current.contains(event.target) &&
+        !moreBtnRef.current.contains(event.target)
+      ) {
+        setShowPanel(false);
       }
+    }
+    function handleScroll() {
+      setShowPanel(false);
     }
 
     document.addEventListener("click", handleClickOutside);
+    document.querySelector(".user-main") &&
+      document
+        .querySelector(".user-main")
+        .addEventListener("scroll", handleScroll);
 
     return () => {
       document.removeEventListener("click", handleClickOutside);
+      document.querySelector(".user-main") &&
+        document
+          .querySelector(".user-main")
+          .removeEventListener("scroll", handleScroll);
+
       // setShowPanel(true);
     };
   }, [ref]);
@@ -85,11 +103,11 @@ const TrackItem = ({
       isPlaying = true;
     }
   };
-
+  console.log(showPanel);
   return (
     // bg-[hsla(0,1%,20%,0.8)]
     <div
-      className={`grid items-center grid-cols-6 gap-16 px-4 py-2 mb-2 text-white border-b border-[rgba(225,225,225,0.2)] rounded-md hover:bg-[#ffffff1a] ${
+      className={`grid items-center grid-cols-4 gap-16 px-4 py-2 mb-2 text-white border-b border-[rgba(225,225,225,0.2)] rounded-md hover:bg-[#ffffff1a] ${
         activeSong ? "bg-[#ffffff1a]" : ""
       }`}
     >
@@ -107,11 +125,35 @@ const TrackItem = ({
           </Link>
         </div>
       </div>
-      <p className="text-xs text-center text-lime-50">
+      {/* <p className="text-xs text-center text-lime-50">
         {calculateTime("2022-6-14")}
-      </p>
-      <div className="flex items-center gap-1 pl-[50%] -translate-x-2/4">
-        <span>
+      </p> */}
+      <div className="flex items-center justify-center">{song.listens}</div>
+      <p className="text-sm text-center">{formatDuration(song.duration)}</p>
+
+      <div className="relative flex justify-end gap-3">
+        <span className="flex justify-center select-none">
+          <IconHeartToggle
+            liked={liked}
+            onClick={() => handleToggleLikeTrack(song, token)}
+          ></IconHeartToggle>
+        </span>
+        <span
+          className="cursor-pointer select-none"
+          onClick={handleShowPanel}
+          ref={moreBtnRef}
+        >
+          <IconMore></IconMore>
+        </span>
+        <TrackPanel song={song} nodeRef={ref} show={showPanel}></TrackPanel>
+      </div>
+    </div>
+  );
+};
+
+export default TrackItem;
+{
+  /* <span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -123,34 +165,5 @@ const TrackItem = ({
               d="M12 3a9 9 0 0 0-9 9v7c0 1.1.9 2 2 2h4v-8H5v-1c0-3.87 3.13-7 7-7s7 3.13 7 7v1h-4v8h4c1.1 0 2-.9 2-2v-7a9 9 0 0 0-9-9zM7 15v4H5v-4h2zm12 4h-2v-4h2v4z"
             />
           </svg>
-        </span>
-        {song.listens}
-      </div>
-      <p className="text-sm text-center">1:21</p>
-      <span className="flex justify-center select-none">
-        <IconHeartToggle
-          liked={liked}
-          onClick={() => handleToggleLikeTrack(song, token)}
-        ></IconHeartToggle>
-      </span>
-      <div className="relative flex justify-end gap-3">
-        <span className="cursor-pointer" onClick={handleShowPanel}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={24}
-            height={24}
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2s2-.9 2-2s-.9-2-2-2z"
-            />
-          </svg>
-        </span>
-        <TrackPanel song={song} nodeRef={ref} show={showPanel}></TrackPanel>
-      </div>
-    </div>
-  );
-};
-
-export default TrackItem;
+        </span> */
+}

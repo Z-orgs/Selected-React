@@ -1,6 +1,6 @@
-import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
+const { default: axios } = require("api/axios");
 
 export default function useSearch(initialUrl, initialData) {
   const [data, setData] = useState(initialData);

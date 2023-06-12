@@ -15,9 +15,11 @@ module.exports = {
         primary: "#7A0BC0",
         secondary: "#FA58B6",
         "bg-color": "#37075d",
-        "bg-2": "#31297f",
+        "bg-color-2": "#270082",
+        "bg-color-3": "#31297f",
         "alpha-bg": "hsla(0,0%,100%,0.1)",
         "dashboard-bg": "#ddd",
+        strock: "#F1F1F3",
       },
       // backgroundImage: {
       //   "theme-1": "url(/artist.jpg)",

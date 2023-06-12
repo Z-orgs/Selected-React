@@ -12,9 +12,9 @@ const ListPLaylistPage = () => {
     (state) => state.playlist.playlists?.allPlaylists
   );
   useEffect(() => {
-    getAllPlaylists(admin?.data?.admin_token, dispatch);
+    getAllPlaylists(admin?.admin_token, dispatch);
   }, []);
-  localStorage.setItem("token", admin?.data?.admin_token);
+  localStorage.setItem("token", admin?.admin_token);
   return (
     // <>
     //   <div>

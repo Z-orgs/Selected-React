@@ -9,6 +9,7 @@ const authSlice = createSlice({
       error: false,
       isAuthenticated: false,
       role: null,
+      token: null,
     },
   },
   reducers: {
@@ -17,10 +18,12 @@ const authSlice = createSlice({
     },
     loginSuccess: (state, action) => {
       state.login.isFetching = false;
-      state.login.currentUser = action.payload.res;
+      state.login.currentUser = action.payload.res.data;
       state.login.error = false;
       state.login.isAuthenticated = true;
       state.login.role = action.payload.role;
+      if (action.payload.role === "Artist")
+        state.login.token = action.payload.res.data.artist_token;
     },
     loginFail: (state) => {
       state.login.isFetching = false;
@@ -37,11 +40,21 @@ const authSlice = createSlice({
       state.login.currentUser = null;
       state.login.role = null;
       state.login.isAuthenticated = false;
+      state.login.token = null;
+    },
+    updateInfoArtist: (state, action) => {
+      state.login.currentUser = action.payload;
     },
   },
 });
 
-export const { loginStart, loginSuccess, loginFail, logout, loginWithGG } =
-  authSlice.actions;
+export const {
+  loginStart,
+  loginSuccess,
+  loginFail,
+  logout,
+  loginWithGG,
+  updateInfoArtist,
+} = authSlice.actions;
 
 export default authSlice.reducer;

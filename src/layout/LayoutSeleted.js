@@ -35,7 +35,7 @@ const LayoutSeleted = () => {
         <SelectedTopbar sticky={isSticky}></SelectedTopbar>
         <div
           ref={outletRef}
-          className="absolute left-0 right-0 h-full px-16 overflow-x-hidden overflow-y-scroll"
+          className="absolute left-0 right-0 h-full px-16 overflow-x-hidden overflow-y-scroll user-main"
         >
           <div className="mt-16">
             <Outlet></Outlet>

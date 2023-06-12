@@ -30,11 +30,11 @@ const sidebarLinks = [
     ),
     url: "/",
   },
-  {
-    title: "Albums",
-    icon: <IconAlbum className="fill-white w-[24px] h-[24px]"></IconAlbum>,
-    url: "/albums/64579d7eb680077a8e37169b",
-  },
+  // {
+  //   title: "Albums",
+  //   icon: <IconAlbum className="fill-white w-[24px] h-[24px]"></IconAlbum>,
+  //   url: "/albums/64579d7eb680077a8e37169b",
+  // },
   {
     title: "Subrice",
     icon: <IconUser></IconUser>,

@@ -68,15 +68,12 @@ const LoginForm = ({ role }) => {
           autoComplete="off"
         >
           <FormGroup>
-            <Label className="text-white" htmlFor="username">
-              Username
-            </Label>
+            <Label htmlFor="username">Username</Label>
             <Input
               name="username"
               placeholder="Enter your username..."
               control={control}
               error={errors.username?.message}
-              className="focus:border-[#FA58B6] border-[#7A0BC0] text-white"
             ></Input>
           </FormGroup>
           <FormGroup>

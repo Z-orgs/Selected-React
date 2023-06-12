@@ -76,6 +76,7 @@ export const loginUser = async (role = "admin", user, dispatch, navigate) => {
       }`,
       user
     );
+    const data = res.data;
     dispatch(loginSuccess({ res, role }));
     console.log({ res, role });
     navigate("/");

@@ -9,9 +9,9 @@ const ListAlbumPage = () => {
   const dispatch = useDispatch();
   const listAlbum = useSelector((state) => state.album.albums?.allAlbums);
   useEffect(() => {
-    getAllAlbums(admin?.data?.admin_token, dispatch);
+    getAllAlbums(admin?.admin_token, dispatch);
   }, []);
-  localStorage.setItem("token", admin?.data?.admin_token);
+  localStorage.setItem("token", admin?.admin_token);
   return (
     <div className="max-h-[96vh] overflow-auto  rounded-lg pl-6 py-4 text-black ">
       <AlbumGrid>

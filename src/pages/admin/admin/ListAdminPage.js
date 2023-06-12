@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import HeadingOverView from "components/common/HeadingOverView";
+import LayoutForm from "layout/LayoutForm";
 const { default: axios } = require("api/axios");
 
 const schema = yup.object({
@@ -42,7 +43,7 @@ const ListAdminPage = () => {
       await axios
         .post(`/admin/`, ad, {
           headers: {
-            Authorization: `Bearer ${admin?.data?.admin_token}`,
+            Authorization: `Bearer ${admin?.admin_token}`,
           },
         })
         .then((res) => {
@@ -61,7 +62,7 @@ const ListAdminPage = () => {
       { id: id },
       {
         headers: {
-          Authorization: `Bearer ${admin?.data?.admin_token}`,
+          Authorization: `Bearer ${admin?.admin_token}`,
         },
       }
     );
@@ -69,14 +70,17 @@ const ListAdminPage = () => {
   };
   console.log(watch("username"));
   useEffect(() => {
-    getAllAdmins(admin?.data?.admin_token, dispatch);
+    getAllAdmins(admin?.admin_token, dispatch);
+    console.log("hehe");
+  }, []);
+  useEffect(() => {
+    getAllAdmins(admin?.admin_token, dispatch);
   }, [count]);
-  localStorage.setItem("token", admin?.data?.admin_token);
+  localStorage.setItem("token", admin?.admin_token);
   return (
     <div className="">
       <HeadingOverView
-        imgUrl="/wallpaper-2.jpg"
-        total={list.length}
+        total={list && list.length}
         type="admins"
       ></HeadingOverView>
       <div className="flex-1">
@@ -118,56 +122,55 @@ const ListAdminPage = () => {
         )}
       </div>
 
-      <Modal
-        show={showModal}
-        heading="Create admin"
-        onClose={() => setShowModal(false)}
-      >
-        <form
-          onSubmit={handleSubmit(handleCreateAdmin)}
-          className="w-[960px] px-24"
-          autoComplete="off"
-        >
-          <FormGroup>
-            <Label htmlFor="username">Username</Label>
-            <Input
-              name="username"
-              placeholder="Enter your username..."
-              control={control}
-              error={errors.username?.message}
-            ></Input>
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="password">Password</Label>
-            <Input
-              name="password"
-              placeholder="Enter your password..."
-              control={control}
-              error={errors.password?.message}
-            ></Input>
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="firstName">First Name</Label>
-            <Input
-              name="firstName"
-              placeholder="Enter your first name..."
-              control={control}
-              error={errors.firstName?.message}
-            ></Input>
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="lastName">Last Name</Label>
-            <Input
-              name="lastName"
-              placeholder="Enter your last name..."
-              control={control}
-              error={errors.lastName?.message}
-            ></Input>
-          </FormGroup>
-          <Button type="submit" className="text-white bg-blue-500">
-            Submit
-          </Button>
-        </form>
+      <Modal show={showModal} onClose={() => setShowModal(false)}>
+        <LayoutForm title="Create admin">
+          <form
+            onSubmit={handleSubmit(handleCreateAdmin)}
+            className="w-[80%] px-24"
+            autoComplete="off"
+          >
+            <div className="flex gap-3">
+              <FormGroup className="w-[50%]">
+                <Label htmlFor="firstName">First Name</Label>
+                <Input
+                  name="firstName"
+                  placeholder="Enter your first name..."
+                  control={control}
+                  error={errors.firstName?.message}
+                ></Input>
+              </FormGroup>
+              <FormGroup className="flex-1">
+                <Label htmlFor="lastName">Last Name</Label>
+                <Input
+                  name="lastName"
+                  placeholder="Enter your last name..."
+                  control={control}
+                  error={errors.lastName?.message}
+                ></Input>
+              </FormGroup>
+            </div>
+            <FormGroup>
+              <Label htmlFor="username">Username</Label>
+              <Input
+                name="username"
+                placeholder="Enter your username..."
+                control={control}
+                error={errors.username?.message}
+              ></Input>
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="password">Password</Label>
+              <Input
+                name="password"
+                placeholder="Enter your password..."
+                control={control}
+                error={errors.password?.message}
+              ></Input>
+            </FormGroup>
+
+            <Button type="submit">Submit</Button>
+          </form>
+        </LayoutForm>
       </Modal>
     </div>
   );

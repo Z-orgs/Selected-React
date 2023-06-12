@@ -1,17 +1,60 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import Modal from "components/modal/Modal";
 import { getAllTrackArtists } from "redux/apiRequest";
+import PlayerV2 from "modules/player/PlayerV2";
+import { IconBin, IconEdit, IconPlayToggle } from "components/icons";
+import { v4 } from "uuid";
+import calculateTime from "utils/calculateTime";
+import HeadingOverView from "components/common/HeadingOverView";
+import { Button } from "components/button";
+import * as yup from "yup";
+import LayoutForm from "layout/LayoutForm";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import FormGroup from "components/common/FormGroup";
+import { Label } from "components/label";
+import { Input } from "components/input";
+import FileInput from "components/input/FileInput";
+import DatePicker from "react-date-picker";
+import FieldCheckboxes from "components/common/FieldCheckboxes";
+import { Radio } from "components/checkbox";
+import { toast } from "react-toastify";
 
 const { default: axios } = require("api/axios");
+const schema = yup.object({
+  // username: yup.string().required("Please enter your username"),
+  // password: yup.string().required("Please enter your password"),
+  //.min(8, "Your password must be at least 8 characters"),
+});
+const formatText = (str) =>
+  str
+    .toLowerCase()
+    .replace(/đ/g, "d")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
 const ArtistAlbumDetail = () => {
+  const navigate = useNavigate();
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm({ mode: "onSubmit", resolver: yupResolver(schema) });
+  const [value, onChange] = useState(new Date());
   const [album, setAlbum] = useState({});
   const dispatch = useDispatch();
   const { id } = useParams();
   const [showModal, setShowModal] = useState(false);
   const artist = useSelector((state) => state.auth.login?.currentUser);
+  const token = useSelector((state) => state.auth.login.token);
+  const [index, setIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [action, setAction] = useState("update");
+
   const listTrack = useSelector(
     (state) => state.trackArtist.trackArtists?.allTrackArtists
   );
@@ -24,39 +67,40 @@ const ArtistAlbumDetail = () => {
     tracks: [],
   });
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState(listTrack);
   const [selectedTracks, setSelectedTracks] = useState([]);
-  const [updatedTracks, setUpdatedTracks] = useState([]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    // Xử lý giá trị boolean của isPublic
-    const inputValue = name === "isPublic" ? value === "true" : value;
-
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: inputValue,
-    }));
+  const handlePickTrack = (i) => {
+    setIndex(i);
+  };
+  const hanldePlayPause = () => {
+    setIsPlaying(!isPlaying);
   };
 
-  const handleFileChange = (e) => {
-    const image = e.target.files[0];
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      image: image,
-    }));
+  const handleDeleteAlbum = async () => {
+    await axios
+      .delete(`/album/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        console.log(res);
+        toast.success("Deleted successfully!");
+        navigate("/albums");
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error("Deleted fail!");
+      });
   };
 
   useEffect(() => {
-    getAllTrackArtists(artist?.data?.artist_token, dispatch);
+    getAllTrackArtists(token, dispatch);
   }, [dispatch, artist]);
 
   useEffect(() => {
     axios
       .get(`/artist/album/${id}`, {
-        headers: { Authorization: `Bearer ${artist?.data?.artist_token}` },
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
         const albumData = response.data;
@@ -79,26 +123,23 @@ const ArtistAlbumDetail = () => {
         console.log(error);
       });
   }, [id, artist]);
-  console.log(album);
 
   const handleUpdateAlbum = async (e) => {
-    e.preventDefault();
-
     const albumData = new FormData();
-    albumData.append("image", formData.image);
-    albumData.append("title", formData.title);
-    albumData.append("genre", formData.genre);
-    albumData.append("release", formData.release);
-    albumData.append("isPublic", formData.isPublic);
+    albumData.append("image", watch("image"));
+    albumData.append("title", watch("title"));
+    albumData.append("genre", watch("genre"));
+    albumData.append("release", value);
+    albumData.append("isPublic", watch("isPublic") === "public");
     albumData.append(
       "tracks",
-      selectedTracks.map((track) => track._id)
+      JSON.stringify(selectedTracks.map((track) => track._id))
     );
 
     try {
       const response = await axios.put(`/album/${id}`, albumData, {
         headers: {
-          Authorization: `Bearer ${artist?.data?.artist_token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       setSelectedTracks(selectedTracks);
@@ -112,18 +153,11 @@ const ArtistAlbumDetail = () => {
   };
 
   const handleTrackSearch = (e) => {
-    const term = e.target.value;
-    setSearchTerm(term);
-
-    if (term.trim() === "") {
-      setSearchResults(listTrack);
-    } else {
-      const filteredTracks = listTrack.filter((track) => {
-        return track.title.toLowerCase().includes(term.toLowerCase());
-      });
-
-      setSearchResults(filteredTracks);
-    }
+    setSearchResults(
+      listTrack.filter((track) =>
+        formatText(track.title).includes(formatText(e.target.value))
+      )
+    );
   };
 
   const handleAddTrack = (track) => {
@@ -138,117 +172,247 @@ const ArtistAlbumDetail = () => {
 
   const renderSelectedTracks = () => {
     return selectedTracks.map((track) => (
-      <div key={track._id}>
+      <div
+        className="p-1 bg-[rgba(255,255,255,0.4)] text-sm rounded-md flex gap-1 items-center cursor-default select-none"
+        key={v4()}
+      >
         {track.title}
-        <button onClick={() => handleRemoveTrack(track)}>Remove</button>
+        <span
+          className="cursor-pointer select-none"
+          onClick={() => handleRemoveTrack(track)}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width={14}
+            height={14}
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="m12 13.4l-4.9 4.9q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.9-4.9l-4.9-4.9q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l4.9 4.9l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L13.4 12l4.9 4.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275L12 13.4Z"
+            />
+          </svg>
+        </span>
       </div>
     ));
   };
 
   return (
     <div>
-      <label>Title</label>&nbsp;
-      {album.title}
-      <br />
-      {album.tracks &&
-        album.tracks.map((item) => {
-          return (
-            <div key={item._id}>
-              Title track: {item.title}
-              <br />
-              <audio controls src={item.link}></audio>
+      <div className="flex flex-col h-[90vh] gap-4">
+        <HeadingOverView
+          total={album?.tracks?.length}
+          imgUrl="/bg-3.jpg"
+          type={`tracks`}
+        ></HeadingOverView>
+        <div className="flex flex-1 gap-6">
+          <div className="min-h-[42vh] w-[60%] bg-white rounded-md relative">
+            <div
+              className="absolute top-0 bottom-0 left-0 right-0 blur-sm brightness-75"
+              style={{
+                backgroundImage: `url('${process.env.REACT_APP_API}/file/${album.coverArtUrl}')`,
+                backgroundSize: "cover",
+              }}
+            ></div>
+            <div className="absolute top-0 bottom-0 left-0 right-0 z-10 flex gap-4 p-4">
+              <div className="w-[300px] text-white">
+                <img
+                  src={`${process.env.REACT_APP_API}/file/${album.coverArtUrl}`}
+                  className="object-cover w-full rounded-lg h-[300px]"
+                  alt=""
+                />
+                <div className="flex flex-col items-center p-2 text-center">
+                  <h3 className="text-xl font-bold">{album.title}</h3>
+                  <p className="">Release: {calculateTime(album.release)}</p>
+                  <p className="">Owner: {album.artist}</p>
+                  <div className="flex gap-3 mt-2">
+                    <Button
+                      className="flex items-center justify-around gap-3 bg-blue-500"
+                      onClick={() => {
+                        setShowModal(true);
+                        setAction("update");
+                      }}
+                    >
+                      Update
+                      <IconEdit size={22} color="white"></IconEdit>
+                    </Button>
+                    <Button
+                      className="flex items-center justify-around gap-1 bg-red-500"
+                      onClick={() => {
+                        setShowModal(true);
+                        setAction("delete");
+                      }}
+                    >
+                      Delete
+                      <IconBin size={22} currentColor="white"></IconBin>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <div className="flex-1 overflow-auto bg-[rgba(0,0,0,0.5)] text-white  rounded-md">
+                {album?.tracks?.length > 0 ? (
+                  album.tracks.map((item, i) => (
+                    <div
+                      onClick={() => handlePickTrack(i)}
+                      key={v4()}
+                      className={`${
+                        index === i ? "bg-alpha-bg" : ""
+                      } flex items-center gap-2 cursor-pointer w-full text-lg p-4`}
+                    >
+                      <span onClick={hanldePlayPause}>
+                        <IconPlayToggle
+                          playing={index === i && isPlaying}
+                        ></IconPlayToggle>
+                      </span>
+                      {item.title}
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center">No song exists</p>
+                )}
+              </div>
             </div>
-          );
-        })}
-      <br />
-      <button onClick={() => setShowModal(true)}>Update album</button>
+          </div>
+          <div className="flex-1">
+            {Object.keys(album).length > 0 && (
+              <PlayerV2
+                setPlaying={setIsPlaying}
+                handlePlayPause={hanldePlayPause}
+                isPlaying={isPlaying}
+                songs={album.tracks}
+                index={index}
+                setAudioIndex={setIndex}
+                role="Artist"
+              ></PlayerV2>
+            )}
+          </div>
+        </div>
+      </div>
+
       <Modal
         show={showModal}
         heading="Update Album"
         onClose={() => setShowModal(false)}
       >
-        <form onSubmit={handleUpdateAlbum}>
-          <label>Image</label>
-          <br />
-          <input type="file" name="image" onChange={handleFileChange} />
-          <br />
-          <label>Title</label>
-          <br />
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleInputChange}
-          />
-          <br />
-          <label>Genre</label>
-          <br />
-          <input
-            type="text"
-            name="genre"
-            value={formData.genre}
-            onChange={handleInputChange}
-          />
-          <br />
-          <label>Release</label>
-          <br />
-          <input
-            type="date"
-            name="release"
-            value={formData.release}
-            onChange={handleInputChange}
-          />
-          <br />
-          <label>
-            <input
-              type="radio"
-              name="isPublic"
-              value={true}
-              checked={formData.isPublic === true}
-              onChange={handleInputChange}
-            />
-            True
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="isPublic"
-              value={false}
-              checked={formData.isPublic === false}
-              onChange={handleInputChange}
-            />
-            False
-          </label>
-          <br />
-          <div>
-            <label htmlFor="track">Search Tracks:</label>
-            <br />
-            <input
-              type="text"
-              id="track"
-              name="track"
-              value={searchTerm}
-              onChange={handleTrackSearch}
-            />
-            <br />
-            <div>
-              <label>Selected Tracks:</label>
-              {renderSelectedTracks()}
+        <LayoutForm title={`${action} Album`}>
+          {action === "update" && (
+            <form
+              onSubmit={handleSubmit(handleUpdateAlbum)}
+              autoComplete="off"
+              className="w-[60%]"
+            >
+              <div className="flex justify-between gap-4">
+                <FormGroup className="w-[60%]">
+                  <Label>Title</Label>
+                  <Input
+                    name="title"
+                    control={control}
+                    placeholder="Enter title..."
+                    defaultValue={album.title}
+                  ></Input>
+                </FormGroup>
+                <FormGroup className="flex-1">
+                  <Label htmlFor="genre">Genre</Label>
+                  <Input
+                    name="genre"
+                    control={control}
+                    placeholder="Enter genre..."
+                    defaultValue={album.genre}
+                  ></Input>
+                </FormGroup>
+              </div>
+              <FormGroup>
+                <FileInput control={control} name="image"></FileInput>
+              </FormGroup>
+              <div className="flex justify-between gap-3">
+                <FormGroup className="w-[50%]">
+                  <Label htmlFor="">Release</Label>
+                  <DatePicker
+                    name="release"
+                    onChange={onChange}
+                    value={value}
+                  />
+                </FormGroup>
+                <div>
+                  <Label>Status</Label>
+
+                  <FieldCheckboxes className="flex-1">
+                    <Radio
+                      control={control}
+                      name="isPublic"
+                      checked={watch("isPublic") === "public"}
+                      value="public"
+                    >
+                      Public
+                    </Radio>
+                    <Radio
+                      checked={watch("isPublic") === "private"}
+                      control={control}
+                      name="isPublic"
+                      value="private"
+                    >
+                      Private
+                    </Radio>
+                  </FieldCheckboxes>
+                </div>
+              </div>
+              <div className="flex justify-between gap-3">
+                <FormGroup className="w-[60%]">
+                  <Label>Your Tracks</Label>
+                  <div className="flex flex-col p-2 border-2 rounded-xl hover:border-secondary border-primary h-[200px]">
+                    <input
+                      type="text"
+                      id="track"
+                      name="track"
+                      onChange={handleTrackSearch}
+                      className="input-text my-1 h-[34px]"
+                    />
+                    <div className="flex flex-wrap gap-2 overflow-auto text-white">
+                      {searchResults &&
+                        searchResults.length > 0 &&
+                        searchResults.map((track) => (
+                          <span
+                            onClick={() => handleAddTrack(track)}
+                            className="p-1 bg-[rgba(255,255,255,0.4)] text-sm rounded-md cursor-pointer select-none"
+                            key={v4()}
+                          >
+                            {track.title}
+                          </span>
+                        ))}
+                    </div>
+                  </div>
+                </FormGroup>
+                <FormGroup className="flex-1">
+                  <Label>Tracks Selected</Label>
+                  <div className="p-2 text-white border-2 rounded-xl hover:border-secondary border-primary h-[200px] flex-col">
+                    <div className="flex flex-wrap max-h-full gap-2 overflow-auto">
+                      {renderSelectedTracks()}
+                    </div>
+                  </div>
+                </FormGroup>
+              </div>
+              <Button type="submit">Update</Button>
+            </form>
+          )}
+          {action === "delete" && (
+            <div className="flex flex-col gap-4 text-white w-[60%] items-center">
+              <p className="text-2xl font-semibold text-center">
+                Are you sure?
+              </p>
+              <div className="flex gap-4">
+                <Button className="bg-green-500" onClick={handleDeleteAlbum}>
+                  ok
+                </Button>
+                <Button
+                  className="bg-gray-500"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
-            <br />
-            <ul>
-              {searchResults.map((track) => (
-                <li key={track._id}>
-                  {track.title} &nbsp;
-                  <button type="button" onClick={() => handleAddTrack(track)}>
-                    Add
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <button type="submit">Submit</button>
-        </form>
+          )}
+        </LayoutForm>
       </Modal>
     </div>
   );
