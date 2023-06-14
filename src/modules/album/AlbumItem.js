@@ -2,20 +2,35 @@ import React from "react";
 import "./Album.css";
 import { Link } from "react-router-dom";
 import generateImg from "utils/generateImg";
+import classNames from "utils/ClassNames";
 
-const AlbumItem = ({ thumb, title, id, isPlaylist = false, size = "290" }) => {
+const AlbumItem = ({
+  thumb,
+  title,
+  id,
+  isPlaylist = false,
+  size = "290",
+  textColor = "black",
+}) => {
   return (
-    <div className={`w-[${size}px] h-[${size}px] mb-4`}>
+    <div
+      style={{
+        width: `${size}px`,
+      }}
+    >
       <Link
         to={`/${!isPlaylist ? "albums" : "playlists"}/${id}`}
-        className={`relative mb-1 cursor-pointer select-none group overflow-hidden block h-[250px] bg-[#eee] rounded-md`}
+        className={`relative mb-1 cursor-pointer select-none group overflow-hidden block h-[${size}px] bg-[#eee] rounded-md`}
+        style={{
+          height: `${size}px`,
+        }}
       >
         <img
-          className={`duration-300 ease-out group-hover:scale-110 object-cover h-full w-full`}
+          className={`duration-300 ease-out group-hover:scale-110 object-cover h-full w-full block`}
           src={
             thumb
-              ? thumb
-              : "https://e7.pngegg.com/pngimages/228/498/png-clipart-playlist-spotify-music-music-radio-music-download-radio-thumbnail.png"
+              ? `${process.env.REACT_APP_API}/file/${thumb}`
+              : "/thumb-5.avif"
           }
           alt=""
         />
@@ -45,7 +60,10 @@ const AlbumItem = ({ thumb, title, id, isPlaylist = false, size = "290" }) => {
       </Link>
       <Link
         to={`/${!isPlaylist ? "albums" : "playlists"}/${id}`}
-        className="block overflow-hidden text-base font-semibold cursor-pointer whitespace-nowrap text-ellipsis"
+        className={`block overflow-hidden text-base font-semibold cursor-pointer whitespace-nowrap text-ellipsis`}
+        style={{
+          color: `${textColor}`,
+        }}
       >
         {title || "Âm nhạc nạp vitamin tích cực cho bạn mỗi ngày"}
       </Link>

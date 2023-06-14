@@ -8,6 +8,8 @@ import Heading from "components/common/Heading";
 import { v4 } from "uuid";
 import TrackItem from "modules/track/TrackItem";
 import { followArtistToggle } from "redux/apiRequest";
+import AlbumItem from "modules/album/AlbumItem";
+import AlbumGrid from "modules/album/AlbumGrid";
 
 const { default: axios } = require("api/axios");
 
@@ -52,6 +54,7 @@ const ArtistDetailPage = () => {
 
     getAllArtist();
   }, []);
+  console.log(artist);
   return (
     <div className="-mt-16">
       <div className="relative -pt-16 mb-8 pt-[135px] flex items-end">
@@ -61,8 +64,9 @@ const ArtistDetailPage = () => {
             className="absolute h-full block top-0 bottom-0 left-0 right-0 blur-[50px]"
             style={{
               backgroundImage: `url('${
-                artist.image ||
-                "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/avatars/2/b/a/b/2babd228242022777078304ef90f7a3f.jpg"
+                artist.profileImage
+                  ? `${process.env.REACT_APP_API}/file/${artist.profileImage}`
+                  : "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/avatars/2/b/a/b/2babd228242022777078304ef90f7a3f.jpg"
               }')`,
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
@@ -77,7 +81,11 @@ const ArtistDetailPage = () => {
           <div className="flex items-center flex-1 gap-8">
             <div className="w-[140px] h-[140px] rounded-full overflow-hidden">
               <img
-                src="https://photo-resize-zmp3.zmdcdn.me/w240_r1x1_webp/avatars/2/b/a/b/2babd228242022777078304ef90f7a3f.jpg"
+                src={`${
+                  artist.profileImage
+                    ? `${process.env.REACT_APP_API}/file/${artist.profileImage}`
+                    : "https://photo-resize-zmp3.zmdcdn.me/w600_r1x1_jpeg/avatars/2/b/a/b/2babd228242022777078304ef90f7a3f.jpg"
+                }`}
                 alt=""
               />
             </div>
@@ -101,11 +109,29 @@ const ArtistDetailPage = () => {
           </div>
         </div>
       </div>
-      <div>
+      <div className="mb-5">
         <Heading>Tracks</Heading>
         {tracks.map((track) => (
           <TrackItem key={v4()} song={track}></TrackItem>
         ))}
+      </div>
+      <div></div>
+      <div>
+        <Heading>Albums</Heading>
+        <AlbumGrid>
+          {data?.albums &&
+            data?.albums.length > 0 &&
+            data?.albums
+              .slice(0, 5)
+              .map((album) => (
+                <AlbumItem
+                  thumb={album.coverArtUrl}
+                  title={album.title}
+                  textColor="white"
+                  key={v4()}
+                ></AlbumItem>
+              ))}
+        </AlbumGrid>
       </div>
       <div>
         <Heading>You may also like</Heading>

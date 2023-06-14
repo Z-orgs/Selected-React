@@ -20,6 +20,7 @@ const PlaylistDetail = () => {
   const hanldePlayPause = () => {
     setIsPlaying(!isPlaying);
   };
+
   useEffect(() => {
     axios
       .get(`/admin/playlist/${slug}`, {

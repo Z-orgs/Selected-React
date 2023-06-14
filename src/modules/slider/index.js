@@ -39,6 +39,7 @@ const Slider = ({ data }) => {
     return () => clearInterval(timerId.current);
     // eslint-disable-next-line
   }, []);
+  console.log(data);
 
   return (
     <div className="flex overflow-hidden mt-5 relative items-center justify-center min-h-[15.2vw]  perspective-none">

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { playPause, setPlaylist } from "redux/user/playerSlice";
 import generateImg from "utils/generateImg";
 import calculateTime from "utils/calculateTime";
-import { IconPlayToggle } from "components/icons";
+import { IconBin, IconPlayToggle } from "components/icons";
 import TrackItem from "modules/track/TrackItem";
 import { v4 } from "uuid";
+import Modal from "components/modal/Modal";
+import LayoutForm from "layout/LayoutForm";
+import ConfirmForm from "components/common/ConfirmForm";
+import { toast } from "react-toastify";
 const { default: axios } = require("api/axios");
 
 const PlaylistDetailPage = () => {
@@ -14,9 +18,45 @@ const PlaylistDetailPage = () => {
   const token = user.jwt;
   const [data, setData] = useState({});
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
+  const [song, setSong] = useState(null);
   const isPlay = useSelector((state) => state.player.issPlaying);
-
+  const [type, setType] = useState(null);
+  const handleDeletePlaylist = async () => {
+    await axios
+      .delete(`/playlist/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        console.log(response);
+        toast.success(`Delelted "${data.title}"!`);
+        navigate("/playlists");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Delete Failed!");
+      });
+  };
+  const handleDeleteTrack = async (id) => {
+    await axios
+      .put(
+        `/playlist/delete/${id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        toast.success(`Delelted "${song?.title}"!`);
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Delete Failed!");
+      });
+  };
   useEffect(() => {
     const fetchAlbum = () => {
       axios
@@ -34,38 +74,19 @@ const PlaylistDetailPage = () => {
     dispatch(playPause(!isPlay));
   };
   return (
-    <div
-      className=""
-      // style={{
-      //   backgroundImage: "url(/thumb.png)",
-      //   backgroundSize: "cover",
-      //   WebkitMaskImage:
-      //     "-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))",
-      // }}
-    >
-      {/* <div
-          className="absolute top-0 bottom-0 left-0 right-0 opacity-70 -z-1"
-          style={{
-            backgroundImage: "url(/thumb.png)",
-            backgroundSize: "cover",
-            WebkitMaskImage:
-              "-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)))",
-          }}
-        ></div> */}
-      {/* <img src="" alt="" /> */}
+    <div className="">
       {Object.keys(data).length === 0 ? (
         "Loading..."
       ) : (
         <div className="">
           <div className="flex items-center gap-4">
-            <div className="w-[290px]">
+            <div className="w-[290px] h-[290px]">
               <img
-                className="w-full rounded-md"
-                // src={`http://localhost:3000/file/${data.coverArtUrl}`}
+                className="object-cover w-full h-full rounded-md"
                 src={
                   data.coverArtUrl
                     ? generateImg(data.coverArtUrl)
-                    : "https://e7.pngegg.com/pngimages/228/498/png-clipart-playlist-spotify-music-music-radio-music-download-radio-thumbnail.png"
+                    : "/thumb-5.avif"
                 }
                 alt=""
               />
@@ -81,13 +102,28 @@ const PlaylistDetailPage = () => {
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Delectus, aliquid dicta? Porro sapiente numquam odio a?
               </p>
-              <div>
-                <span
-                  className="flex items-center justify-center rounded-full bg-primary w-[60px] h-[60px]"
-                  onClick={handlePlayAlbum}
-                >
-                  <IconPlayToggle></IconPlayToggle>
-                </span>
+              <div className="flex gap-4">
+                <div className="flex gap-3 rounded-full bg-alpha-bg w-[140px] p-2 items-center">
+                  <span
+                    className="cursor-pointer flex items-center justify-center rounded-full bg-primary w-[36px] h-[36px]"
+                    onClick={handlePlayAlbum}
+                  >
+                    <IconPlayToggle></IconPlayToggle>
+                  </span>
+                  Play all
+                </div>
+                <div className="flex gap-3 rounded-full bg-alpha-bg w-[140px] p-2 items-center">
+                  <span
+                    className="cursor-pointer flex items-center justify-center rounded-full bg-red-500 w-[36px] h-[36px]"
+                    onClick={() => {
+                      setShowModal(true);
+                      setType("playlist");
+                    }}
+                  >
+                    <IconBin size={22} currentColor="white"></IconBin>
+                  </span>
+                  Delete
+                </div>
               </div>
             </div>
           </div>
@@ -98,12 +134,47 @@ const PlaylistDetailPage = () => {
                 track === null ? (
                   ""
                 ) : (
-                  <TrackItem key={v4()} song={track}></TrackItem>
+                  <TrackItem key={v4()} song={track}>
+                    <span
+                      className="rounded-full opacity-0 cursor-pointer select-none p-2 group-hover:opacity-100 hover:bg-[rgba(0,0,0,0.2)]"
+                      onClick={() => {
+                        setSong(track);
+                        setShowModal(true);
+                        setType("track");
+                      }}
+                    >
+                      <IconBin size={20} currentColor="white"></IconBin>
+                    </span>
+                  </TrackItem>
                 )
               )}
           </div>
         </div>
       )}
+      <Modal
+        show={showModal}
+        heading="Create Playlist"
+        onClose={() => setShowModal(false)}
+      >
+        <LayoutForm>
+          {type === "playlist" && (
+            <ConfirmForm
+              msg={`Are you sure you want to delete "${data?.title}"?`}
+              handleConfirm={() => handleDeletePlaylist()}
+              handleCancel={() => setShowModal(false)}
+            ></ConfirmForm>
+          )}
+          {type === "track" && (
+            <ConfirmForm
+              msg={`Are you sure you want to delete "${song?.title}"?`}
+              handleConfirm={() => {
+                handleDeleteTrack(song?._id);
+              }}
+              handleCancel={() => setShowModal(false)}
+            ></ConfirmForm>
+          )}
+        </LayoutForm>
+      </Modal>
     </div>
   );
 };

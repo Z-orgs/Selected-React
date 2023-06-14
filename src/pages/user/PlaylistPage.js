@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import AlbumGrid from "modules/album/AlbumGrid";
 import GridView from "components/common/GridView";
 import AlbumItem from "modules/album/AlbumItem";
 import Modal from "components/modal/Modal";
 import { useSelector } from "react-redux";
 import { Label } from "components/label";
-import { Input } from "components/input";
 import { Button } from "components/button";
 import { createPlaylistUser } from "redux/apiRequest";
+import LayoutForm from "layout/LayoutForm";
+import FormGroup from "components/common/FormGroup";
+import { v4 } from "uuid";
 
 const { default: axios } = require("api/axios");
 
@@ -28,7 +29,7 @@ const PlaylistPage = () => {
   useEffect(() => {
     getAllPlaylists();
   }, []);
-
+  console.log(playlists);
   return (
     <div className="py-2">
       <GridView>
@@ -39,18 +40,6 @@ const PlaylistPage = () => {
           }}
         >
           <span className="w-16">
-            {/* <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="{32}"
-              height="{32}"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="white"
-                d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8s8 3.59 8 8s-3.59 8-8 8z"
-                className="group-hover:fill-secondary"
-              />
-            </svg> */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -70,36 +59,42 @@ const PlaylistPage = () => {
         </div>
         {playlists.map((playlist) => (
           <AlbumItem
+            key={v4()}
             isPlaylist={true}
             id={playlist._id}
             title={playlist.title}
+            textColor="white"
           ></AlbumItem>
         ))}
-        <AlbumItem></AlbumItem>
-        <AlbumItem></AlbumItem>
-        <AlbumItem></AlbumItem>
-        <AlbumItem></AlbumItem>
-        <AlbumItem></AlbumItem>
-        <AlbumItem></AlbumItem>
       </GridView>
       <Modal
         show={showModal}
         heading="Create Playlist"
         onClose={() => setShowModal(false)}
       >
-        <Label>Name playlist: </Label>
-        <input
-          type="text"
-          name=""
-          id=""
-          onChange={(e) => setNamePlaylist(e.target.value)}
-        />
-        <Button
-          type="submit"
-          onClick={() => createPlaylistUser(namePlaylist, token)}
-        >
-          Create
-        </Button>
+        <LayoutForm title="Create new playlist">
+          <div className="flex flex-col gap-2">
+            <FormGroup>
+              <Label>Name: </Label>
+              <input
+                type="text"
+                name=""
+                className="input-text"
+                id=""
+                onChange={(e) => setNamePlaylist(e.target.value)}
+              />
+            </FormGroup>
+            <Button
+              type="submit"
+              onClick={() => {
+                createPlaylistUser(namePlaylist, token);
+                setShowModal(!showModal);
+              }}
+            >
+              Create
+            </Button>
+          </div>
+        </LayoutForm>
       </Modal>
     </div>
   );

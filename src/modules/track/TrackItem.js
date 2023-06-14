@@ -20,6 +20,8 @@ const TrackItem = ({
   data,
   i,
   isLiked,
+  onlyTitle = false,
+  children,
 }) => {
   const playPlayer = useSelector((state) => state.player.isPlaying);
   const currentSong = useSelector(
@@ -106,64 +108,71 @@ const TrackItem = ({
   console.log(showPanel);
   return (
     // bg-[hsla(0,1%,20%,0.8)]
-    <div
-      className={`grid items-center grid-cols-4 gap-16 px-4 py-2 mb-2 text-white border-b border-[rgba(225,225,225,0.2)] rounded-md hover:bg-[#ffffff1a] ${
-        activeSong ? "bg-[#ffffff1a]" : ""
-      }`}
-    >
-      <div className="flex items-center gap-3">
-        <span className="cursor-pointer" onClick={() => handlePlayClick()}>
-          <IconPlayToggle playing={isPlaying}></IconPlayToggle>
-        </span>
-        <div className="flex flex-col">
-          <h3 className="">{song.title || "unknown"}</h3>
-          <Link
-            to={`/artists/${song.artist._id}`}
-            className="text-xs hover:text-secondary"
-          >
-            {song.artist.username || song.artist}
-          </Link>
+    onlyTitle ? (
+      <div
+        className={` items-center gap-16 px-4 py-2 mb-2 group text-white border-b border-[rgba(225,225,225,0.2)] rounded-sm hover:bg-[#ffffff1a] ${
+          activeSong ? "bg-[#ffffff1a]" : ""
+        }`}
+      >
+        <div className="flex items-center gap-3">
+          <span className="cursor-pointer" onClick={() => handlePlayClick()}>
+            <IconPlayToggle playing={isPlaying}></IconPlayToggle>
+          </span>
+          <h3 className="overflow-hidden whitespace-nowrap text-ellipsis">
+            {song?.title || "unknown"} - {song.artist}
+          </h3>
         </div>
       </div>
-      {/* <p className="text-xs text-center text-lime-50">
+    ) : (
+      <div
+        className={` items-center flex px-4 py-2 mb-2 group text-white border-b border-[rgba(225,225,225,0.2)] rounded-sm hover:bg-[#ffffff1a] ${
+          activeSong ? "bg-[#ffffff1a]" : ""
+        }`}
+      >
+        <div className="flex items-center w-2/5 gap-3">
+          <span className="cursor-pointer" onClick={() => handlePlayClick()}>
+            <IconPlayToggle playing={isPlaying}></IconPlayToggle>
+          </span>
+          <div className="flex flex-col">
+            <h3 className="">{song.title || "unknown"}</h3>
+            <Link
+              to={`/artists/${song.artist._id}`}
+              className="text-xs hover:text-secondary"
+            >
+              {song.artist.nickName || song.artist}
+            </Link>
+          </div>
+        </div>
+        {/* <p className="text-xs text-center text-lime-50">
         {calculateTime("2022-6-14")}
       </p> */}
-      <div className="flex items-center justify-center">{song.listens}</div>
-      <p className="text-sm text-center">{formatDuration(song.duration)}</p>
+        <div className="grid flex-1 grid-cols-3">
+          <div className="flex items-center justify-center">{song.listens}</div>
+          <p className="text-sm text-center">{formatDuration(song.duration)}</p>
 
-      <div className="relative flex justify-end gap-3">
-        <span className="flex justify-center select-none">
-          <IconHeartToggle
-            liked={liked}
-            onClick={() => handleToggleLikeTrack(song, token)}
-          ></IconHeartToggle>
-        </span>
-        <span
-          className="cursor-pointer select-none"
-          onClick={handleShowPanel}
-          ref={moreBtnRef}
-        >
-          <IconMore></IconMore>
-        </span>
-        <TrackPanel song={song} nodeRef={ref} show={showPanel}></TrackPanel>
+          <div className="relative flex items-center justify-end gap-3">
+            <span className="flex justify-center opacity-0 select-none group-hover:opacity-100">
+              <IconHeartToggle
+                liked={liked}
+                onClick={() => handleToggleLikeTrack(song, token)}
+              ></IconHeartToggle>
+            </span>
+            <span
+              className="cursor-pointer select-none"
+              onClick={handleShowPanel}
+              ref={moreBtnRef}
+            >
+              <IconMore></IconMore>
+            </span>
+            {/* <span className="opacity-0 select-none group-hover:opacity-100"> */}
+            {children}
+            {/* </span> */}
+            <TrackPanel song={song} nodeRef={ref} show={showPanel}></TrackPanel>
+          </div>
+        </div>
       </div>
-    </div>
+    )
   );
 };
 
 export default TrackItem;
-{
-  /* <span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              d="M12 3a9 9 0 0 0-9 9v7c0 1.1.9 2 2 2h4v-8H5v-1c0-3.87 3.13-7 7-7s7 3.13 7 7v1h-4v8h4c1.1 0 2-.9 2-2v-7a9 9 0 0 0-9-9zM7 15v4H5v-4h2zm12 4h-2v-4h2v4z"
-            />
-          </svg>
-        </span> */
-}

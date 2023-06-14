@@ -54,6 +54,7 @@ import {
   getArtistAlbumStart,
   getArtistAlbumSuccess,
 } from "./albumArtistSlice";
+import { toast } from "react-toastify";
 // import axios from "axios";
 
 // const api = process.env.REACT_APP_API;
@@ -242,9 +243,11 @@ export const createPlaylistUser = async (namePlaylist, token) => {
     )
     .then((response) => {
       console.log(response.data);
+      toast.success(response.data.message);
     })
     .catch((error) => {
       console.error(error);
+      toast.error("Failed to create playlist");
     });
 };
 

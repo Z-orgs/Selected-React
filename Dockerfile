@@ -14,7 +14,7 @@ RUN yarn install
 COPY . .
 
 # build ứng dụng React
-RUN yarn build
+# RUN yarn build
 
 # chỉ định port sẽ được sử dụng
 EXPOSE 3006

@@ -178,14 +178,7 @@ const ArtistTrackPage = () => {
               <IconUpload size={36} color="white"></IconUpload>
             </button>
           </div>
-          <div
-            className="flex flex-wrap gap-4 p-4 overflow-auto rounded-md "
-            //   style={{
-            //     backgroundImage: "url('/bg-3.jpg')",
-            //     backgroundSize: "cover",
-            //     backgroundPosition: "center",
-            //   }}
-          >
+          <div className="flex flex-wrap gap-4 p-4 overflow-auto rounded-md ">
             {result && result.length > 0 ? (
               result.map((item, i) => (
                 <div
@@ -262,16 +255,12 @@ const ArtistTrackPage = () => {
             <form
               onSubmit={handleSubmit(
                 action === "upload"
-                  ? handleUploadTrack
-                  : handleUpdateTrack(result[index]._id)
+                  ? handleUploadTrack()
+                  : handleUpdateTrack(result && result[index]?._id)
               )}
               autoComplete="off"
               className="w-[60%]"
             >
-              {/* <label>File</label>
-            <br />
-            <input type="file" name="file" onChange={handleFileChange} />
-            <br /> */}
               {action === "upload" && (
                 <FormGroup>
                   <FileInput
@@ -281,24 +270,7 @@ const ArtistTrackPage = () => {
                   ></FileInput>
                 </FormGroup>
               )}
-              {/* <label>Title</label>
-            <br />
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-            />
-            <br />
-            <label>Genre</label>
-            <br />
-            <input
-              type="text"
-              name="genre"
-              value={formData.genre}
-              onChange={handleInputChange}
-            />
-            <br /> */}
+
               <div className="flex justify-between gap-4">
                 <FormGroup className="w-[60%]">
                   <Label>Title</Label>
@@ -323,37 +295,7 @@ const ArtistTrackPage = () => {
                   ></Input>
                 </FormGroup>
               </div>
-              {/* <label>Release</label>
-            <br />
-            <input
-              type="date"
-              name="release"
-              value={formData.release}
-              onChange={handleInputChange}
-            />
-            <br />
-            <label>
-              <input
-                type="radio"
-                name="isPublic"
-                value={true}
-                checked={formData.isPublic === true}
-                onChange={handleInputChange}
-              />
-              True
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="isPublic"
-                value={false}
-                checked={formData.isPublic === false}
-                onChange={handleInputChange}
-              />
-              False
-            </label>
 
-            <br /> */}
               <div className="flex justify-between gap-3">
                 <FormGroup className="w-[50%]">
                   <Label htmlFor="">Release</Label>

@@ -157,9 +157,14 @@ const PlayerV2 = ({
             }}
           />
           <p>
-            {formatDuration(
-              track.duration ? track?.duration : songs[index]?.duration
-            )}
+            {/* {formatDuration(
+              track?.duration
+                ? track?.duration
+                : songs?.length > 0 && songs[index]?.duration
+            )} */}
+            {track?.duration
+              ? formatDuration(track?.duration)
+              : songs?.length > 0 && formatDuration(songs[index]?.duration)}
           </p>
         </div>
         <audio

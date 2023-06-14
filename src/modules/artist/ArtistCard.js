@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 const { default: axios } = require("api/axios");
 
-const ArtistCard = ({ idArtist }) => {
+const ArtistCard = ({ idArtist, onlyName = false }) => {
   const token = useSelector((state) => state.auth.login.currentUser.jwt);
   const [artist, setArtist] = useState({});
   const [data, setData] = useState({});
@@ -29,11 +29,18 @@ const ArtistCard = ({ idArtist }) => {
   }, []);
   // console.log(artist);
   return (
-    <div className=" w-[250px] items-center flex flex-col justify-center text-white gap-y-1">
-      <div className="relative overflow-hidden transition-all rounded-full cursor-pointer group">
+    <div className="w-[250px] items-center flex flex-col justify-center text-white gap-y-1">
+      <Link
+        to={`/artists/${idArtist}`}
+        className="relative block overflow-hidden transition-all rounded-full cursor-pointer group"
+      >
         <img
           className="w-full duration-500 linear group-hover:scale-110"
-          src={"/avt.jpg"}
+          src={
+            artist.profileImage
+              ? `${process.env.REACT_APP_API}/file/${artist.profileImage}`
+              : "/avt.jpg"
+          }
           alt=""
         />
         <div className="absolute top-0 bottom-0 left-0 right-0 bg-[rgba(0,0,0,0.4)] flex justify-center items-center opacity-0 group-hover:opacity-100 duration-500 linear">
@@ -51,38 +58,42 @@ const ArtistCard = ({ idArtist }) => {
             </svg>
           </span>
         </div>
-      </div>
+      </Link>
       <div className="flex flex-col items-center gap-1">
         <Link to="#" className="font-semibold">
           {artist.nickName || `${artist.userName}`}
           {/* Mob */}
         </Link>
-        <p className="text-sm font-semibold text-gray-300">
-          {artist.followers
-            ? `${artist.followers} followers`
-            : "Become first follower"}
-        </p>
-        <ButtonFollowArtist
-          onClick={() => {
-            followArtistToggle(artist._id, token, data.followed)
-              .then((res) => {
-                if (res.success) {
-                  if (data.followed) {
-                    setCountFollower(countFollower - 1); // Giảm giá trị countFollower nếu unfollow
-                  } else {
-                    setCountFollower(countFollower + 1); // Tăng giá trị countFollower nếu follow
+        {!onlyName && (
+          <p className="text-sm font-semibold text-gray-300">
+            {artist.followers
+              ? `${artist.followers} followers`
+              : "Become first follower"}
+          </p>
+        )}
+        {!onlyName && (
+          <ButtonFollowArtist
+            onClick={() => {
+              followArtistToggle(artist._id, token, data.followed)
+                .then((res) => {
+                  if (res.success) {
+                    if (data.followed) {
+                      setCountFollower(countFollower - 1); // Giảm giá trị countFollower nếu unfollow
+                    } else {
+                      setCountFollower(countFollower + 1); // Tăng giá trị countFollower nếu follow
+                    }
+                    setData((prevState) => ({
+                      ...prevState,
+                      followed: !prevState.followed,
+                    })); // Toggle trạng thái follow/unfollow
                   }
-                  setData((prevState) => ({
-                    ...prevState,
-                    followed: !prevState.followed,
-                  })); // Toggle trạng thái follow/unfollow
-                }
-              })
-              .catch((err) => console.log(err));
-          }}
-          followed={data.followed}
-          countFollower={countFollower}
-        ></ButtonFollowArtist>
+                })
+                .catch((err) => console.log(err));
+            }}
+            followed={data.followed}
+            countFollower={countFollower}
+          ></ButtonFollowArtist>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import React, { useMemo } from "react";
 import "./Slider.scss";
+import { Link } from "react-router-dom";
 
 const SlideItem = ({
   slide = {},
@@ -61,12 +62,13 @@ const SlideItem = ({
       })}
     >
       <div className="row__item-display">
-        <div
-          className="explore__slide-img row__item-img pt-[56.25%] rounded-md"
+        <Link
+          to={`/albums/${slide.id}`}
+          className="block explore__slide-img row__item-img pt-[56.25%] rounded-md"
           style={{
-            background: `url('${slide.coverArtUrl}') no-repeat center center / cover`,
+            background: `url('${process.env.REACT_APP_API}/file/${slide.coverArtUrl}') no-repeat center center / cover`,
           }}
-        ></div>
+        ></Link>
       </div>
     </div>
   );

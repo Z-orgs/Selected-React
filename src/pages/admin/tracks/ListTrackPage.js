@@ -115,13 +115,13 @@ const ListTrackPage = () => {
               <button
                 onClick={handleApproveTrack}
                 className={`px-4 py-2 text-white rounded-md min-w-[120px] my-2 font-semibold block text-lg ${
-                  result[index].status
+                  result[index]?.status
                     ? "bg-blue-400 text-gray-100"
                     : "bg-blue-500"
                 }`}
-                disabled={result[index].status}
+                disabled={result[index]?.status}
               >
-                {result[index].status ? "Approved" : "Approve"}
+                {result[index]?.status ? "Approved" : "Approve"}
               </button>
             )}
           </PlayerV2>

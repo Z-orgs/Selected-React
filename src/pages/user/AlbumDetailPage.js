@@ -59,9 +59,9 @@ const AlbumDetailPage = () => {
       ) : (
         <div className="">
           <div className="flex items-center gap-4">
-            <div className="w-[290px]">
+            <div className="w-[290px] h-[290px]">
               <img
-                className="w-full rounded-md"
+                className="object-cover w-full h-full rounded-md"
                 // src={`/file/${data.coverArtUrl}`}
                 src={generateImg(data.coverArtUrl) || "/thumb.png"}
                 alt=""
@@ -74,30 +74,30 @@ const AlbumDetailPage = () => {
               <p>{`${
                 data.tracks.filter((track) => track !== null).length
               } songs - ${calculateTime(data.release)}`}</p>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Delectus, aliquid dicta? Porro sapiente numquam odio a?
-              </p>
-              <div>
+              <p>{`${calculateTime(data.release)}`}</p>
+              <div className="flex gap-3 rounded-full bg-alpha-bg w-[140px] p-2 items-center">
                 <span
-                  className="flex items-center justify-center rounded-full bg-primary w-[60px] h-[60px]"
+                  className="flex items-center justify-center rounded-full bg-primary w-[36px] h-[36px]"
                   onClick={handlePlayAlbum}
                 >
                   <IconPlayToggle></IconPlayToggle>
                 </span>
+                Play all
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-y-3">
-            {data.tracks
-              .filter((track) => track !== null)
-              .map((track) =>
-                track === null ? (
-                  ""
-                ) : (
-                  <TrackItem key={v4()} song={track}></TrackItem>
-                )
-              )}
+          <div className="flex flex-col">
+            {data?.tracks &&
+              data.tracks?.length > 0 &&
+              data.tracks
+                .filter((track) => track !== null)
+                .map((track) =>
+                  track === null ? (
+                    ""
+                  ) : (
+                    <TrackItem key={v4()} song={track}></TrackItem>
+                  )
+                )}
           </div>
         </div>
       )}

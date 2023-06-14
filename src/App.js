@@ -24,12 +24,16 @@ import SongsFavoritePage from "pages/user/SongsFavoritePage";
 import SearchResultPage from "pages/user/SearchResultPage";
 import PlaylistDetailPage from "pages/user/PlaylistDetailPage";
 import ArtistHomePage from "pages/artist/artist/ArtistHomePage";
-import axios from "axios";
 import ArtistTrackDetail from "pages/artist/track/ArtistTrackDetail";
 import ArtistAlbumPage from "pages/artist/album/ArtistAlbumPage";
 import ArtistAlbumDetail from "pages/artist/album/ArtistAlbumDetail";
+import SubscribePage from "pages/user/SubscribePage";
+import SearchTracksResult from "pages/user/SearchTracksResult";
+import SearchArtistsResult from "pages/user/SearchArtistsResult";
+import SearchAlbumsResult from "pages/user/SearchAlbumsResult";
+const { default: axios } = require("api/axios");
 
-axios.get("http://localhost:3000/");
+axios.get("/");
 
 function App() {
   const role = useSelector((state) => state.auth.login.role);
@@ -177,6 +181,31 @@ function App() {
             path="/search/:keyword"
             extract
             element={<SearchResultPage></SearchResultPage>}
+          ></Route>
+          <Route
+            path="/search/:keyword"
+            extract
+            element={<SearchResultPage></SearchResultPage>}
+          ></Route>
+          <Route
+            path="/search_tracks/:keyword"
+            extract
+            element={<SearchTracksResult></SearchTracksResult>}
+          ></Route>
+          <Route
+            path="/search_artists/:keyword"
+            extract
+            element={<SearchArtistsResult></SearchArtistsResult>}
+          ></Route>
+          <Route
+            path="/search_albums/:keyword"
+            extract
+            element={<SearchAlbumsResult></SearchAlbumsResult>}
+          ></Route>
+          <Route
+            path="/subscribe"
+            extract
+            element={<SubscribePage></SubscribePage>}
           ></Route>
         </Route>
       </Routes>

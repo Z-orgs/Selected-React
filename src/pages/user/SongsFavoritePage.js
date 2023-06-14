@@ -15,16 +15,42 @@ const SongsFavoritePage = () => {
     getSongsLiked(token, dispatch);
   }, []);
   return (
-    <div>
-      {songsLiked && songsLiked.length > 0
-        ? songsLiked.map((track) => (
-            <TrackItem
-              key={v4()}
-              song={track}
-              isLiked={songsLiked.includes(track)}
-            ></TrackItem>
-          ))
-        : "Empty"}
+    <div className="flex gap-6">
+      <div className="flex flex-col w-1/5 gap-2">
+        <img
+          className="object-cover w-full rounded-lg"
+          src="/thumb-5.avif"
+          alt=""
+        />
+        <h3 className="text-2xl font-semibold text-center text-white font-secondary">
+          Songs favorite
+        </h3>
+        <div className="flex justify-center gap-2 text-white">
+          <p>{songsLiked && songsLiked.length} songs ~</p>
+          <p>
+            {songsLiked?.length > 0 &&
+              Math.floor(
+                songsLiked.reduce(
+                  (accumulator, currentValue) =>
+                    accumulator + currentValue.duration,
+                  0
+                ) / 60
+              )}
+            + minutes
+          </p>
+        </div>
+      </div>
+      <div className="flex-1">
+        {songsLiked && songsLiked.length > 0
+          ? songsLiked.map((track) => (
+              <TrackItem
+                key={v4()}
+                song={track}
+                isLiked={songsLiked.includes(track)}
+              ></TrackItem>
+            ))
+          : "Empty"}
+      </div>
     </div>
   );
 };
