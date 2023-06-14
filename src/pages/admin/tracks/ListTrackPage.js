@@ -4,8 +4,13 @@ import { getAllTracks } from "redux/apiRequest";
 import HeadingOverView from "components/common/HeadingOverView";
 import IconApproveToggle from "components/icons/IconApproveToggle";
 import PlayerV2 from "modules/player/PlayerV2";
-import { IconPlayToggle } from "components/icons";
+import { IconBin, IconPlayToggle } from "components/icons";
 import axios from "api/axios";
+import { Button } from "components/button";
+import Modal from "components/modal/Modal";
+import LayoutForm from "layout/LayoutForm";
+import ConfirmForm from "components/common/ConfirmForm";
+import { toast } from "react-toastify";
 
 const ListTrackPage = () => {
   const admin = useSelector((state) => state.auth.login?.currentUser);
@@ -14,6 +19,7 @@ const ListTrackPage = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [index, setIndex] = useState(0);
   const ad = useSelector((state) => state.auth.login?.currentUser);
+  const [showModal, setShowModal] = useState(false);
   const [result, setResult] = useState(listTracks);
   const formatText = (str) =>
     str
@@ -28,14 +34,24 @@ const ListTrackPage = () => {
     setIsPlaying(!isPlaying);
   };
   const handleApproveTrack = async () => {
-    const res = await axios.put(
-      `/track/approved/${result[index]._id}`,
-      { id: result[index]._id },
-      {
+    await axios
+      .put(
+        `/track/approved/${result[index]._id}`,
+        { id: result[index]._id },
+        {
+          headers: { Authorization: `Bearer ${ad?.admin_token}` },
+        }
+      )
+      .then((response) => toast.success(`Approved "${result[index].title}"`))
+      .catch((error) => toast.error("Approve failed!"));
+  };
+  const handleDeleteTrack = async () => {
+    await axios
+      .delete(`/admin/track/${result[index]._id}`, {
         headers: { Authorization: `Bearer ${ad?.admin_token}` },
-      }
-    );
-    console.log(res);
+      })
+      .then((response) => toast.success(`Approved "${result[index].title}"`))
+      .catch((error) => toast.error("Delete failed!"));
   };
   console.log(index);
   useEffect(() => {
@@ -112,21 +128,43 @@ const ListTrackPage = () => {
             setPlaying={setIsPlaying}
           >
             {result && result.length > 0 && (
-              <button
-                onClick={handleApproveTrack}
-                className={`px-4 py-2 text-white rounded-md min-w-[120px] my-2 font-semibold block text-lg ${
-                  result[index]?.status
-                    ? "bg-blue-400 text-gray-100"
-                    : "bg-blue-500"
-                }`}
-                disabled={result[index]?.status}
-              >
-                {result[index]?.status ? "Approved" : "Approve"}
-              </button>
+              <div className="">
+                <button
+                  onClick={handleApproveTrack}
+                  className={`px-4 py-2 text-white rounded-md min-w-[120px] my-2 font-semibold block text-lg ${
+                    result[index]?.status
+                      ? "bg-blue-400 text-gray-100"
+                      : "bg-blue-500"
+                  }`}
+                  disabled={result[index]?.status}
+                >
+                  {result[index]?.status ? "Approved" : "Approve"}
+                </button>
+                <Button
+                  className="flex items-center justify-around gap-1 bg-red-500"
+                  onClick={() => {
+                    setShowModal(true);
+                  }}
+                >
+                  Delete
+                  <IconBin size={22} currentColor="white"></IconBin>
+                </Button>
+              </div>
             )}
           </PlayerV2>
         </div>
       </div>
+      <Modal show={showModal} onClose={() => setShowModal(false)}>
+        <LayoutForm>
+          <ConfirmForm
+            handleConfirm={() => {
+              handleDeleteTrack();
+              setShowModal(false);
+            }}
+            handleCancel={() => setShowModal(false)}
+          ></ConfirmForm>
+        </LayoutForm>
+      </Modal>
     </>
   );
 };

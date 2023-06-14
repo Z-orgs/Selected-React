@@ -30,6 +30,7 @@ import SubscribePage from "pages/user/SubscribePage";
 import SearchTracksResult from "pages/user/SearchTracksResult";
 import SearchArtistsResult from "pages/user/SearchArtistsResult";
 import SearchAlbumsResult from "pages/user/SearchAlbumsResult";
+import LoggerPage from "pages/admin/logger/LoggerPage";
 const { default: axios } = require("api/axios");
 
 axios.get("/");
@@ -106,6 +107,11 @@ function App() {
                 path="/users"
                 exact
                 element={<ListUserPage></ListUserPage>}
+              ></Route>
+              <Route
+                path="/logger"
+                exact
+                element={<LoggerPage></LoggerPage>}
               ></Route>
             </>
           )}

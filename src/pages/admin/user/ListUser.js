@@ -19,7 +19,7 @@ const ListUserPage = () => {
         type="users"
       ></HeadingOverView>
       {listUser && listUser?.length > 0 ? (
-        <table className="w-full text-sm text-gray-500">
+        <table className="w-full text-sm text-gray-500 rounded-md">
           <thead className="text-base text-gray-700 uppercase bg-gray-50">
             <tr>
               <th className="px-6 py-3 max-w-[100px]">User</th>

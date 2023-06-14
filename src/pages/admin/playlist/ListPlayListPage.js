@@ -45,7 +45,7 @@ const ListPLaylistPage = () => {
           listPlaylist.map((item) => (
             <AlbumItem
               isPlaylist={true}
-              thumb={`${item.picture}`}
+              // thumb={`${item.picture}`}
               size="250"
               title={item.title}
               key={item._id}

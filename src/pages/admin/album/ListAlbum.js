@@ -18,7 +18,7 @@ const ListAlbumPage = () => {
         {listAlbum &&
           listAlbum.map((item) => (
             <AlbumItem
-              thumb={`${process.env.REACT_APP_API}/file/${item.coverArtUrl}`}
+              thumb={item.coverArtUrl}
               size="250"
               title={item.title}
               key={item._id}

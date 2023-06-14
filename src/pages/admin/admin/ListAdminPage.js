@@ -84,17 +84,9 @@ const ListAdminPage = () => {
         type="admins"
       ></HeadingOverView>
       <div className="flex-1">
-        <Button
-          onClick={() => {
-            setShowModal(true);
-            // setShowForm(!showForm);
-          }}
-        >
-          Create Admin
-        </Button>
         {list && list.length > 0 ? (
           <table className="w-full text-sm text-left text-gray-500">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+            <thead className="text-base text-gray-700 uppercase bg-gray-50">
               <tr>
                 <th className="px-6 py-3">Username</th>
                 <th className="px-6 py-3">First Name</th>
@@ -120,6 +112,16 @@ const ListAdminPage = () => {
         ) : (
           <p>Nothing</p>
         )}
+      </div>
+      <div className="flex justify-end mt-2">
+        <Button
+          onClick={() => {
+            setShowModal(true);
+            // setShowForm(!showForm);
+          }}
+        >
+          Create Admin
+        </Button>
       </div>
 
       <Modal show={showModal} onClose={() => setShowModal(false)}>
@@ -168,7 +170,9 @@ const ListAdminPage = () => {
               ></Input>
             </FormGroup>
 
-            <Button type="submit">Submit</Button>
+            <div className="flex justify-center">
+              <Button type="submit">Submit</Button>
+            </div>
           </form>
         </LayoutForm>
       </Modal>
