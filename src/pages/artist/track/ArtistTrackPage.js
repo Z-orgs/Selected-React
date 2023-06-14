@@ -252,16 +252,12 @@ const ArtistTrackPage = () => {
           </LayoutForm>
         ) : (
           <LayoutForm title={`${action} track`}>
-            <form
-              onSubmit={handleSubmit(
-                action === "upload"
-                  ? handleUploadTrack()
-                  : handleUpdateTrack(result && result[index]?._id)
-              )}
-              autoComplete="off"
-              className="w-[60%]"
-            >
-              {action === "upload" && (
+            {action === "upload" && (
+              <form
+                onSubmit={handleSubmit(handleUploadTrack)}
+                autoComplete="off"
+                className="w-[60%]"
+              >
                 <FormGroup>
                   <FileInput
                     control={control}
@@ -269,67 +265,123 @@ const ArtistTrackPage = () => {
                     fileType="audio"
                   ></FileInput>
                 </FormGroup>
-              )}
 
-              <div className="flex justify-between gap-4">
-                <FormGroup className="w-[60%]">
-                  <Label>Title</Label>
-                  <Input
-                    name="title"
-                    control={control}
-                    placeholder="Enter title..."
-                    defaultValue={`${
-                      action === "update" ? dataTrack.title : ""
-                    }`}
-                  ></Input>
-                </FormGroup>
-                <FormGroup className="flex-1">
-                  <Label htmlFor="genre">Genre</Label>
-                  <Input
-                    name="genre"
-                    control={control}
-                    placeholder="Enter genre..."
-                    defaultValue={`${
-                      action === "update" ? dataTrack.genre : ""
-                    }`}
-                  ></Input>
-                </FormGroup>
-              </div>
-
-              <div className="flex justify-between gap-3">
-                <FormGroup className="w-[50%]">
-                  <Label htmlFor="">Release</Label>
-                  <DatePicker
-                    name="release"
-                    onChange={onChange}
-                    value={value}
-                  />
-                </FormGroup>
-                <div>
-                  <Label>Status</Label>
-
-                  <FieldCheckboxes className="flex-1">
-                    <Radio
+                <div className="flex justify-between gap-4">
+                  <FormGroup className="w-[60%]">
+                    <Label>Title</Label>
+                    <Input
+                      name="title"
                       control={control}
-                      name="isPublic"
-                      checked={watch("isPublic") === "public"}
-                      value="public"
-                    >
-                      Public
-                    </Radio>
-                    <Radio
-                      checked={watch("isPublic") === "private"}
+                      placeholder="Enter title..."
+                    ></Input>
+                  </FormGroup>
+                  <FormGroup className="flex-1">
+                    <Label htmlFor="genre">Genre</Label>
+                    <Input
+                      name="genre"
                       control={control}
-                      name="isPublic"
-                      value="private"
-                    >
-                      Private
-                    </Radio>
-                  </FieldCheckboxes>
+                      placeholder="Enter genre..."
+                    ></Input>
+                  </FormGroup>
                 </div>
-              </div>
-              <button type="submit">Submit</button>
-            </form>
+
+                <div className="flex justify-between gap-3">
+                  <FormGroup className="w-[50%]">
+                    <Label htmlFor="">Release</Label>
+                    <DatePicker
+                      name="release"
+                      onChange={onChange}
+                      value={value}
+                    />
+                  </FormGroup>
+                  <div>
+                    <Label>Status</Label>
+
+                    <FieldCheckboxes className="flex-1">
+                      <Radio
+                        control={control}
+                        name="isPublic"
+                        checked={watch("isPublic") === "public"}
+                        value="public"
+                      >
+                        Public
+                      </Radio>
+                      <Radio
+                        checked={watch("isPublic") === "private"}
+                        control={control}
+                        name="isPublic"
+                        value="private"
+                      >
+                        Private
+                      </Radio>
+                    </FieldCheckboxes>
+                  </div>
+                </div>
+                <Button type="submit">Submit</Button>
+              </form>
+            )}
+            {action === "update" && result?.length > 0 && (
+              <form
+                onSubmit={handleSubmit(handleUpdateTrack(result[index]?._id))}
+                autoComplete="off"
+                className="w-[60%]"
+              >
+                <div className="flex justify-between gap-4">
+                  <FormGroup className="w-[60%]">
+                    <Label>Title</Label>
+                    <Input
+                      name="title"
+                      control={control}
+                      placeholder="Enter title..."
+                      defaultValue={result[index]?.title}
+                    ></Input>
+                  </FormGroup>
+                  <FormGroup className="flex-1">
+                    <Label htmlFor="genre">Genre</Label>
+                    <Input
+                      name="genre"
+                      control={control}
+                      placeholder="Enter genre..."
+                      defaultValue={result[index]?.genre}
+                    ></Input>
+                  </FormGroup>
+                </div>
+
+                <div className="flex justify-between gap-3">
+                  <FormGroup className="w-[50%]">
+                    <Label htmlFor="">Release</Label>
+                    <DatePicker
+                      name="release"
+                      onChange={onChange}
+                      value={value}
+                    />
+                  </FormGroup>
+                  <div>
+                    <Label>Status</Label>
+
+                    <FieldCheckboxes className="flex-1">
+                      <Radio
+                        control={control}
+                        name="isPublic"
+                        checked={watch("isPublic") === "public"}
+                        value="public"
+                      >
+                        Public
+                      </Radio>
+                      <Radio
+                        checked={watch("isPublic") === "private"}
+                        control={control}
+                        name="isPublic"
+                        value="private"
+                      >
+                        Private
+                      </Radio>
+                    </FieldCheckboxes>
+                  </div>
+                </div>
+                <Button type="submit">Submit</Button>
+              </form>
+            )}
           </LayoutForm>
         )}
       </Modal>

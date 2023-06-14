@@ -16,7 +16,7 @@ const itemClass =
 
 const sidebarLinks = [
   {
-    title: "Home",
+    title: "Homekkk",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"

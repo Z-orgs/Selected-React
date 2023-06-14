@@ -105,7 +105,6 @@ const TrackItem = ({
       isPlaying = true;
     }
   };
-  console.log(showPanel);
   return (
     // bg-[hsla(0,1%,20%,0.8)]
     onlyTitle ? (

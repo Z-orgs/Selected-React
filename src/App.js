@@ -9,7 +9,6 @@ import PlaylistDetail from "pages/admin/playlist/PlaylistDetail";
 import ListAlbumPage from "pages/admin/album/ListAlbum";
 import AlbumDetail from "pages/admin/album/AlbumDetail";
 import ListUserPage from "pages/admin/user/ListUser";
-import ListLoggerPage from "pages/admin/logger/ListLogger";
 import LoginPage from "pages/LoginPage";
 import AdminDashBoardPage from "pages/admin/AdminDashBoardPage";
 import LayoutDashboard from "layout/LayoutDashboard";
@@ -107,11 +106,6 @@ function App() {
                 path="/users"
                 exact
                 element={<ListUserPage></ListUserPage>}
-              ></Route>
-              <Route
-                path="/logger"
-                exact
-                element={<ListLoggerPage></ListLoggerPage>}
               ></Route>
             </>
           )}

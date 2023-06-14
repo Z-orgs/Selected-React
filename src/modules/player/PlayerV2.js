@@ -64,7 +64,7 @@ const PlayerV2 = ({
     // setAudioIndex(index);
     role === "Admin" &&
       songs &&
-      songs.length > 0 &&
+      songs?.length > 0 &&
       axios
         .get(`/admin/track/${songs[index]._id}`, {
           headers: { Authorization: `Bearer ${ad?.currentUser?.admin_token}` },
@@ -74,7 +74,7 @@ const PlayerV2 = ({
         });
     // role === "Artist" && isFetching ? '' : setTrack(songs);
     if (role === "Artist") {
-      if (isFetching)
+      if (isFetching && songs?.length > 0)
         axios
           .get(`/artist/track/${songs[index]._id}`, {
             headers: { Authorization: `Bearer ${ad?.token}` },
@@ -106,10 +106,11 @@ const PlayerV2 = ({
         />
         <div>
           <h2 className="p-1 text-white rounded-md">
-            {(songs && songs[index]?.title) || "No songs are playing"}
+            {(songs?.length > 0 && songs[index]?.title) ||
+              "No songs are playing"}
           </h2>
           <p className="Singer">
-            {(songs && songs[index]?.artist?.nickName) || ""}
+            {(songs?.length > 0 && songs[index]?.artist?.nickName) || ""}
           </p>
         </div>
       </div>
@@ -169,7 +170,7 @@ const PlayerV2 = ({
         </div>
         <audio
           ref={audioRef}
-          src={track?.link || songs[index]?.link}
+          src={track?.link || (songs?.length > 0 && songs[index]?.link)}
           onLoadedData={handleLoadedData}
           onTimeUpdate={() => setCurrentTime(audioRef.current.currentTime)}
           onEnded={() => handlePlayPause()}
