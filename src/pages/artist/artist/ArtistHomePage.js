@@ -52,7 +52,7 @@ const ArtistHomePage = () => {
             <div className="flex gap-2">
               <CountUp duration={2.75} end={totalRevenue} decimals={2} />$
             </div>
-            <p className="text-2xl font-normal">followers</p>
+            <p className="text-2xl font-normal">revenue</p>
           </div>
         </div>
         <div className="w-full h-[220px]   items-center justify-center flex m-auto bg-white">

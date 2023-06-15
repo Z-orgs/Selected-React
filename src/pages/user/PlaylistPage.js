@@ -13,7 +13,7 @@ import { v4 } from "uuid";
 const { default: axios } = require("api/axios");
 
 const PlaylistPage = () => {
-  const token = useSelector((state) => state.auth.login.currentUser.jwt);
+  const token = useSelector((state) => state?.auth?.login?.currentUser?.jwt);
   const [showModal, setShowModal] = useState(false);
   const [namePlaylist, setNamePlaylist] = useState("");
   const [playlists, setPlaylists] = useState([]);
