@@ -115,6 +115,8 @@ const playerSlice = createSlice({
       state.tracks = [];
       state.currentTrackIndex = null;
       state.isPlaying = false;
+      state.trackActive = null;
+      state.volume = 100;
     },
 
     setPlaylist(state, action) {

@@ -16,7 +16,7 @@ const itemClass =
 
 const sidebarLinks = [
   {
-    title: "Homekkk",
+    title: "Home",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -77,25 +77,28 @@ const SelectedLeftSidebar = () => {
     navigate("/");
   };
   return (
-    <div className="w-[240px] bg-[hsla(0,0%,100%,0.05)] flex flex-col items-center">
-      <Link to="/" className="my-4">
-        <img srcSet="/logoWithoutText.png 2x" alt="" />
-      </Link>
-      {sidebarLinks.map((link) => (
-        <NavLink
-          className={({ isActive }) =>
-            isActive
-              ? `${itemClass} bg-[#ffffff1a] border-l-4 border-secondary`
-              : `${itemClass}`
-          }
-          to={link.url}
-          key={v4()}
-        >
-          <span className="">{link.icon}</span>
-          {link.title}
-        </NavLink>
-      ))}
-      <div>
+    <div className="w-[240px] bg-[hsla(0,0%,100%,0.05)] flex flex-col items-center justify-between h-[100vh]">
+      <div className="flex flex-col items-center w-full">
+        <Link to="/" className="my-4">
+          <img srcSet="/logoWithoutText.png 2x" alt="" />
+        </Link>
+        {sidebarLinks.map((link) => (
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? `${itemClass} bg-[#ffffff1a] border-l-4 border-secondary`
+                : `${itemClass}`
+            }
+            to={link.url}
+            key={v4()}
+          >
+            <span className="">{link.icon}</span>
+            {link.title}
+          </NavLink>
+        ))}
+      </div>
+      <div className="flex items-center gap-2 p-2 text-lg font-semibold text-white mb-player-height bg-[hsla(0,0%,100%,0.05)] w-full justify-center">
+        Logout
         <span
           onClick={handleLogout}
           className="block p-2 bg-white rounded-full cursor-pointer shadow-[rgba(60,_64,_67,_0.3)_0px_1px_2px_0px,_rgba(60,_64,_67,_0.15)_0px_2px_6px_2px]"

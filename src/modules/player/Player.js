@@ -91,7 +91,7 @@ const Player = () => {
   // console.log(audioRef.current.src);
 
   return (
-    <div className="bg-[rgba(0,0,0,0.5)] flex items-center text-white justify-between p-4 w-full h-full">
+    <div className="bg-[rgba(0,0,0,0.8)] flex items-center text-white justify-between p-4 w-full h-full">
       <div className="flex items-center gap-3 w-[32%]">
         <img
           className="Song-Thumbnail w-[80px] rounded-md"
