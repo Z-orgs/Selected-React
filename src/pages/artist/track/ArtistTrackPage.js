@@ -24,6 +24,7 @@ import { Radio } from "components/checkbox";
 import { Button } from "components/button";
 import ConfirmForm from "components/common/ConfirmForm";
 import { toast } from "react-toastify";
+import DataEmpty from "components/common/DataEmpty";
 
 const { default: axios } = require("api/axios");
 
@@ -76,9 +77,14 @@ const ArtistTrackPage = () => {
   };
 
   const handleUpdateTrack = async (id) => {
-    const data = {};
+    const data = {
+      title: watch("title"),
+      genre: watch("genre"),
+      release: value,
+      isPublic: watch("isPublic") === "public",
+    };
     await axios
-      .apply(`/track/${id}`, data, {
+      .put(`/track/${id}`, data, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -209,7 +215,7 @@ const ArtistTrackPage = () => {
                 </div>
               ))
             ) : (
-              <p className="text-center">No song exists</p>
+              <DataEmpty msg="No songs exist"></DataEmpty>
             )}
           </div>
         </div>
@@ -317,12 +323,16 @@ const ArtistTrackPage = () => {
                     </FieldCheckboxes>
                   </div>
                 </div>
-                <Button type="submit">Submit</Button>
+                <div className="flex justify-center">
+                  <Button type="submit">Submit</Button>
+                </div>
               </form>
             )}
             {action === "update" && result?.length > 0 && (
               <form
-                onSubmit={handleSubmit(handleUpdateTrack(result[index]?._id))}
+                onSubmit={handleSubmit(() =>
+                  handleUpdateTrack(result[index]?._id)
+                )}
                 autoComplete="off"
                 className="w-[60%]"
               >
@@ -379,7 +389,9 @@ const ArtistTrackPage = () => {
                     </FieldCheckboxes>
                   </div>
                 </div>
-                <Button type="submit">Submit</Button>
+                <div className="flex justify-center">
+                  <Button type="submit">Submit</Button>
+                </div>
               </form>
             )}
           </LayoutForm>

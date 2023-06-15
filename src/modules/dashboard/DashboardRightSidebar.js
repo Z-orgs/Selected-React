@@ -218,7 +218,11 @@ const DashboardRightSidebar = () => {
         </span>
       </div>
       <Modal show={showModal} onClose={() => setShowModal(false)}>
-        <LayoutForm title="Change password">
+        <LayoutForm
+          title={`${
+            action === "password" ? "Change password" : "Update your info"
+          }`}
+        >
           {action === "password" && (
             <form
               onSubmit={handleSubmit(handleChangePassword)}
@@ -252,7 +256,9 @@ const DashboardRightSidebar = () => {
                   error={errors.confirmNewPassword?.message}
                 ></Input>
               </FormGroup>
-              <Button type="submit">Submit</Button>
+              <div className="flex justify-center">
+                <Button type="submit">Submit</Button>
+              </div>
             </form>
           )}
           {action === "update" && (
@@ -360,7 +366,7 @@ const DashboardRightSidebar = () => {
                   </svg>
                 </span>
               </div>
-              <div className="flex flex-col max-h-[200px] p-1 border-2 border-primary rounded-md mb-5">
+              <div className="flex flex-col h-[200px] p-1 border-2 border-primary rounded-md mb-5">
                 <div className="flex flex-col h-full p-2 overflow-auto">
                   {artistData.socialLinks.map((link, index) => (
                     <div key={v4()} className="flex gap-3">
@@ -396,7 +402,9 @@ const DashboardRightSidebar = () => {
                   ))}
                 </div>
               </div>
-              <Button type="submit">Update</Button>
+              <div className="flex justify-center">
+                <Button type="submit">Update</Button>
+              </div>
             </form>
           )}
         </LayoutForm>

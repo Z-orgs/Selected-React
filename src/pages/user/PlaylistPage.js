@@ -34,7 +34,7 @@ const PlaylistPage = () => {
     <div className="py-2">
       <GridView>
         <div
-          className="flex flex-col items-center justify-center text-white w-[290px] border-2 border-[hsla(0,0%,100%,0.1)] rounded-md hover:text-secondary cursor-pointer group gap-3 text-lg transition-all"
+          className="flex flex-col items-center justify-center text-white w-[290px] border-2 border-[rgba(255,255,255,0.2)] rounded-md hover:text-secondary cursor-pointer group gap-3 text-lg transition-all min-h-[290px]"
           onClick={() => {
             setShowModal(true);
           }}

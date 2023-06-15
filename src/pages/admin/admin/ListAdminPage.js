@@ -11,6 +11,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import HeadingOverView from "components/common/HeadingOverView";
 import LayoutForm from "layout/LayoutForm";
+import DataEmpty from "components/common/DataEmpty";
 const { default: axios } = require("api/axios");
 
 const schema = yup.object({
@@ -79,50 +80,61 @@ const ListAdminPage = () => {
   localStorage.setItem("token", admin?.admin_token);
   return (
     <div className="">
-      <HeadingOverView
-        total={list && list.length}
-        type="admins"
-      ></HeadingOverView>
-      <div className="flex-1">
-        {list && list.length > 0 ? (
-          <table className="w-full text-sm text-left text-gray-500">
-            <thead className="text-base text-gray-700 uppercase bg-gray-50">
-              <tr>
-                <th className="px-6 py-3">Username</th>
-                <th className="px-6 py-3">First Name</th>
-                <th className="px-6 py-3">Last Name</th>
-                <th className="px-6 py-3">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {list.map((ad) => (
-                <tr key={ad._id} className="bg-white border-b">
-                  <td className="px-6 py-4">{ad.username || "Unknown"}</td>
-                  <td className="px-6 py-4">{ad.firstName || "Unknown"}</td>
-                  <td className="px-6 py-4">{ad.lastName || "Unknown"}</td>
-                  <td className="px-6 py-4">
-                    <button onClick={() => handleResetPassword(ad._id)}>
-                      Reset password
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>Nothing</p>
-        )}
-      </div>
-      <div className="flex justify-end mt-2">
-        <Button
-          onClick={() => {
-            setShowModal(true);
-            // setShowForm(!showForm);
-          }}
-        >
-          Create Admin
-        </Button>
-      </div>
+      {list && list.length > 0 ? (
+        <div>
+          <HeadingOverView
+            total={list && list.length}
+            type="admins"
+          ></HeadingOverView>
+          <div className="flex-1">
+            {list && list.length > 0 ? (
+              <table className="w-full text-sm text-left text-gray-500">
+                <thead className="text-base text-gray-700 uppercase bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3">Username</th>
+                    <th className="px-6 py-3">First Name</th>
+                    <th className="px-6 py-3">Last Name</th>
+                    <th className="px-6 py-3">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="text-center">
+                  {list.map((ad) => (
+                    <tr key={ad._id} className="bg-white border-b">
+                      <td className="px-6 py-4">{ad.username || "Unknown"}</td>
+                      <td className="px-6 py-4">{ad.firstName || "Unknown"}</td>
+                      <td className="px-6 py-4">{ad.lastName || "Unknown"}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col items-center justify-center gap-2 text-white">
+                          <button
+                            className="px-2 py-2 text-white bg-blue-500 rounded-md"
+                            onClick={() => handleResetPassword(ad._id)}
+                          >
+                            Reset password
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p>Nothing</p>
+            )}
+          </div>
+          <div className="flex justify-end mt-2">
+            <Button
+              onClick={() => {
+                setShowModal(true);
+                // setShowForm(!showForm);
+              }}
+            >
+              Create Admin
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <DataEmpty msg="Not admins exist!" text="black"></DataEmpty>
+      )}
 
       <Modal show={showModal} onClose={() => setShowModal(false)}>
         <LayoutForm title="Create admin">

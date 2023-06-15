@@ -38,7 +38,6 @@ const formatText = (str) =>
 const ArtistAlbumDetail = () => {
   const navigate = useNavigate();
   const {
-    register,
     control,
     handleSubmit,
     formState: { errors },
@@ -53,19 +52,12 @@ const ArtistAlbumDetail = () => {
   const token = useSelector((state) => state.auth.login.token);
   const [index, setIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [action, setAction] = useState("update");
+  const [action, setAction] = useState("");
+  const [infoAlbum, setInfoAlbum] = useState(null);
 
   const listTrack = useSelector(
     (state) => state.trackArtist.trackArtists?.allTrackArtists
   );
-  const [formData, setFormData] = useState({
-    image: null,
-    title: "",
-    genre: "",
-    release: "",
-    isPublic: true,
-    tracks: [],
-  });
 
   const [searchResults, setSearchResults] = useState(listTrack);
   const [selectedTracks, setSelectedTracks] = useState([]);
@@ -106,23 +98,12 @@ const ArtistAlbumDetail = () => {
         const albumData = response.data;
         setAlbum(albumData);
 
-        // Set the initial values of the form fields based on albumData
-        setFormData({
-          image: null,
-          title: albumData.title,
-          genre: albumData.genre,
-          release: albumData.release,
-          isPublic: albumData.isPublic,
-          tracks: albumData.tracks || [],
-        });
-
-        // Set the initial selected tracks based on albumData
         setSelectedTracks(albumData.tracks || []);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [id, artist]);
+  }, []);
 
   const handleUpdateAlbum = async (e) => {
     const albumData = new FormData();
@@ -136,20 +117,22 @@ const ArtistAlbumDetail = () => {
       JSON.stringify(selectedTracks.map((track) => track._id))
     );
 
-    try {
-      const response = await axios.put(`/album/${id}`, albumData, {
+    // try {
+    await axios
+      .put(`/album/${id}`, albumData, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
-      });
-      setSelectedTracks(selectedTracks);
+      })
+      .then((res) => {
+        setSelectedTracks(selectedTracks);
 
-      alert("Album updated successfully!");
-      console.log(albumData);
-    } catch (error) {
-      console.log(error);
-      alert("Failed to update album. Please try again.");
-    }
+        toast.success("Album updated successfully!");
+        window.location.reload();
+        console.log(albumData);
+      })
+      .then((err) => toast.error("Failed to update album. Please try again!"));
   };
 
   const handleTrackSearch = (e) => {
@@ -196,6 +179,7 @@ const ArtistAlbumDetail = () => {
       </div>
     ));
   };
+  console.log(album);
 
   return (
     <div>
@@ -231,6 +215,7 @@ const ArtistAlbumDetail = () => {
                       onClick={() => {
                         setShowModal(true);
                         setAction("update");
+                        setInfoAlbum(album);
                       }}
                     >
                       Update
@@ -289,12 +274,8 @@ const ArtistAlbumDetail = () => {
         </div>
       </div>
 
-      <Modal
-        show={showModal}
-        heading="Update Album"
-        onClose={() => setShowModal(false)}
-      >
-        <LayoutForm title={`${action} Album`}>
+      <Modal show={showModal} onClose={() => setShowModal(false)}>
+        <LayoutForm title={`${action} "${album.title}"`}>
           {action === "update" && (
             <form
               onSubmit={handleSubmit(handleUpdateAlbum)}
@@ -391,7 +372,9 @@ const ArtistAlbumDetail = () => {
                   </div>
                 </FormGroup>
               </div>
-              <Button type="submit">Update</Button>
+              <div className="flex justify-center">
+                <Button type="submit">Update</Button>
+              </div>
             </form>
           )}
           {action === "delete" && (

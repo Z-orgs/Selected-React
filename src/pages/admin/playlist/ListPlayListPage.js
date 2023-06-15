@@ -4,6 +4,7 @@ import { getAllPlaylists } from "redux/apiRequest";
 import { NavLink } from "react-router-dom";
 import AlbumGrid from "modules/album/AlbumGrid";
 import AlbumItem from "modules/album/AlbumItem";
+import DataEmpty from "components/common/DataEmpty";
 
 const ListPLaylistPage = () => {
   const admin = useSelector((state) => state.auth.login?.currentUser);
@@ -41,7 +42,7 @@ const ListPLaylistPage = () => {
     // </>
     <div className="max-h-[96vh] overflow-auto  rounded-lg pl-6 py-4 text-black ">
       <AlbumGrid>
-        {listPlaylist &&
+        {listPlaylist && listPlaylist.length > 0 ? (
           listPlaylist.map((item) => (
             <AlbumItem
               isPlaylist={true}
@@ -51,7 +52,10 @@ const ListPLaylistPage = () => {
               key={item._id}
               id={item._id}
             ></AlbumItem>
-          ))}
+          ))
+        ) : (
+          <DataEmpty msg="Not playlists exist!" text="black"></DataEmpty>
+        )}
       </AlbumGrid>
     </div>
   );

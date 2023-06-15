@@ -74,12 +74,12 @@ const PlaylistDetailPage = () => {
     dispatch(playPause(!isPlay));
   };
   return (
-    <div className="">
+    <div className="mt-20">
       {Object.keys(data).length === 0 ? (
         "Loading..."
       ) : (
         <div className="">
-          <div className="flex items-center gap-4">
+          <div className="flex gap-4">
             <div className="w-[290px] h-[290px]">
               <img
                 className="object-cover w-full h-full rounded-md"
@@ -91,7 +91,7 @@ const PlaylistDetailPage = () => {
                 alt=""
               />
             </div>
-            <div className="text-white">
+            <div className="flex flex-col gap-2 text-white">
               <h3 className="text-4xl font-semibold">
                 {data.title || "Tomorow's tunes"}
               </h3>
@@ -102,8 +102,8 @@ const PlaylistDetailPage = () => {
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Delectus, aliquid dicta? Porro sapiente numquam odio a?
               </p>
-              <div className="flex gap-4">
-                <div className="flex gap-3 rounded-full bg-alpha-bg w-[140px] p-2 items-center">
+              <div className="flex gap-4 mt-2">
+                <div className="flex gap-3 rounded-full bg-alpha-bg w-[140px] p-2 items-center cursor-default select-none">
                   <span
                     className="cursor-pointer flex items-center justify-center rounded-full bg-primary w-[36px] h-[36px]"
                     onClick={handlePlayAlbum}
@@ -112,7 +112,7 @@ const PlaylistDetailPage = () => {
                   </span>
                   Play all
                 </div>
-                <div className="flex gap-3 rounded-full bg-alpha-bg w-[140px] p-2 items-center">
+                <div className="flex gap-3 rounded-full bg-alpha-bg w-[140px] p-2 items-center cursor-default select-none">
                   <span
                     className="cursor-pointer flex items-center justify-center rounded-full bg-red-500 w-[36px] h-[36px]"
                     onClick={() => {

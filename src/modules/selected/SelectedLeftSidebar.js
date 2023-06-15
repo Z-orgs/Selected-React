@@ -72,8 +72,8 @@ const SelectedLeftSidebar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
-    dispatch(logout());
     dispatch(clearPlaylist());
+    dispatch(logout());
     navigate("/");
   };
   return (

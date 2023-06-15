@@ -11,6 +11,7 @@ import Modal from "components/modal/Modal";
 import LayoutForm from "layout/LayoutForm";
 import ConfirmForm from "components/common/ConfirmForm";
 import { toast } from "react-toastify";
+import DataEmpty from "components/common/DataEmpty";
 
 const ListTrackPage = () => {
   const admin = useSelector((state) => state.auth.login?.currentUser);
@@ -90,7 +91,7 @@ const ListTrackPage = () => {
             //     backgroundPosition: "center",
             //   }}
           >
-            {result &&
+            {result && result.length > 0 ? (
               result.map((item, i) => (
                 <div
                   className={`flex items-center gap-2 p-2 bg-[rgba(255,255,255,0.9)] rounded-md cursor-pointer select-none border-2 ${
@@ -115,7 +116,10 @@ const ListTrackPage = () => {
                     ></IconApproveToggle>
                   </span>
                 </div>
-              ))}
+              ))
+            ) : (
+              <DataEmpty text="Not songs exist!"></DataEmpty>
+            )}
           </div>
         </div>
         <div className="items-center flex-1">

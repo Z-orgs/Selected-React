@@ -14,6 +14,7 @@ import LayoutForm from "layout/LayoutForm";
 import DatePicker from "react-date-picker";
 import { toast } from "react-toastify";
 import ConfirmForm from "components/common/ConfirmForm";
+import DataEmpty from "components/common/DataEmpty";
 const { default: axios } = require("api/axios");
 
 const schema = yup.object({
@@ -52,22 +53,20 @@ const ListArtistPage = () => {
       email: watch("email"),
       phone: watch("phone"),
     };
-    try {
-      await axios
-        .post(`/artist`, artist, {
-          headers: {
-            Authorization: `Bearer ${admin?.admin_token}`,
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          setShowModal(false);
-          setCount(count + 1);
-        });
-      console.log(artist);
-    } catch (e) {
-      alert(e);
-    }
+    await axios
+      .post(`/artist`, artist, {
+        headers: {
+          Authorization: `Bearer ${admin?.admin_token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setShowModal(false);
+        setCount(count + 1);
+        toast
+          .success(`Created "${artist.username}" successfully!`)
+          .catch((err) => toast.error("Create failed!"));
+      });
   };
   const handlePay = async (artist) => {
     await axios
@@ -142,26 +141,26 @@ const ListArtistPage = () => {
                     </div>
                   </td>
 
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 font-semibold">
                     {artist.revenue.toFixed(2) || "0"}$
+                    <button
+                      className="px-2 py-1 ml-2 text-white bg-green-500 rounded-md"
+                      onClick={() => {
+                        setShowModal(true);
+                        setArtist(artist);
+                        setAction("pay");
+                      }}
+                    >
+                      Pay Now
+                    </button>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex flex-col items-center justify-center gap-2 text-white">
                       <button
-                        className="px-4 py-2 bg-blue-500 rounded-md"
+                        className="px-2 py-2 bg-blue-500 rounded-md"
                         onClick={() => handleResetPassword(artist._id)}
                       >
                         Reset password
-                      </button>
-                      <button
-                        className="px-4 py-2 bg-green-500 rounded-md"
-                        onClick={() => {
-                          setShowModal(true);
-                          setArtist(artist);
-                          setAction("pay");
-                        }}
-                      >
-                        Pay Now
                       </button>
                     </div>
                   </td>
@@ -171,7 +170,7 @@ const ListArtistPage = () => {
           </table>
         </div>
       ) : (
-        <p>Nothing</p>
+        <DataEmpty msg="No artists exist" text="black"></DataEmpty>
       )}
       <div className="flex justify-end mt-5">
         <Button

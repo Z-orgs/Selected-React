@@ -218,7 +218,7 @@ const ArtistAlbumPage = () => {
             >
               <div
                 onClick={() => setShowModal(true)}
-                className="flex flex-col items-center justify-center w-full h-full gap-2 p-4 text-lg font-semibold transition-all border-4 border-dashed cursor-pointer select-none hover:text-gray-200"
+                className="flex flex-col items-center justify-center w-full h-full gap-2 p-4 text-lg font-semibold transition-all border-4 border-dashed cursor-pointer select-none hover:text-gray-200 min-h-[250px]"
               >
                 <span>
                   <svg
@@ -275,7 +275,7 @@ const ArtistAlbumPage = () => {
               listAlbum.map((item) => (
                 <AlbumItem
                   key={v4()}
-                  thumb={`${process.env.REACT_APP_API}/file/${item.coverArtUrl}`}
+                  thumb={item.coverArtUrl}
                   size="250"
                   title={item.title}
                   id={item._id}

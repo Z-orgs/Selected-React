@@ -95,48 +95,48 @@ const ListLogger = () => {
             </Link>
           </div>
           <div className="grid w-full h-full grid-cols-3 gap-8 px-8 pt-2 pb-8">
-            <div className="w-full h-full p-4 m-auto overflow-auto bg-pink-300 rounded-md">
+            <div className="w-full h-full p-4 m-auto overflow-auto bg-pink-400 rounded-md">
               <div className="flex flex-col justify-center w-full h-full gap-3 p-1 text-sm font-semibold ">
                 {listLogger &&
                   listLogger
                     .filter((item) => item.level === "admin")
                     .slice(0, 10)
                     .map((item) => (
-                      <div className="flex justify-between items-center bg-[rgba(0,0,0,0.2)] rounded-md p-2 text-white gap-20">
-                        <p className="">{item.log}</p>
-                        <p className="text-xs font-thin text-center w-[15%]">
+                      <div className="flex items-center bg-[rgba(0,0,0,0.2)] rounded-md p-2 text-white gap-2 justify-between">
+                        <p className="line-clamp-2 w-[70%]">{item.log}</p>
+                        <p className="text-xs font-thin text-center w-[20%]">
                           {calculateTime(item.time)}
                         </p>
                       </div>
                     ))}
               </div>
             </div>
-            <div className="w-full h-full px-2 m-auto overflow-auto bg-orange-300 rounded-md">
+            <div className="w-full h-full px-2 m-auto overflow-auto bg-orange-400 rounded-md">
               <div className="flex flex-col justify-center w-full h-full gap-3 p-1 text-sm font-semibold ">
                 {listLogger &&
                   listLogger
                     .filter((item) => item.level === "artist")
                     .slice(0, 10)
                     .map((item) => (
-                      <div className="flex items-center bg-[rgba(0,0,0,0.2)] rounded-md py-2 px-4 text-white">
-                        <p>{item.log}</p>
-                        <p className="text-xs font-thin text-center">
+                      <div className="flex items-center bg-[rgba(0,0,0,0.2)] rounded-md py-2 px-4 text-white gap-2 justify-between">
+                        <p className="line-clamp-2 w-[70%]">{item.log}</p>
+                        <p className="text-xs font-thin text-center w-[20%]">
                           {calculateTime(item.time)}
                         </p>
                       </div>
                     ))}
               </div>
             </div>
-            <div className="w-full h-full px-2 m-auto bg-blue-300 rounded-md">
+            <div className="w-full h-full px-2 m-auto bg-blue-400 rounded-md">
               <div className="flex flex-col justify-center w-full h-full gap-3 p-1 text-sm font-semibold ">
                 {listLogger &&
                   listLogger
-                    .filter((item) => item.level === "artist")
+                    .filter((item) => item.level === "user")
                     .slice(0, 10)
                     .map((item) => (
-                      <div className="flex items-center bg-[rgba(0,0,0,0.2)] rounded-md py-2 px-4 text-white">
-                        <p>{item.log}</p>
-                        <p className="text-xs font-thin text-center">
+                      <div className="flex items-center bg-[rgba(0,0,0,0.2)] rounded-md py-2 px-4 text-white gap-2 justify-between">
+                        <p className="line-clamp-2 w-[70%]">{item.log}</p>
+                        <p className="text-xs font-thin text-center w-[20%]">
                           {calculateTime(item.time)}
                         </p>
                       </div>

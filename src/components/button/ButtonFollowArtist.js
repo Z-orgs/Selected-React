@@ -1,6 +1,7 @@
 import React from "react";
 
-const ButtonFollowArtist = ({ onClick, followed, countFollower }) => {
+const ButtonFollowArtist = ({ onClick, followed = false, countFollower }) => {
+  console.log(followed);
   return (
     <button
       className={`flex items-center gap-2 px-4 py-1 text-sm rounded-full ${

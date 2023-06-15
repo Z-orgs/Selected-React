@@ -57,8 +57,8 @@ const AlbumDetailPage = () => {
       {Object.keys(data).length === 0 ? (
         "Loading..."
       ) : (
-        <div className="">
-          <div className="flex items-center gap-4">
+        <div className="mt-20">
+          <div className="flex gap-6">
             <div className="w-[290px] h-[290px]">
               <img
                 className="object-cover w-full h-full rounded-md"
@@ -67,7 +67,7 @@ const AlbumDetailPage = () => {
                 alt=""
               />
             </div>
-            <div className="text-white">
+            <div className="flex flex-col gap-2 text-white">
               <h3 className="text-4xl font-semibold">
                 {data.title || "Tomorow's tunes"}
               </h3>
@@ -75,9 +75,9 @@ const AlbumDetailPage = () => {
                 data.tracks.filter((track) => track !== null).length
               } songs - ${calculateTime(data.release)}`}</p>
               <p>{`${calculateTime(data.release)}`}</p>
-              <div className="flex gap-3 rounded-full bg-alpha-bg w-[140px] p-2 items-center">
+              <div className="flex gap-3 rounded-full bg-alpha-bg w-[140px] p-2 items-center cursor-default select-none">
                 <span
-                  className="flex items-center justify-center rounded-full bg-primary w-[36px] h-[36px]"
+                  className="flex items-center justify-center rounded-full bg-primary w-[36px] h-[36px] cursor-pointer"
                   onClick={handlePlayAlbum}
                 >
                   <IconPlayToggle></IconPlayToggle>

@@ -43,8 +43,8 @@ const Player = () => {
     setSongs(player?.tracks);
     setPlay(player.isPlaying);
     // playPause(true);
-    // if (!player.isPlaying) audioRef.current && audioRef.current.pause();
-    // else audioRef.current && audioRef.current.play();
+    if (!player.isPlaying) audioRef.current && audioRef.current.pause();
+    else audioRef.current && audioRef.current.play();
   }, [player]);
 
   const handleLoadedData = (id) => {

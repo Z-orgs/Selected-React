@@ -20,6 +20,7 @@ const ArtistDetailPage = () => {
   const [tracks, setTracks] = useState([]);
   const [data, setData] = useState({});
   const [countFollower, setCountFollower] = useState(0);
+  const [isFollow, setIsFollow] = useState(false);
   const token = useSelector((state) => state.auth.login.currentUser.jwt);
   const getArtist = async () => {
     await axios
@@ -31,10 +32,12 @@ const ArtistDetailPage = () => {
         setTracks(res.data.tracks);
         setArtist(res.data.artist);
         setData(res.data);
+        setIsFollow(res.data.followed);
         setCountFollower(res.data.artist.followers);
       })
       .catch((err) => console.log(err));
   };
+  console.log(data);
 
   const getAllArtist = async () => {
     try {
@@ -53,7 +56,7 @@ const ArtistDetailPage = () => {
     getArtist();
 
     getAllArtist();
-  }, []);
+  }, [countFollower]);
   console.log(artist);
   return (
     <div className="-mt-16">
@@ -100,9 +103,12 @@ const ArtistDetailPage = () => {
                 <ButtonFollowArtist
                   onClick={() => {
                     followArtistToggle(artist._id, token, data.followed);
-                    setCountFollower(countFollower + 1);
+                    setIsFollow(!isFollow);
+                    setCountFollower(
+                      (prevCountFollower) => prevCountFollower + 1
+                    );
                   }}
-                  followed={data.followed}
+                  followed={isFollow}
                 ></ButtonFollowArtist>
               </div>
             </div>

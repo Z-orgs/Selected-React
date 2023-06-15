@@ -82,6 +82,7 @@ export const loginUser = async (role = "admin", user, dispatch, navigate) => {
     console.log({ res, role });
     navigate("/");
   } catch (err) {
+    toast.error("Login failed!");
     dispatch(loginFail());
   }
 };

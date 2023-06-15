@@ -1,3 +1,4 @@
+import DataEmpty from "components/common/DataEmpty";
 import HeadingOverView from "components/common/HeadingOverView";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -69,7 +70,7 @@ const ListUserPage = () => {
           </tbody>
         </table>
       ) : (
-        <p>Nothing</p>
+        <DataEmpty text="black" msg="Not users exist!"></DataEmpty>
       )}
     </>
   );

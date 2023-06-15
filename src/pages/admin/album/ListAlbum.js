@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllAlbums } from "redux/apiRequest";
 import AlbumGrid from "modules/album/AlbumGrid";
 import AlbumItem from "modules/album/AlbumItem";
+import DataEmpty from "components/common/DataEmpty";
 
 const ListAlbumPage = () => {
   const admin = useSelector((state) => state.auth.login?.currentUser);
@@ -15,7 +16,7 @@ const ListAlbumPage = () => {
   return (
     <div className="max-h-[96vh] overflow-auto  rounded-lg pl-6 py-4 text-black ">
       <AlbumGrid>
-        {listAlbum &&
+        {listAlbum && listAlbum.length > 0 ? (
           listAlbum.map((item) => (
             <AlbumItem
               thumb={item.coverArtUrl}
@@ -24,7 +25,10 @@ const ListAlbumPage = () => {
               key={item._id}
               id={item._id}
             ></AlbumItem>
-          ))}
+          ))
+        ) : (
+          <DataEmpty msg="Not albums exist!" text="black"></DataEmpty>
+        )}
       </AlbumGrid>
     </div>
   );
