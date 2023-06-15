@@ -1,5 +1,4 @@
-import axios from "axios";
-import { loginStart, loginSuccess, loginFail } from "./authSlice";
+import { loginStart, loginSuccess, loginFail, loginWithGG } from "./authSlice";
 import {
   getAdminsFailed,
   getAdminsStart,
@@ -35,6 +34,32 @@ import {
   getLoggersSuccess,
   getLoggersFailed,
 } from "./admin/loggerSlice";
+import {
+  getHomePageFailed,
+  getHomePageStart,
+  getHomePageSuccess,
+} from "./user/homePageSlice";
+import {
+  getSongsLikedFailed,
+  getSongsLikedStart,
+  getSongsLikedSuccess,
+} from "./user/songsLikedSlice";
+import {
+  getTrackArtistFailed,
+  getTrackArtistStart,
+  getTrackArtistSuccess,
+} from "./trackArtistSlice";
+import {
+  getAritstAlbumFailed,
+  getArtistAlbumStart,
+  getArtistAlbumSuccess,
+} from "./albumArtistSlice";
+import { toast } from "react-toastify";
+// import axios from "axios";
+
+// const api = process.env.REACT_APP_API;
+
+const { default: axios } = require("api/axios");
 
 // const dispatch = useDispatch();
 // const navigate = useNavigate();
@@ -43,24 +68,42 @@ export const loginUser = async (role = "admin", user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
     const res = await axios.post(
-      `${role === "Admin"
-        ? "http://localhost:3000/auth/admin/login"
-        : "http://localhost:3000/auth/artist/login"
+      `${
+        role === "Admin"
+          ? `/auth/admin/login`
+          : role === "Artist"
+          ? `/auth/artist/login`
+          : ""
       }`,
       user
     );
+    const data = res.data;
     dispatch(loginSuccess({ res, role }));
     console.log({ res, role });
     navigate("/");
   } catch (err) {
+    toast.error("Login failed!");
     dispatch(loginFail());
   }
+};
+
+export const loginUserWithGoogle = async (credential, dispatch, navigate) => {
+  try {
+    const res = await axios.post(`/auth/login`, {
+      token: credential,
+    });
+    dispatch(loginWithGG(res));
+    navigate("/");
+  } catch (err) {
+    console.log(err);
+  }
+  // return data;
 };
 
 export const getAllAdmins = async (accessToken, dispatch) => {
   dispatch(getAdminsStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/admin", {
+    const res = await axios.get(`/admin/admin`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -73,7 +116,7 @@ export const getAllAdmins = async (accessToken, dispatch) => {
 export const getAllArtist = async (accessToken, dispatch) => {
   dispatch(getArtistStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/artist", {
+    const res = await axios.get(`/admin/artist`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -86,7 +129,7 @@ export const getAllArtist = async (accessToken, dispatch) => {
 export const getAllTracks = async (accessToken, dispatch) => {
   dispatch(getTrackStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/track", {
+    const res = await axios.get(`/admin/track`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -98,7 +141,7 @@ export const getAllTracks = async (accessToken, dispatch) => {
 export const getAllPlaylists = async (accessToken, dispatch) => {
   dispatch(getPlaylistStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/playlist", {
+    const res = await axios.get(`/admin/playlist`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -111,7 +154,7 @@ export const getAllPlaylists = async (accessToken, dispatch) => {
 export const getAllAlbums = async (accessToken, dispatch) => {
   dispatch(getAlbumsStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/album", {
+    const res = await axios.get(`/admin/album`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -124,7 +167,7 @@ export const getAllAlbums = async (accessToken, dispatch) => {
 export const getAllUsers = async (accessToken, dispatch) => {
   dispatch(getUsersStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/user", {
+    const res = await axios.get(`/admin/user`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -137,7 +180,7 @@ export const getAllUsers = async (accessToken, dispatch) => {
 export const getAllLoggers = async (accessToken, dispatch) => {
   dispatch(getLoggersStart());
   try {
-    const res = await axios.get("http://localhost:3000/admin/logger", {
+    const res = await axios.get(`/admin/logger`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     console.log(res.data);
@@ -146,3 +189,102 @@ export const getAllLoggers = async (accessToken, dispatch) => {
     dispatch(getLoggersFailed());
   }
 };
+
+export const getAllTrackArtists = async (accessToken, dispatch) => {
+  dispatch(getTrackArtistStart());
+  try {
+    const res = await axios.get("/artist/track", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    console.log(res.data);
+    dispatch(getTrackArtistSuccess(res.data));
+  } catch (err) {
+    dispatch(getTrackArtistFailed());
+  }
+};
+
+export const getAllAlbumArtists = async (accessToken, dispatch) => {
+  dispatch(getArtistAlbumStart());
+  try {
+    const res = await axios.get("/artist/album", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    console.log(res.data);
+    dispatch(getArtistAlbumSuccess(res.data));
+  } catch (err) {
+    dispatch(getAritstAlbumFailed());
+  }
+};
+
+export const getHomePage = async (accessToken, dispatch) => {
+  try {
+    dispatch(getHomePageStart());
+
+    const res = await axios.get(`/home`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    console.log(res);
+    dispatch(getHomePageSuccess(res.data));
+  } catch (err) {
+    dispatch(getHomePageFailed());
+  }
+};
+
+export const createPlaylistUser = async (namePlaylist, token) => {
+  await axios
+    .post(
+      `/playlist`,
+      {
+        title: namePlaylist,
+        tracks: JSON.stringify([]),
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+      toast.success(response.data.message);
+    })
+    .catch((error) => {
+      console.error(error);
+      toast.error("Failed to create playlist");
+    });
+};
+
+export const followArtistToggle = async (idArtist, token, followed = false) => {
+  console.log("aa");
+  if (!followed) {
+    await axios
+      .put(
+        `/user/follow/${idArtist}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
+  } else {
+    await axios
+      .put(
+        `/user/unfollow/${idArtist}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
+  }
+};
+
+export async function getSongsLiked(token, dispatch) {
+  dispatch(getSongsLikedStart());
+  await axios
+    .get(`/user/likes`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then((response) => dispatch(getSongsLikedSuccess(response.data)))
+    .catch(dispatch(getSongsLikedFailed()));
+}
