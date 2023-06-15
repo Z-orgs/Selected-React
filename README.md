@@ -6,14 +6,6 @@
 
 Selected is a music streaming website that allows users to stream and enjoy their favorite music from around the world. This repository contains the frontend code for the [Selected](https://github.com/Z-orgs/Selected) project, developed using ReactJS.
 
-## Features
-
-- User authentication and authorization
-- Search and filter for music tracks and artists
-- Ability to create and manage playlists
-- Social sharing capabilities
-- Easy navigation and intuitive user interface
-
 ## Contributing
 
 We welcome your pull requests, bug reports, and feature requests. If you find any issues or would like to suggest a feature, please feel free to open an issue in our [GitHub repository](https://github.com/Z-orgs/Selected-React).
