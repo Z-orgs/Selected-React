@@ -1,125 +1,125 @@
-@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;500;600;700;800&display=swap"); /* font-family: 'Merriweather Sans', sans-serif; */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"); /* font-family: 'Inter', sans-serif; */
+// @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;500;600;700;800&display=swap"); /* font-family: 'Merriweather Sans', sans-serif; */
+// @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"); /* font-family: 'Inter', sans-serif; */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-::-webkit-scrollbar {
-  width: 4px;
-}
+// * {
+//   margin: 0;
+//   padding: 0;
+//   box-sizing: border-box;
+// }
+// body {
+//   margin: 0;
+//   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+//     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+//     sans-serif;
+//   -webkit-font-smoothing: antialiased;
+//   -moz-osx-font-smoothing: grayscale;
+// }
+// ::-webkit-scrollbar {
+//   width: 4px;
+// }
 
-::-webkit-scrollbar-track {
-  /* background-color: #37075d; */
-}
-::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(-45deg, #6a5af9, #d66efd);
-  border-radius: 100rem;
-  opacity: 0;
-  transition: all 0.1s;
-}
-::-webkit-scrollbar:hover ::-webkit-scrollbar-thumb {
-  opacity: 1;
-}
+// ::-webkit-scrollbar-track {
+//   /* background-color: #37075d; */
+// }
+// ::-webkit-scrollbar-thumb {
+//   background-image: linear-gradient(-45deg, #6a5af9, #d66efd);
+//   border-radius: 100rem;
+//   opacity: 0;
+//   transition: all 0.1s;
+// }
+// ::-webkit-scrollbar:hover ::-webkit-scrollbar-thumb {
+//   opacity: 1;
+// }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@layer base {
-  body {
-    @apply font-primary;
-  }
-  h1,
-  h2,
-  h3 {
-    @apply font-secondary;
-  }
-}
+// code {
+//   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+//     monospace;
+// }
+// @tailwind base;
+// @tailwind components;
+// @tailwind utilities;
+// @layer base {
+//   body {
+//     @apply font-primary;
+//   }
+//   h1,
+//   h2,
+//   h3 {
+//     @apply font-secondary;
+//   }
+// }
 
-.hidden-input {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-  white-space: nowrap;
-}
+// .hidden-input {
+//   border: 0;
+//   clip: rect(0 0 0 0);
+//   height: 1px;
+//   margin: -1px;
+//   overflow: hidden;
+//   padding: 0;
+//   position: absolute;
+//   width: 1px;
+//   white-space: nowrap;
+// }
 
-body {
-  .input-text {
-    @apply w-full p-2 text-[16px] bg-transparent border-2 rounded-xl outline-none focus:border-[#FA58B6] border-[#7A0BC0] text-white;
-  }
-  .react-date-picker {
-    @apply w-full pl-2 pr-4 text-base font-medium bg-transparent border-2 rounded-xl border-primary;
-    height: 44px;
-    .react-date-picker__wrapper {
-      @apply items-center justify-between border-none;
-    }
-    .react-date-picker__inputGroup {
-      @apply text-white;
-    }
-    .react-date-picker__clear-button {
-      @apply hidden;
-    }
-    .react-date-picker__inputGroup {
-      min-width: 0;
-      flex-grow: 0;
-    }
-    .react-date-picker__button {
-      padding: 0;
-    }
-  }
-  .react-date-picker__calendar .react-calendar {
-    @apply border-none rounded-lg;
-  }
-  .react-calendar__navigation button:enabled:hover,
-  .react-calendar__navigation button:enabled:focus {
-    @apply bg-transparent;
-  }
-  .react-calendar__tile:not(
-      .react-calendar__tile--active,
-      .react-calendar__tile--now
-    ):enabled:hover,
-  .react-calendar__tile:not(
-      .react-calendar__tile--active,
-      .react-calendar__tile--now
-    ):enabled:focus {
-    @apply text-primary;
-  }
-  .react-calendar__tile--active:enabled:hover,
-  .react-calendar__tile--active:enabled:focus,
-  .react-calendar__tile--active,
-  .react-calendar__tile--active:hover {
-    @apply text-white rounded-lg bg-secondary;
-  }
-  .react-calendar__tile--now:enabled:hover,
-  .react-calendar__tile--now:enabled:focus,
-  .react-calendar__tile--now,
-  .react-calendar__tile--now:hover {
-    @apply text-white rounded-sm bg-primary;
-  }
-  .react-date-picker__calendar-button__icon {
-    @apply stroke-[#8d949f];
-  }
-  .react-date-picker__button:enabled:hover .react-date-picker__button__icon,
-  .react-date-picker__button:enabled:focus .react-date-picker__button__icon {
-    @apply stroke-secondary;
-  }
-}
+// body {
+//   .input-text {
+//     @apply w-full p-2 text-[16px] bg-transparent border-2 rounded-xl outline-none focus:border-[#FA58B6] border-[#7A0BC0] text-white;
+//   }
+//   .react-date-picker {
+//     @apply w-full pl-2 pr-4 text-base font-medium bg-transparent border-2 rounded-xl border-primary;
+//     height: 44px;
+//     .react-date-picker__wrapper {
+//       @apply items-center justify-between border-none;
+//     }
+//     .react-date-picker__inputGroup {
+//       @apply text-white;
+//     }
+//     .react-date-picker__clear-button {
+//       @apply hidden;
+//     }
+//     .react-date-picker__inputGroup {
+//       min-width: 0;
+//       flex-grow: 0;
+//     }
+//     .react-date-picker__button {
+//       padding: 0;
+//     }
+//   }
+//   .react-date-picker__calendar .react-calendar {
+//     @apply border-none rounded-lg;
+//   }
+//   .react-calendar__navigation button:enabled:hover,
+//   .react-calendar__navigation button:enabled:focus {
+//     @apply bg-transparent;
+//   }
+//   .react-calendar__tile:not(
+//       .react-calendar__tile--active,
+//       .react-calendar__tile--now
+//     ):enabled:hover,
+//   .react-calendar__tile:not(
+//       .react-calendar__tile--active,
+//       .react-calendar__tile--now
+//     ):enabled:focus {
+//     @apply text-primary;
+//   }
+//   .react-calendar__tile--active:enabled:hover,
+//   .react-calendar__tile--active:enabled:focus,
+//   .react-calendar__tile--active,
+//   .react-calendar__tile--active:hover {
+//     @apply text-white rounded-lg bg-secondary;
+//   }
+//   .react-calendar__tile--now:enabled:hover,
+//   .react-calendar__tile--now:enabled:focus,
+//   .react-calendar__tile--now,
+//   .react-calendar__tile--now:hover {
+//     @apply text-white rounded-sm bg-primary;
+//   }
+//   .react-date-picker__calendar-button__icon {
+//     @apply stroke-[#8d949f];
+//   }
+//   .react-date-picker__button:enabled:hover .react-date-picker__button__icon,
+//   .react-date-picker__button:enabled:focus .react-date-picker__button__icon {
+//     @apply stroke-secondary;
+//   }
+// }
