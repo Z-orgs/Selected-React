@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getHomePage } from "redux/apiRequest";
 import AlbumItem from "modules/album/AlbumItem";
 import AlbumGrid from "modules/album/AlbumGrid";
-import TrackItem from "modules/track/TrackItem";
+import TrackItem from "components/track/TrackItem";
 import { v4 } from "uuid";
 import Slider from "modules/slider";
 

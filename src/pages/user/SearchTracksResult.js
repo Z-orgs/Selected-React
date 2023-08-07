@@ -1,6 +1,6 @@
 import Heading from "components/common/Heading";
 import useSearch from "hooks/useSearch";
-import TrackItem from "modules/track/TrackItem";
+import TrackItem from "components/track/TrackItem";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { v4 } from "uuid";

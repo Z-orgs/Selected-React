@@ -89,7 +89,7 @@ export const loginUser = async (role = "admin", user, dispatch, navigate) => {
 
 export const loginUserWithGoogle = async (credential, dispatch, navigate) => {
   try {
-    const res = await axios.post(`/auth/login`, {
+    const res = await axios.get(`/auth`, {
       token: credential,
     });
     dispatch(loginWithGG(res));

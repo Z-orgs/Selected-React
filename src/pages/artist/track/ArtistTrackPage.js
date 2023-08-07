@@ -36,7 +36,6 @@ const schema = yup.object({
 
 const ArtistTrackPage = () => {
   const {
-    register,
     control,
     handleSubmit,
     formState: { errors },
@@ -104,18 +103,6 @@ const ArtistTrackPage = () => {
     console.log(result);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    // Xử lý giá trị boolean của isPublic
-    const inputValue = name === "isPublic" ? value === "true" : value;
-
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: inputValue,
-    }));
-  };
-
   const handleDeleteTrack = async (id) => {
     await axios
       .delete(`/track/${id}`, { headers: { Authorization: `Bearer ${token}` } })
@@ -127,14 +114,6 @@ const ArtistTrackPage = () => {
       });
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      file: file,
-    }));
-  };
-
   const handleUploadTrack = async (e) => {
     const trackData = new FormData();
     trackData.append("file", watch("file"));
@@ -142,18 +121,17 @@ const ArtistTrackPage = () => {
     trackData.append("genre", watch("genre"));
     trackData.append("release", value);
     trackData.append("isPublic", watch("isPublic") === "public");
-
-    try {
-      await axios.post("/track", trackData, {
+    await axios
+      .post("/track", trackData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
-      });
-      alert("Track uploaded successfully!");
-    } catch (e) {
-      alert(e);
-    }
+      })
+      .then((response) => {
+        toast.success("Track uploaded successfully!");
+      })
+      .catch((error) => toast.error(error));
   };
   useEffect(() => {
     getAllTrackArtists(token, dispatch);

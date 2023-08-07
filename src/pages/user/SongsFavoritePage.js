@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { v4 } from "uuid";
-import TrackItem from "modules/track/TrackItem";
+import TrackItem from "components/track/TrackItem";
 import { useDispatch, useSelector } from "react-redux";
 import { getSongsLiked } from "redux/apiRequest";
 import { IconPlayToggle } from "components/icons";

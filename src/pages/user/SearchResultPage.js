@@ -3,7 +3,7 @@ import useSearch from "hooks/useSearch";
 import AlbumGrid from "modules/album/AlbumGrid";
 import AlbumItem from "modules/album/AlbumItem";
 import ArtistCard from "modules/artist/ArtistCard";
-import TrackItem from "modules/track/TrackItem";
+import TrackItem from "components/track/TrackItem";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { v4 } from "uuid";

@@ -5,7 +5,7 @@ import { playPause, setPlaylist } from "redux/user/playerSlice";
 import generateImg from "utils/generateImg";
 import calculateTime from "utils/calculateTime";
 import { IconBin, IconPlayToggle } from "components/icons";
-import TrackItem from "modules/track/TrackItem";
+import TrackItem from "components/track/TrackItem";
 import { v4 } from "uuid";
 import Modal from "components/modal/Modal";
 import LayoutForm from "layout/LayoutForm";

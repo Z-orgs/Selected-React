@@ -50,11 +50,11 @@ const LoginForm = ({ role }) => {
             useOneTap={true}
             onSuccess={async (credentialResponse) => {
               console.log(credentialResponse);
-              loginUserWithGoogle(
-                credentialResponse.credential,
-                dispatch,
-                navigate
-              );
+              // loginUserWithGoogle(
+              //   credentialResponse.credential,
+              //   dispatch,
+              //   navigate
+              // );
             }}
             onError={() => {
               console.log("Login Failed");
@@ -127,3 +127,22 @@ const LoginForm = ({ role }) => {
 };
 
 export default LoginForm;
+
+// (
+//   <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+//     <GoogleLogin
+//       useOneTap={true}
+//       onSuccess={async (credentialResponse) => {
+//         console.log(credentialResponse);
+//         loginUserWithGoogle(
+//           credentialResponse.credential,
+//           dispatch,
+//           navigate
+//         );
+//       }}
+//       onError={() => {
+//         console.log("Login Failed");
+//       }}
+//     />
+//   </GoogleOAuthProvider>
+// )

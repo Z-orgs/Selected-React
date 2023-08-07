@@ -6,7 +6,7 @@ import ArtistCard from "modules/artist/ArtistCard";
 import GridView from "components/common/GridView";
 import Heading from "components/common/Heading";
 import { v4 } from "uuid";
-import TrackItem from "modules/track/TrackItem";
+import TrackItem from "components/track/TrackItem";
 import { followArtistToggle } from "redux/apiRequest";
 import AlbumItem from "modules/album/AlbumItem";
 import AlbumGrid from "modules/album/AlbumGrid";
