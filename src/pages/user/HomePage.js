@@ -1,27 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getHomePage } from "redux/apiRequest";
 import AlbumItem from "modules/album/AlbumItem";
 import AlbumGrid from "modules/album/AlbumGrid";
-import TrackItem from "components/track/TrackItem";
+import TrackItem from "modules/track/TrackItem";
 import { v4 } from "uuid";
 import Slider from "modules/slider";
+import useAxiosPrivate from "hooks/useAxiosPrivate";
+import Heading from "components/common/Heading";
 
 const HomePage = () => {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.login.currentUser);
-  const token = user.jwt;
-
-  const data = useSelector((state) => state.homePage.homePage.data);
+  // const data = useSelector((state) => state.homePage.homePage.data);
+  const [data, setData] = useState({});
   console.log(data);
   const trackActive = useSelector((state) => state.player.trackActive);
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
-    getHomePage(token, dispatch);
+    axiosPrivate.get("/home").then((res) => setData(res.data));
   }, []);
 
   return (
-    <div className="">
+    <div className="mb-player-height">
       <div className="mb-5">
         <Slider
           // data={[
@@ -56,9 +56,7 @@ const HomePage = () => {
       {/* <Player link={audioUrl}></Player> */}
       {data?.Following && data?.Following?.randomAlbums.length > 0 && (
         <div>
-          <h2 className="text-2xl font-semibold text-white">
-            Random Albums(Following)
-          </h2>
+          <Heading>Random Albums(Following)</Heading>
           <AlbumGrid>
             {data?.Following?.randomAlbums.map((album) => (
               <AlbumItem
@@ -80,7 +78,7 @@ const HomePage = () => {
 
       {data?.NoFollowing && (
         <div>
-          <h2 className="text-2xl font-semibold text-white">Random Albums</h2>
+          <Heading>Random Albums</Heading>
           <AlbumGrid>
             {data?.NoFollowing?.randomAlbumsNF.map((album) => (
               <AlbumItem
@@ -101,13 +99,10 @@ const HomePage = () => {
         </div>
       )}
 
-      <div className="flex gap-10">
+      <div className="gap-10 xl:flex">
         {data?.Following?.randomTracks?.length > 0 && (
-          <div className="w-2/4">
-            <h2 className="text-2xl font-semibold text-white">
-              Random Tracks(Following)
-            </h2>
-
+          <div className="xl:w-2/4">
+            <Heading>Random Tracks(Following)</Heading>
             <div>
               {data?.Following?.randomTracks.map((track) => (
                 <TrackItem key={v4()} song={track}></TrackItem>
@@ -115,9 +110,8 @@ const HomePage = () => {
             </div>
           </div>
         )}
-        <div className="flex-1">
-          <h2 className="text-2xl font-semibold text-white">Random Tracks</h2>
-
+        <div className="xl:flex-1">
+          <Heading>Random Tracks</Heading>
           <div className="">
             {data?.NoFollowing?.randomTracksNF.map((track) => (
               <TrackItem

@@ -2,33 +2,33 @@ import React, { useEffect, useState } from "react";
 import GridView from "components/common/GridView";
 import AlbumItem from "modules/album/AlbumItem";
 import Modal from "components/modal/Modal";
-import { useSelector } from "react-redux";
 import { Label } from "components/label";
 import { Button } from "components/button";
-import { createPlaylistUser } from "redux/apiRequest";
 import LayoutForm from "layout/LayoutForm";
 import FormGroup from "components/common/FormGroup";
 import { v4 } from "uuid";
-
-const { default: axios } = require("api/axios");
+import useAxiosPrivate from "hooks/useAxiosPrivate";
+import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { openModal } from "store/global/global-slice";
 
 const PlaylistPage = () => {
-  const token = useSelector((state) => state?.auth?.login?.currentUser?.jwt);
-  const [showModal, setShowModal] = useState(false);
-  const [namePlaylist, setNamePlaylist] = useState("");
+  const axios = useAxiosPrivate();
   const [playlists, setPlaylists] = useState([]);
-  // const title = "hehe";
+  const dispatch = useDispatch();
+  const global = useSelector((state) => state.global);
+
   const getAllPlaylists = async () => {
     await axios
-      .get("/playlist", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get("/playlist")
       .then((response) => setPlaylists(response.data))
       .catch((err) => console.log(err));
   };
+
   useEffect(() => {
     getAllPlaylists();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [global.tempBoolean]);
   console.log(playlists);
   return (
     <div className="py-2">
@@ -36,7 +36,7 @@ const PlaylistPage = () => {
         <div
           className="flex flex-col items-center justify-center text-white w-[290px] border-2 border-[rgba(255,255,255,0.2)] rounded-md hover:text-secondary cursor-pointer group gap-3 text-lg transition-all min-h-[290px]"
           onClick={() => {
-            setShowModal(true);
+            dispatch(openModal("create_playlist"));
           }}
         >
           <span className="w-16">
@@ -67,35 +67,6 @@ const PlaylistPage = () => {
           ></AlbumItem>
         ))}
       </GridView>
-      <Modal
-        show={showModal}
-        heading="Create Playlist"
-        onClose={() => setShowModal(false)}
-      >
-        <LayoutForm title="Create new playlist">
-          <div className="flex flex-col gap-2">
-            <FormGroup>
-              <Label>Name: </Label>
-              <input
-                type="text"
-                name=""
-                className="input-text"
-                id=""
-                onChange={(e) => setNamePlaylist(e.target.value)}
-              />
-            </FormGroup>
-            <Button
-              type="submit"
-              onClick={() => {
-                createPlaylistUser(namePlaylist, token);
-                setShowModal(!showModal);
-              }}
-            >
-              Create
-            </Button>
-          </div>
-        </LayoutForm>
-      </Modal>
     </div>
   );
 };

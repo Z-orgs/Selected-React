@@ -28,7 +28,7 @@ const SelectedBottombar = () => {
   //   </div>
   // );
   return (
-    <div className="fixed bottom-0 flex items-center justify-center w-full h-player-height">
+    <div className="fixed bottom-0 left-0 right-0 flex items-center justify-center h-player-height z-[100]">
       <Player></Player>
     </div>
   );

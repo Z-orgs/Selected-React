@@ -63,23 +63,17 @@ const { default: axios } = require("api/axios");
 
 // const dispatch = useDispatch();
 // const navigate = useNavigate();
-
-export const loginUser = async (role = "admin", user, dispatch, navigate) => {
+export const loginUser = async (dispatch, navigate) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post(
-      `${
-        role === "Admin"
-          ? `/auth/admin/login`
-          : role === "Artist"
-          ? `/auth/artist/login`
-          : ""
-      }`,
-      user
-    );
+    const res = await axios.get("/user", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
     const data = res.data;
-    dispatch(loginSuccess({ res, role }));
-    console.log({ res, role });
+    dispatch(loginSuccess(data));
+    console.log(data);
     navigate("/");
   } catch (err) {
     toast.error("Login failed!");

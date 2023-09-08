@@ -5,17 +5,16 @@ import { playPause, setPlaylist } from "redux/user/playerSlice";
 import generateImg from "utils/generateImg";
 import calculateTime from "utils/calculateTime";
 import { IconBin, IconPlayToggle } from "components/icons";
-import TrackItem from "components/track/TrackItem";
+import TrackItem from "modules/track/TrackItem";
 import { v4 } from "uuid";
 import Modal from "components/modal/Modal";
 import LayoutForm from "layout/LayoutForm";
 import ConfirmForm from "components/common/ConfirmForm";
 import { toast } from "react-toastify";
-const { default: axios } = require("api/axios");
+import useAxiosPrivate from "hooks/useAxiosPrivate";
 
 const PlaylistDetailPage = () => {
-  const user = useSelector((state) => state.auth.login.currentUser);
-  const token = user.jwt;
+  const axios = useAxiosPrivate();
   const [data, setData] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
@@ -26,9 +25,7 @@ const PlaylistDetailPage = () => {
   const [type, setType] = useState(null);
   const handleDeletePlaylist = async () => {
     await axios
-      .delete(`/playlist/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .delete(`/playlist/${id}`)
       .then((response) => {
         console.log(response);
         toast.success(`Delelted "${data.title}"!`);
@@ -41,13 +38,7 @@ const PlaylistDetailPage = () => {
   };
   const handleDeleteTrack = async (id) => {
     await axios
-      .put(
-        `/playlist/delete/${id}`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .put(`/playlist/delete/${id}`, {})
       .then((response) => {
         console.log(response);
         toast.success(`Delelted "${song?.title}"!`);
@@ -59,11 +50,7 @@ const PlaylistDetailPage = () => {
   };
   useEffect(() => {
     const fetchAlbum = () => {
-      axios
-        .get(`/playlist/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => setData(res.data));
+      axios.get(`/playlist/${id}`).then((res) => setData(res.data));
     };
     fetchAlbum();
   }, []);

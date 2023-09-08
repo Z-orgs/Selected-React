@@ -1,8 +1,6 @@
 import React from "react";
 import "./Album.css";
 import { Link } from "react-router-dom";
-import generateImg from "utils/generateImg";
-import classNames from "utils/ClassNames";
 
 const AlbumItem = ({
   thumb,
@@ -33,6 +31,7 @@ const AlbumItem = ({
               : "/thumb-5.avif"
           }
           alt=""
+          loading="lazy"
         />
         <div className="absolute top-0 bottom-0 left-0 right-0 z-2 bg-[rgba(0,_0,_0,_0.3)] flex justify-center items-center opacity-0 group-hover:opacity-100 transition-all">
           <span>

@@ -1,7 +1,7 @@
 import useSearch from "hooks/useSearch";
 import { debounce } from "lodash";
 import AlbumItem from "modules/album/AlbumItem";
-import TrackItem from "components/track/TrackItem";
+import TrackItem from "modules/track/TrackItem";
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { v4 } from "uuid";

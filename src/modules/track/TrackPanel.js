@@ -1,42 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { v4 } from "uuid";
-import Modal from "components/modal/Modal";
-import { Label } from "components/label";
-import { Button } from "components/button";
-import { createPlaylistUser } from "redux/apiRequest";
-import LayoutForm from "layout/LayoutForm";
-import FormGroup from "components/common/FormGroup";
-
-const { default: axios } = require("api/axios");
+import useAxiosPrivate from "hooks/useAxiosPrivate";
+import { openModal } from "store/global/global-slice";
 
 const panelItemClass = "px-10 block py-2 hover:bg-alpha-bg cursor-pointer";
 const TrackPanel = ({ song, show, nodeRef }) => {
-  const [showModal, setShowModal] = useState(false);
-  const [namePlaylist, setNamePlaylist] = useState("");
-  const token = useSelector((state) => state.auth.login.currentUser.jwt);
-
+  const axios = useAxiosPrivate();
+  const dispatch = useDispatch();
+  const isRerender = useSelector((state) => state.global.tempBoolean);
   const [playlists, setPlaylists] = useState({});
   const getPlaylistsUser = async () => {
-    const res = await axios.get("/playlist", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const res = await axios.get("/playlist");
     setPlaylists(res.data);
-    // console.log(res);
   };
   const addTrackToPlaylist = async (trackId, playlistId) => {
     await axios
-      .put(
-        `/playlist/add/${playlistId}`,
-        {
-          trackId,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .put(`/playlist/add/${playlistId}`, {
+        trackId,
+      })
       .then((res) => {
         toast.success("Add track success!");
       })
@@ -44,9 +28,9 @@ const TrackPanel = ({ song, show, nodeRef }) => {
   };
 
   useEffect(() => {
-    getPlaylistsUser(token);
-  }, []);
-  // console.log(show);
+    getPlaylistsUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRerender]);
   return (
     <div>
       <ul
@@ -117,7 +101,7 @@ const TrackPanel = ({ song, show, nodeRef }) => {
           <div className="top-0 absolute w-full rounded-md hidden bg-primary -left-[calc(100%-4px)] shadow-shadow-r list-none group-hover/item:block overflow-hidden">
             <div
               onClick={() => {
-                setShowModal(true);
+                dispatch(openModal("create_playlist"));
               }}
               className={`${panelItemClass} flex border-b border-alpha-bg gap-2 items-center`}
             >
@@ -213,35 +197,6 @@ const TrackPanel = ({ song, show, nodeRef }) => {
           </Link>
         </li>
       </ul>
-      <Modal
-        show={showModal}
-        heading="Create Playlist"
-        onClose={() => setShowModal(false)}
-      >
-        <LayoutForm title="Create new playlist">
-          <div className="flex flex-col gap-2">
-            <FormGroup>
-              <Label>Name: </Label>
-              <input
-                type="text"
-                name=""
-                className="input-text"
-                id=""
-                onChange={(e) => setNamePlaylist(e.target.value)}
-              />
-            </FormGroup>
-            <Button
-              type="submit"
-              onClick={() => {
-                createPlaylistUser(namePlaylist, token);
-                setShowModal(!showModal);
-              }}
-            >
-              Create
-            </Button>
-          </div>
-        </LayoutForm>
-      </Modal>
     </div>
   );
 };

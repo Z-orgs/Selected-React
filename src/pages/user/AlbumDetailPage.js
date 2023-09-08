@@ -2,29 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { v4 } from "uuid";
-import TrackItem from "components/track/TrackItem";
+import TrackItem from "modules/track/TrackItem";
 import generateImg from "utils/generateImg";
 import calculateTime from "utils/calculateTime";
 import { IconPlayToggle } from "components/icons";
 import { playPause, setPlaylist } from "redux/user/playerSlice";
-
-const { default: axios } = require("api/axios");
+import useAxiosPrivate from "hooks/useAxiosPrivate";
 
 const AlbumDetailPage = () => {
-  const user = useSelector((state) => state.auth.login.currentUser);
-  const token = user.jwt;
   const [data, setData] = useState({});
   const { id } = useParams();
   const dispatch = useDispatch();
   const isPlay = useSelector((state) => state.player.issPlaying);
+  const axiosPrivate = useAxiosPrivate();
 
   useEffect(() => {
     const fetchAlbum = () => {
-      axios
-        .get(`/album/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res) => setData(res.data));
+      axiosPrivate.get(`/album/${id}`).then((res) => setData(res.data));
     };
     fetchAlbum();
   }, []);
@@ -58,6 +52,20 @@ const AlbumDetailPage = () => {
         "Loading..."
       ) : (
         <div className="mt-20">
+          <div
+            className="absolute inset-0 min-h-screen -z-10 -left-48 -right-48 -top-20"
+            style={{
+              backgroundImage: `url(${generateImg(data.coverArtUrl)})`,
+              backgroundSize: "cover",
+              backgroundRepeat: "no-repeat",
+            }}
+          ></div>
+          <div
+            className="absolute inset-0 min-h-screen -z-10 -left-48 -right-48 -top-20 backdrop-blur-lg"
+            style={{
+              backgroundImage: "linear-gradient(to bottom, transparent, #000)",
+            }}
+          ></div>
           <div className="flex gap-6">
             <div className="w-[290px] h-[290px]">
               <img
@@ -65,6 +73,7 @@ const AlbumDetailPage = () => {
                 // src={`/file/${data.coverArtUrl}`}
                 src={generateImg(data.coverArtUrl) || "/thumb.png"}
                 alt=""
+                loading="lazy"
               />
             </div>
             <div className="flex flex-col gap-2 text-white">
@@ -95,7 +104,11 @@ const AlbumDetailPage = () => {
                   track === null ? (
                     ""
                   ) : (
-                    <TrackItem key={v4()} song={track}></TrackItem>
+                    <TrackItem
+                      key={v4()}
+                      song={track}
+                      owner={data.artist}
+                    ></TrackItem>
                   )
                 )}
           </div>

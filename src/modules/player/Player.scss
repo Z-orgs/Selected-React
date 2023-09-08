@@ -49,23 +49,40 @@
 }
 
 .rc-slider-handle {
-  top: 50%;
+  // top: 0;
+  // bottom: 0;
+  // top: -50%;
   position: absolute;
-  background-color: #fff;
+  // background-color: #fff;
+  // border: 1px solid #fff;
+  @apply bg-secondary;
   border-radius: 50%;
   cursor: grab;
   touch-action: pan-x;
   transform: translateY(-50%);
-  border: none;
+  // border: none;
   box-shadow: none;
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   margin-left: -8px;
-  margin-top: -6px;
+  margin-top: -3px;
   opacity: 0;
   left: 50.0098%;
 
   transition: all linear 0.1s;
+  &::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 1px solid white;
+    // transform: translate(-50%, -50%);
+    // top: 0;
+    // bottom: 0;
+    border-radius: 50%;
+    bottom: -4px;
+    left: -4px;
+  }
 }
 .rc-slider * {
   box-sizing: border-box;
@@ -76,5 +93,6 @@
   opacity: 1;
 }
 .rc-slider:hover .rc-slider-track {
-  background-color: #7a0bc0;
+  // background-color: #7a0bc0;
+  @apply bg-secondary;
 }

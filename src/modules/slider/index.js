@@ -13,7 +13,7 @@ const Slider = ({ data }) => {
   const [isReverse, setIsReverse] = useState(false);
 
   const handleNextSlide = () => {
-    setFirstImage((prev) => (prev + 1 >= data.length ? 0 : prev + 1));
+    setFirstImage((prev) => (prev + 1 >= data?.length ? 0 : prev + 1));
     setIsReverse(false);
   };
 
@@ -28,7 +28,7 @@ const Slider = ({ data }) => {
   };
 
   const handleClickPrev = () => {
-    setFirstImage((prev) => (prev - 1 < 0 ? data.length - 1 : prev - 1));
+    setFirstImage((prev) => (prev - 1 < 0 ? data?.length - 1 : prev - 1));
     setIsReverse(true);
     resetSlideLoop();
   };

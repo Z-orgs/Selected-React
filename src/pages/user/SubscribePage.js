@@ -1,31 +1,29 @@
 import DataEmpty from "components/common/DataEmpty";
+import useAxiosPrivate from "hooks/useAxiosPrivate";
 import ArtistCard from "modules/artist/ArtistCard";
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { v4 } from "uuid";
-const { default: axios } = require("api/axios");
 
 const SubscribePage = () => {
-  const token = useSelector((state) => state.auth.login.currentUser.jwt);
   const [ids, setIds] = useState([]);
   const [following, setFollowing] = useState(null);
   const [artists, setArtists] = useState([]);
+  const axios = useAxiosPrivate();
 
   const getArtistFollowings = useCallback(async () => {
-    const response = await axios.get("/user", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await axios.get("/user");
     setFollowing(response.data.following);
-  }, [token]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getInfoArtist = useCallback(
     async (idArtist) => {
-      const response = await axios.get(`/artist/artist/${idArtist}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get(`/artist/artist/${idArtist}`);
       return response.data;
     },
-    [token]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
   );
 
   useEffect(() => {

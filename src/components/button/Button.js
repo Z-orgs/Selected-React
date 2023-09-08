@@ -5,7 +5,7 @@ const Button = ({ type = "button", children, className, onClick }) => {
     <button
       className={`${
         className ? className : "bg-primary-gradient"
-      } text-white rounded-md font-semibold block text-lg px-4 py-2 min-w-[120px]`}
+      } text-white rounded-md font-semibold block text-lg px-4 py-2 min-w-[180px] mx-auto transition-all`}
       type={type}
       onClick={onClick}
     >

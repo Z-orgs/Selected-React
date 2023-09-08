@@ -24,39 +24,38 @@ const Player = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMute, setIsMute] = useState(false);
-  const player = useSelector((state) => state.player);
+  // const player = useSelector((state) => state.player);
   const [currentVolume, setCurrentVolume] = useState(100);
-  const audios = player.tracks;
+  const audios = [];
   const [isPlay, setPlay] = useState(false);
   // const { setSongs, audioUrl } = useGenerateTrack(audios);
   const [songs, setSongs] = useState(audios);
   const dispatch = useDispatch(audios);
-  const token = useSelector((state) => state.auth.login.currentUser.jwt);
-  const index = useSelector((state) => state.player.currentTrackIndex);
+  // const token = useSelector((state) => state.auth.login.currentUser.jwt);
+  // const index = useSelector((state) => state.player.currentTrackIndex);
   // setSongs(player.tracks);
 
   useEffect(() => {
     dispatch(playPause(false));
   }, []);
 
-  useEffect(() => {
-    setSongs(player?.tracks);
-    setPlay(player.isPlaying);
-    // playPause(true);
-    if (!player.isPlaying) audioRef.current && audioRef.current.pause();
-    else audioRef.current && audioRef.current.play();
-  }, [player]);
+  // useEffect(() => {
+  //   setSongs(player?.tracks);
+  //   setPlay(player.isPlaying);
+  //   // playPause(true);
+  //   if (!player.isPlaying) audioRef.current && audioRef.current.pause();
+  //   else audioRef.current && audioRef.current.play();
+  // }, [player]);
 
-  const handleLoadedData = (id) => {
-    axios
-      .get(`/track/info/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => setDuration(res.data.duration))
-      .catch((err) => console.log(err));
-    // setDuration(audioRef.current.duration);
-    if (isPlay) audioRef.current.play();
-  };
+  // const handleLoadedData = (id) => {
+  //   axios
+  //     .get(`/track/info/${id}`, {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     })
+  //     .then((res) => setDuration(res.data.duration))
+  //     .catch((err) => console.log(err));
+  //   if (isPlay) audioRef.current.play();
+  // };
   console.log(isPlay);
 
   const handlePausePlayClick = () => {
@@ -91,7 +90,7 @@ const Player = () => {
   // console.log(audioRef.current.src);
 
   return (
-    <div className="bg-[rgba(0,0,0,0.8)] flex items-center text-white justify-between p-4 w-full h-full">
+    <div className="bg-[rgba(29,_33,_35,_0.30)] backdrop-blur-lg flex items-center text-white justify-between py-4 px-10 w-full h-full">
       <div className="flex items-center gap-3 w-[32%]">
         <img
           className="Song-Thumbnail w-[80px] rounded-md"
@@ -119,7 +118,7 @@ const Player = () => {
             <IconPrevSong></IconPrevSong>
           </div>
           <div
-            className="p-1 bg-white rounded-full Pause-Play-Button"
+            className="w-9 h-9 flex items-center justify-center rounded-full bg-secondary Pause-Play-Button shadow-[0px_0px_18px_0px_rgba(255,_255,_255,_0.30)]"
             onClick={handlePausePlayClick}
           >
             <IconPlayToggle
@@ -152,15 +151,15 @@ const Player = () => {
           />
           <p>{formatDuration(duration)}</p>
         </div>
-        {songs[index]?.fileId && (
-          <audio
-            ref={audioRef}
-            src={`${process.env.REACT_APP_API}/file/${songs[index]?.fileId}`}
-            onLoadedData={() => handleLoadedData(songs[index]?._id)}
-            onTimeUpdate={() => setCurrentTime(audioRef.current.currentTime)}
-            onEnded={() => setPlay(false)}
-          />
-        )}
+        {/* {songs[index]?.fileId && ( */}
+        <audio
+          ref={audioRef}
+          // src={`${process.env.REACT_APP_API}/file/${songs[index]?.fileId}`}
+          // onLoadedData={() => handleLoadedData(songs[index]?._id)}
+          onTimeUpdate={() => setCurrentTime(audioRef.current.currentTime)}
+          onEnded={() => setPlay(false)}
+        />
+        {/* )} */}
       </div>
       <div className="flex items-center gap-4 select-none w-[32%] justify-end">
         {/* icon */}

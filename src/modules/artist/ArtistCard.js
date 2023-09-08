@@ -2,26 +2,38 @@ import React, { useEffect, useState } from "react";
 import { ButtonFollowArtist } from "components/button";
 import { Link } from "react-router-dom";
 import { followArtistToggle } from "redux/apiRequest";
-import { useSelector } from "react-redux";
+import useAxiosPrivate from "hooks/useAxiosPrivate";
 
 const { default: axios } = require("api/axios");
 
 const ArtistCard = ({ idArtist, onlyName = false }) => {
-  const token = useSelector((state) => state.auth.login.currentUser.jwt);
+  const axios = useAxiosPrivate();
   const [artist, setArtist] = useState({});
   const [data, setData] = useState({});
   const [countFollower, setCountFollower] = useState(0);
   const getInfoArtist = async (id) => {
     try {
-      const res = await axios.get(`/artist/artist/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(`/artist/artist/${id}`);
       console.log(res);
       setData(res.data);
       setArtist(res.data.artist);
       setCountFollower(res.data.artist.followers);
     } catch (err) {
       console.log(err);
+    }
+  };
+  const followArtistToggle = async (idArtist, followed = false) => {
+    console.log("aa");
+    if (!followed) {
+      await axios
+        .put(`/user/follow/${idArtist}`, {})
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err));
+    } else {
+      await axios
+        .put(`/user/unfollow/${idArtist}`, {})
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err));
     }
   };
   useEffect(() => {
@@ -32,15 +44,11 @@ const ArtistCard = ({ idArtist, onlyName = false }) => {
     <div className="w-[250px] items-center flex flex-col justify-center text-white gap-y-1">
       <Link
         to={`/artists/${idArtist}`}
-        className="relative block overflow-hidden transition-all rounded-full cursor-pointer group"
+        className="relative block w-full overflow-hidden transition-all rounded-full cursor-pointer group"
       >
         <img
           className="w-full duration-500 linear group-hover:scale-110"
-          src={
-            artist.profileImage
-              ? `${process.env.REACT_APP_API}/file/${artist.profileImage}`
-              : "/avt.jpg"
-          }
+          src={artist.picture || "/avt.jpg"}
           alt=""
         />
         <div className="absolute top-0 bottom-0 left-0 right-0 bg-[rgba(0,0,0,0.4)] flex justify-center items-center opacity-0 group-hover:opacity-100 duration-500 linear">
@@ -74,7 +82,7 @@ const ArtistCard = ({ idArtist, onlyName = false }) => {
         {!onlyName && (
           <ButtonFollowArtist
             onClick={() => {
-              followArtistToggle(artist._id, token, data.followed)
+              followArtistToggle(artist._id, data.followed)
                 .then((res) => {
                   if (res.success) {
                     if (data.followed) {

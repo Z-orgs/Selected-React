@@ -14,18 +14,16 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @apply bg-dark;
+  overflow-x: hidden;
 }
 ::-webkit-scrollbar {
-  width: 4px;
-}
-
-::-webkit-scrollbar-track {
-  /* background-color: #37075d; */
+  width: 3px;
 }
 ::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(-45deg, #6a5af9, #d66efd);
-  border-radius: 100rem;
+  @apply bg-secondary;
   opacity: 0;
+  border-radius: 100rem;
   transition: all 0.1s;
 }
 ::-webkit-scrollbar:hover ::-webkit-scrollbar-thumb {
@@ -43,11 +41,11 @@ code {
   body {
     @apply font-primary;
   }
-  h1,
-  h2,
-  h3 {
-    @apply font-secondary;
-  }
+  // h1,
+  // h2,
+  // h3 {
+  //   @apply font-secondary;
+  // }
 }
 
 .hidden-input {
@@ -64,7 +62,7 @@ code {
 
 body {
   .input-text {
-    @apply w-full p-2 text-[16px] bg-transparent border-2 rounded-xl outline-none focus:border-[#FA58B6] border-[#7A0BC0] text-white;
+    @apply w-full p-2 text-[16px] bg-transparent border-2 rounded-xl outline-none border-secondary text-white focus:shadow-lightness;
     foo: bar;
   }
   .react-date-picker {
@@ -134,4 +132,81 @@ body {
     @apply stroke-secondary;
     foo: bar;
   }
+}
+
+.menu__item span {
+  svg {
+    width: 28px;
+    height: 28px;
+  }
+  svg,
+  path {
+    @apply fill-gray-blur opacity-50 transition-all;
+  }
+}
+
+.menu__item:hover span {
+  svg,
+  path {
+    @apply fill-secondary opacity-100;
+  }
+  svg {
+    @apply drop-shadow-lightness;
+  }
+}
+
+.menu__item--active span {
+  svg,
+  path {
+    @apply fill-secondary opacity-100;
+  }
+}
+
+.container {
+  margin: 0 auto;
+}
+
+.heading {
+  position: relative;
+  display: inline-block;
+  &:after {
+    content: "";
+    position: absolute;
+    height: 3px;
+    width: 80px;
+    bottom: -20%;
+    left: 0;
+    @apply bg-secondary rounded-full;
+  }
+}
+
+.modal-content {
+  min-height: 60vh;
+  &::before,
+  &::after {
+    content: "";
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 140px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-radius: inherit;
+  }
+  &::before {
+    background-image: url("../public/UpWave.svg");
+    background-position: bottom;
+    top: 0;
+  }
+  &::after {
+    background-image: url("../public/DownWave.svg");
+    background-position: top;
+    bottom: 0;
+  }
+}
+
+:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }

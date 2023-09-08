@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 // import AdminHomePage from "pages/admin/admin/AdminHomePage";
 // import ListAdminPage from "pages/admin/admin/ListAdminPage";
 // import ListArtistPage from "pages/admin/artist/ListArtistPage";
@@ -12,7 +12,7 @@ import { Route, Routes } from "react-router-dom";
 // import LoginPage from "pages/LoginPage";
 // import AdminDashBoardPage from "pages/admin/AdminDashBoardPage";
 import LayoutDashboard from "layout/LayoutDashboard";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import ArtistTrackPage from "pages/artist/track/ArtistTrackPage";
 import LayoutSeleted from "layout/LayoutSeleted";
 // import HomePage from "pages/user/HomePage";
@@ -33,6 +33,14 @@ import LayoutSeleted from "layout/LayoutSeleted";
 // import LoggerPage from "pages/admin/logger/LoggerPage";
 import { Suspense, lazy, useEffect, useState } from "react";
 import Cookies from "js-cookie";
+import { loginUser } from "redux/apiRequest";
+import Test from "pages/Test";
+import { getToken, logOut } from "utils/auth";
+import { authRefreshToken, authUpdateCurrentUser } from "store/auth/auth-slice";
+import Modal from "components/modal/Modal";
+import ProfilePage from "pages/ProfilePage";
+const AuthorizePage = lazy(() => import("pages/AuthorizePage"));
+const RequiredAuthPage = lazy(() => import("pages/RequiredAuthPage"));
 
 //Import admin pages
 const AdminHomePage = lazy(() => import("pages/admin/admin/AdminHomePage"));
@@ -84,149 +92,227 @@ const SearchArtistsResult = lazy(() =>
 );
 const SearchAlbumsResult = lazy(() => import("pages/user/SearchAlbumsResult"));
 
-const { default: axios } = require("api/axios");
-
 function App() {
-  const role = useSelector((state) => state.auth.login.role);
-  const isLogin = useSelector((state) => state.auth.login.isAuthenticated);
-  const [user, setUser] = useState(null);
+  const role = useSelector((state) => state.auth?.currentUser?.roles[0]);
+  const isLogin = useSelector(
+    (state) => state.auth.currentUser?.roles.length > 0
+  );
+  // const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.auth.currentUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const token = Cookies.get("accessToken");
   useEffect(() => {
-    const getCurrentUser = async () => {
-      await axios
-        .get("/user", {
-          headers: { Authorization: `Bearer ${token}` },
+    if (user && user.email) {
+      const { access_token } = getToken();
+      dispatch(
+        authUpdateCurrentUser({
+          user: user,
+          accessToken: access_token,
         })
-        .then((response) => {
-          if (response.status === 200) return response.json();
-          throw new Error("authentication has been failed!");
-        })
-        .then((resObject) => {
-          setUser(resObject);
-          console.log(user);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    getCurrentUser(token);
-  }, []);
-  console.log(Cookies.get("accessToken"));
+      );
+    } else {
+      const { refresh_token, access_token } = getToken();
+      if (refresh_token) {
+        dispatch(
+          authRefreshToken({
+            accessToken: access_token,
+            refreshToken: refresh_token,
+          })
+        );
+      } else {
+        dispatch(authUpdateCurrentUser({}));
+        logOut();
+      }
+    }
+    // eslint-disable-next-line
+  }, [dispatch]);
   return (
-    <Suspense fallback={<></>}>
+    // <Suspense fallback={<></>}>
+    //   <Routes>
+    //     <Route path="/test" element={<Test></Test>}></Route>
+    //     <Route path="/auth" element={<LoginPage2></LoginPage2>}></Route>
+    //     {!isLogin && (
+    //       <Route path="/" exact element={<LoginPage2></LoginPage2>}></Route>
+    //     )}
+    //     <Route
+    //       element={
+    //         isLogin &&
+    //         (role === "admin" || "artist") && (
+    //           <LayoutDashboard></LayoutDashboard>
+    //         )
+    //       }
+    //     >
+    //       {role === "admin" && (
+    //         <>
+    //           <Route
+    //             path="/"
+    //             element={<AdminDashBoardPage></AdminDashBoardPage>}
+    //           ></Route>
+    //           <Route
+    //             path="/admin"
+    //             exact
+    //             element={<AdminHomePage></AdminHomePage>}
+    //           ></Route>
+    //           <Route
+    //             path="/admins"
+    //             exact
+    //             element={<ListAdminPage></ListAdminPage>}
+    //           ></Route>
+    //           <Route
+    //             path="/artists"
+    //             exact
+    //             element={<ListArtistPage></ListArtistPage>}
+    //           ></Route>
+    //           <Route
+    //             path="/tracks"
+    //             exact
+    //             element={<ListTrackPage></ListTrackPage>}
+    //           ></Route>
+    //           <Route
+    //             path="/track/:slug"
+    //             exact
+    //             element={<TrackDetail></TrackDetail>}
+    //           ></Route>
+    //           <Route
+    //             path="/playlists"
+    //             exact
+    //             element={<ListPLaylistPage></ListPLaylistPage>}
+    //           ></Route>
+    //           <Route
+    //             path="/playlists/:slug"
+    //             exact
+    //             element={<PlaylistDetail></PlaylistDetail>}
+    //           ></Route>
+    //           <Route
+    //             path="/albums"
+    //             exact
+    //             element={<ListAlbumPage></ListAlbumPage>}
+    //           ></Route>
+    //           <Route
+    //             path="/albums/:slug"
+    //             exact
+    //             element={<AlbumDetail></AlbumDetail>}
+    //           ></Route>
+    //           <Route
+    //             path="/users"
+    //             exact
+    //             element={<ListUserPage></ListUserPage>}
+    //           ></Route>
+    //           <Route
+    //             path="/logger"
+    //             exact
+    //             element={<LoggerPage></LoggerPage>}
+    //           ></Route>
+    //         </>
+    //       )}
+    //       {role === "Artist" && (
+    //         <>
+    //           <Route
+    //             path="/"
+    //             exact
+    //             element={<ArtistHomePage></ArtistHomePage>}
+    //           ></Route>
+    //           <Route
+    //             path="/tracks"
+    //             exact
+    //             element={<ArtistTrackPage></ArtistTrackPage>}
+    //           ></Route>
+    //           <Route
+    //             path="/tracks/:slug"
+    //             exact
+    //             element={<ArtistTrackDetail></ArtistTrackDetail>}
+    //           ></Route>
+    //           <Route
+    //             path="/albums"
+    //             exact
+    //             element={<ArtistAlbumPage></ArtistAlbumPage>}
+    //           ></Route>
+    //           <Route
+    //             path="/albums/:id"
+    //             exact
+    //             element={<ArtistAlbumDetail></ArtistAlbumDetail>}
+    //           ></Route>
+    //         </>
+    //       )}
+    //     </Route>
+    //     <Route
+    //       element={
+    //         isLogin && role === "user" && <LayoutSeleted></LayoutSeleted>
+    //       }
+    //     >
+    //       <>
+    //         <Route path="/" exact element={<HomePage></HomePage>}></Route>
+    //         <Route
+    //           path="/albums/:id"
+    //           extract
+    //           element={<AlbumDetailPage></AlbumDetailPage>}
+    //         ></Route>
+    //         <Route
+    //           path="/artists/:id"
+    //           extract
+    //           element={<ArtistDetailPage></ArtistDetailPage>}
+    //         ></Route>
+    //         <Route
+    //           path="/playlists"
+    //           exact
+    //           element={<PlaylistPage></PlaylistPage>}
+    //         ></Route>
+    //         <Route
+    //           path="/playlists/:id"
+    //           extract
+    //           element={<PlaylistDetailPage></PlaylistDetailPage>}
+    //         ></Route>
+    //         <Route
+    //           path="/songs-favorite"
+    //           exact
+    //           element={<SongsFavoritePage></SongsFavoritePage>}
+    //         ></Route>
+    //         <Route
+    //           path="/search/:keyword"
+    //           extract
+    //           element={<SearchResultPage></SearchResultPage>}
+    //         ></Route>
+    //         {/* <Route
+    //           path="/search/:keyword"
+    //           extract
+    //           element={<SearchResultPage></SearchResultPage>}
+    //         ></Route> */}
+    //         <Route
+    //           path="/search_tracks/:keyword"
+    //           extract
+    //           element={<SearchTracksResult></SearchTracksResult>}
+    //         ></Route>
+    //         <Route
+    //           path="/search_artists/:keyword"
+    //           extract
+    //           element={<SearchArtistsResult></SearchArtistsResult>}
+    //         ></Route>
+    //         <Route
+    //           path="/search_albums/:keyword"
+    //           extract
+    //           element={<SearchAlbumsResult></SearchAlbumsResult>}
+    //         ></Route>
+    //         <Route
+    //           path="/subscribe"
+    //           extract
+    //           element={<SubscribePage></SubscribePage>}
+    //         ></Route>
+    //       </>
+    //     </Route>
+    //   </Routes>
+    // </Suspense>
+    <Suspense>
       <Routes>
-        <Route path="/auth" element={<LoginPage2></LoginPage2>}></Route>
-        {!isLogin && (
-          <Route path="/" exact element={<LoginPage2></LoginPage2>}></Route>
-        )}
-        <Route
-          element={
-            isLogin &&
-            (role === "Admin" || "Artist") && (
-              <LayoutDashboard></LayoutDashboard>
-            )
-          }
-        >
-          {role === "Admin" && (
-            <>
-              <Route
-                path="/"
-                element={<AdminDashBoardPage></AdminDashBoardPage>}
-              ></Route>
-              <Route
-                path="/admin"
-                exact
-                element={<AdminHomePage></AdminHomePage>}
-              ></Route>
-              <Route
-                path="/admins"
-                exact
-                element={<ListAdminPage></ListAdminPage>}
-              ></Route>
-              <Route
-                path="/artists"
-                exact
-                element={<ListArtistPage></ListArtistPage>}
-              ></Route>
-              <Route
-                path="/tracks"
-                exact
-                element={<ListTrackPage></ListTrackPage>}
-              ></Route>
-              <Route
-                path="/track/:slug"
-                exact
-                element={<TrackDetail></TrackDetail>}
-              ></Route>
-              <Route
-                path="/playlists"
-                exact
-                element={<ListPLaylistPage></ListPLaylistPage>}
-              ></Route>
-              <Route
-                path="/playlists/:slug"
-                exact
-                element={<PlaylistDetail></PlaylistDetail>}
-              ></Route>
-              <Route
-                path="/albums"
-                exact
-                element={<ListAlbumPage></ListAlbumPage>}
-              ></Route>
-              <Route
-                path="/albums/:slug"
-                exact
-                element={<AlbumDetail></AlbumDetail>}
-              ></Route>
-              <Route
-                path="/users"
-                exact
-                element={<ListUserPage></ListUserPage>}
-              ></Route>
-              <Route
-                path="/logger"
-                exact
-                element={<LoggerPage></LoggerPage>}
-              ></Route>
-            </>
-          )}
-          {role === "Artist" && (
-            <>
-              <Route
-                path="/"
-                exact
-                element={<ArtistHomePage></ArtistHomePage>}
-              ></Route>
-              <Route
-                path="/tracks"
-                exact
-                element={<ArtistTrackPage></ArtistTrackPage>}
-              ></Route>
-              <Route
-                path="/tracks/:slug"
-                exact
-                element={<ArtistTrackDetail></ArtistTrackDetail>}
-              ></Route>
-              <Route
-                path="/albums"
-                exact
-                element={<ArtistAlbumPage></ArtistAlbumPage>}
-              ></Route>
-              <Route
-                path="/albums/:id"
-                exact
-                element={<ArtistAlbumDetail></ArtistAlbumDetail>}
-              ></Route>
-            </>
-          )}
-        </Route>
-        <Route
-          element={
-            isLogin && role === "User" && <LayoutSeleted></LayoutSeleted>
-          }
-        >
-          <>
+        <Route path="/login" element={<LoginPage2></LoginPage2>}></Route>
+        <Route path="/auth" element={<AuthorizePage></AuthorizePage>}></Route>
+        <Route element={<LayoutSeleted></LayoutSeleted>}>
+          <Route
+            element={
+              <RequiredAuthPage allowRoles={["user"]}></RequiredAuthPage>
+            }
+          >
             <Route path="/" exact element={<HomePage></HomePage>}></Route>
             <Route
               path="/albums/:id"
@@ -258,11 +344,6 @@ function App() {
               extract
               element={<SearchResultPage></SearchResultPage>}
             ></Route>
-            {/* <Route
-              path="/search/:keyword"
-              extract
-              element={<SearchResultPage></SearchResultPage>}
-            ></Route> */}
             <Route
               path="/search_tracks/:keyword"
               extract
@@ -283,7 +364,80 @@ function App() {
               extract
               element={<SubscribePage></SubscribePage>}
             ></Route>
-          </>
+            <Route
+              path="/profile"
+              element={<ProfilePage></ProfilePage>}
+            ></Route>
+          </Route>
+        </Route>
+        <Route
+          element={<RequiredAuthPage allowRoles={["admin"]}></RequiredAuthPage>}
+        >
+          <Route
+            element={
+              <LayoutDashboard>
+                <Route
+                  path="/"
+                  element={<AdminDashBoardPage></AdminDashBoardPage>}
+                ></Route>
+                <Route
+                  path="/admin"
+                  exact
+                  element={<AdminHomePage></AdminHomePage>}
+                ></Route>
+                <Route
+                  path="/admins"
+                  exact
+                  element={<ListAdminPage></ListAdminPage>}
+                ></Route>
+                <Route
+                  path="/artists"
+                  exact
+                  element={<ListArtistPage></ListArtistPage>}
+                ></Route>
+                <Route
+                  path="/tracks"
+                  exact
+                  element={<ListTrackPage></ListTrackPage>}
+                ></Route>
+                <Route
+                  path="/track/:slug"
+                  exact
+                  element={<TrackDetail></TrackDetail>}
+                ></Route>
+                <Route
+                  path="/playlists"
+                  exact
+                  element={<ListPLaylistPage></ListPLaylistPage>}
+                ></Route>
+                <Route
+                  path="/playlists/:slug"
+                  exact
+                  element={<PlaylistDetail></PlaylistDetail>}
+                ></Route>
+                <Route
+                  path="/albums"
+                  exact
+                  element={<ListAlbumPage></ListAlbumPage>}
+                ></Route>
+                <Route
+                  path="/albums/:slug"
+                  exact
+                  element={<AlbumDetail></AlbumDetail>}
+                ></Route>
+                <Route
+                  path="/users"
+                  exact
+                  element={<ListUserPage></ListUserPage>}
+                ></Route>
+                <Route
+                  path="/logger"
+                  exact
+                  element={<LoggerPage></LoggerPage>}
+                ></Route>
+              </LayoutDashboard>
+            }
+          ></Route>
         </Route>
       </Routes>
     </Suspense>

@@ -15,3 +15,4 @@ export const { default: IconBin } = require("./IconBin");
 export const { default: IconEdit } = require("./IconEdit");
 export const { default: IconUpload } = require("./IconUpload");
 export const { default: IconMore } = require("./IconMore");
+export const { default: IconHome } = require("./IconHome");

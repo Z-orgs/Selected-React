@@ -1,21 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { v4 } from "uuid";
-import TrackItem from "components/track/TrackItem";
+import TrackItem from "modules/track/TrackItem";
 import { useDispatch, useSelector } from "react-redux";
-import { getSongsLiked } from "redux/apiRequest";
 import { IconPlayToggle } from "components/icons";
 import { playPause, setPlaylist } from "redux/user/playerSlice";
 import DataEmpty from "components/common/DataEmpty";
+import useAxiosPrivate from "hooks/useAxiosPrivate";
 
 const SongsFavoritePage = () => {
-  const token = useSelector((state) => state.auth.login.currentUser.jwt);
-  const songsLiked = useSelector((state) => state.songsLiked.songsLiked.data);
-  console.log(songsLiked);
+  const axios = useAxiosPrivate();
+  const [songsLiked, setSongsLiked] = useState([]);
+  console.log(
+    "🚀 ~ file: SongsFavoritePage.js:13 ~ SongsFavoritePage ~ songsLiked:",
+    songsLiked
+  );
   const dispatch = useDispatch();
-  const [data, setData] = useState([]);
 
   useEffect(() => {
-    getSongsLiked(token, dispatch);
+    axios
+      .get("/user/likes")
+      .then((res) => {
+        setSongsLiked(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
   return (
     <div>

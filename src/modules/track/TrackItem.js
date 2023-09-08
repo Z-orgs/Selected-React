@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import calculateTime from "utils/calculateTime";
 import { useDispatch, useSelector } from "react-redux";
 import IconHeartToggle from "components/icons/IconHeartToggle";
 import { IconMore, IconPlayToggle } from "components/icons";
@@ -7,8 +6,7 @@ import { Link } from "react-router-dom";
 import TrackPanel from "./TrackPanel";
 import { playPause, setPlaylist } from "redux/user/playerSlice";
 import formatDuration from "utils/formatDuration";
-
-const { default: axios } = require("api/axios");
+import useAxiosPrivate from "hooks/useAxiosPrivate";
 
 // const centerClass = "flex justify-center";
 // const panelItemClass = "px-10 block py-2 hover:bg-alpha-bg cursor-pointer";
@@ -17,20 +15,19 @@ const TrackItem = ({
   song,
   isPlaying = false,
   activeSong,
-  data,
-  i,
   isLiked,
+  owner = "",
   onlyTitle = false,
   children,
 }) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const playPlayer = useSelector((state) => state.player.isPlaying);
   const currentSong = useSelector(
     (state) => state.player.tracks[state.player.currentTrackIndex]
   );
   activeSong = song?._id === currentSong?._id;
   if (activeSong) isPlaying = playPlayer;
-  // console.log(isLiked);
-  const token = useSelector((state) => state.auth.login.currentUser.jwt);
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(isLiked);
   const [showPanel, setShowPanel] = useState(false);
@@ -76,21 +73,9 @@ const TrackItem = ({
   // };
   const handleToggleLikeTrack = async (song) => {
     if (!liked) {
-      await axios.put(
-        `/user/like/${song._id}`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axiosPrivate.put(`/user/like/${song._id}`, {});
     } else {
-      await axios.put(
-        `/user/unlike/${song._id}`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await axiosPrivate.put(`/user/unlike/${song._id}`, {});
     }
     setLiked(!liked);
   };
@@ -118,7 +103,7 @@ const TrackItem = ({
             <IconPlayToggle playing={isPlaying}></IconPlayToggle>
           </span>
           <h3 className="overflow-hidden whitespace-nowrap text-ellipsis">
-            {song?.title || "unknown"} - {song.artist}
+            {song?.title || "unknown"} - {song.artist.firstName}
           </h3>
         </div>
       </div>
@@ -135,10 +120,12 @@ const TrackItem = ({
           <div className="flex flex-col">
             <h3 className="">{song.title || "unknown"}</h3>
             <Link
-              to={`/artists/${song.artist._id}`}
+              to={`/artists/${song?.artist?._id ? song.artist._id : owner._id}`}
               className="text-xs hover:text-secondary"
             >
-              {song.artist.nickName || song.artist}
+              {song?.artist?.firstName
+                ? song?.artist?.firstName
+                : owner.firstName}
             </Link>
           </div>
         </div>
@@ -153,7 +140,7 @@ const TrackItem = ({
             <span className="flex justify-center opacity-0 select-none group-hover:opacity-100">
               <IconHeartToggle
                 liked={liked}
-                onClick={() => handleToggleLikeTrack(song, token)}
+                onClick={() => handleToggleLikeTrack(song)}
               ></IconHeartToggle>
             </span>
             <span
